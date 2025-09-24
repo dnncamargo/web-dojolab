@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 
-export default function ClassForm({ onAdd, onUpload }: any) {
+export default function ClassForm({ onAdd, onUpload }: {
+  onAdd: (className: string) => void;
+  onUpload: (students: { name: string }[], className: string) => void;
+}) {
   const [className, setClassName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {

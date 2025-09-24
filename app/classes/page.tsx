@@ -10,7 +10,7 @@ export default function ClassesPage() {
   const { students, addStudent } = useStudents();
 
   // Quando CSV é carregado, cria alunos para a turma mais recente
-  const handleUpload = async (studentLine: any[], className: string) => {
+  const handleUpload = async (studentLine: { name: string }[], className: string) => {
     if (!classes.length) return;
 
     // pega a turma mais recente (se essa for a regra)

@@ -2,7 +2,11 @@
 
 import React, { useState } from "react";
 
-export default function ClassTable({ students, classes, onRemove }: any) {
+export default function ClassTable({ students, classes, onRemove }: {
+  students: any[];
+  classes: any[];
+  onRemove: (classId: string) => void;
+}) {
   const [expandedClassId, setExpandedClassId] = useState<string | null>(null);
 
   const toggleExpand = (classId: string) => {

@@ -13,15 +13,16 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import { classroom } from "../utils/types";
 
 export function useClasses() {
-  const [classes, setClasses] = useState<any[]>([]);
+  const [classes, setClasses] = useState<classroom[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(collection(db, "classes"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setClasses(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setClasses(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as classroom[]);
       setLoading(false);
     });
     return () => unsubscribe();

@@ -14,15 +14,16 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
+import { student } from "../utils/types";
 
 export function useStudents() {
-  const [students, setStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<student[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(collection(db, "students"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setStudents(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setStudents(snap.docs.map((d) => ({ ...d.data(), id: d.id } as student)));
       setLoading(false);
     });
     return () => unsubscribe();

@@ -13,15 +13,16 @@ import {
   orderBy,
   serverTimestamp,
 } from "firebase/firestore";
+import { team } from "../utils/types";
 
 export function useTeams() {
-  const [teams, setTeams] = useState<any[]>([]);
+  const [teams, setTeams] = useState<team[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(collection(db, "teams"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setTeams(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setTeams(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as team[]);
       setLoading(false);
     });
     return () => unsubscribe();
