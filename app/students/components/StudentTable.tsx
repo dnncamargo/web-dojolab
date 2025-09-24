@@ -2,14 +2,22 @@
 "use client";
 
 import { useState } from "react";
+import { student, classroom } from "../../utils/types";
 
-export default function StudentTable({ students, classes, onRemove, onUpdate }: any) {
+type StudentTableProps = {
+  students: student[];
+  classes: classroom[];
+  onRemove: (id: string) => void;
+  onUpdate: (id: string, data: student) => void;
+};
+
+export default function StudentTable({ students, classes, onRemove, onUpdate }: StudentTableProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editClassId, setEditClassId] = useState("");
   const [editBadge, setEditBadge] = useState("");
 
-  const startEditing = (student: any) => {
+  const startEditing = (student: student) => {
     setEditingId(student.id);
     setEditName(student.name);
     setEditClassId(student.classId || "");
@@ -18,6 +26,7 @@ export default function StudentTable({ students, classes, onRemove, onUpdate }: 
 
   const saveEdit = async (id: string) => {
     await onUpdate(id, {
+      id,
       name: editName,
       classId: editClassId,
       badge: editBadge,

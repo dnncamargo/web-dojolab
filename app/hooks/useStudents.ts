@@ -37,7 +37,7 @@ export function useStudents() {
     });
   }
 
-  async function updateStudent(id: string, data: any) {
+  async function updateStudent(id: string, data: student) {
     const studentRef = doc(db, "students", id);
     await updateDoc(studentRef, data);
   }

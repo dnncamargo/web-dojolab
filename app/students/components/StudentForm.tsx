@@ -3,8 +3,15 @@
 
 
 import { useState } from "react";
+import { student, classroom } from "../../utils/types";
 
-export default function StudentForm({ onAdd, classes, loading }: any) {
+type StudentFormProps = {
+  onAdd: (name: string, classId: string) => void;
+  classes: classroom[];
+  loading: boolean;
+};
+
+export default function StudentForm({ onAdd, classes, loading }: StudentFormProps) {
   const [name, setName] = useState("");
   const [classId, setClassId] = useState("");
   
