@@ -5,22 +5,52 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.title-logo-0 {
+    font-family: var(--font-antica-regular);
+    font-size: 1rem;
+    font-weight: 500;
+    color: #f1356d;
+  }
+
+.title-logo-1 {
+    font-family: var(--font-harlow-solid-std);
+    font-size: 2rem;
+    font-weight: 500;
+    color: #f1356d;
+    margin-right: 2px;
+  }
+
+.title-logo-2 {
+    font-family: var(--font-agency-fb);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #f1356d;
+}
+
+.title-section {
+    font-family: var(--font-roboto);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.body-text {
+    font-family: var(--font-roboto);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #333333;
+    margin-bottom: 4px;
+} 
+
+.inline-h1 {
+  display: inline-block;
+  /* margin-right: 10px;  Opcional: para dar um espaçamento entre eles */
 }
