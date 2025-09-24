@@ -7,7 +7,7 @@ import ClassTable from "./components/ClassesTable";
 
 export default function ClassesPage() {
   const { classes, loading, addClass, removeClass } = useClasses();
-  const { addStudent } = useStudents();
+  const { students, addStudent } = useStudents();
 
   // Quando CSV é carregado, cria alunos para a turma mais recente
   const handleUpload = async (studentLine: any[], className: string) => {
@@ -31,7 +31,7 @@ export default function ClassesPage() {
       {loading ? (
         <p className="body-text">Carregando turmas...</p>
       ) : (
-        <ClassTable classes={classes} onRemove={removeClass} />
+        <ClassTable students={students} classes={classes} onRemove={removeClass} />
       )}
     </div>
   );

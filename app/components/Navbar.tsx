@@ -71,6 +71,11 @@ export default function Navbar() {
                         Equipes
                       </Link>
                     </li>
+                    <li>
+                      <Link href="/awards" className="hover:text-indigo-600">
+                        Insígnias
+                      </Link>
+                    </li>
                   </ul>
                 </motion.div>
               )}
