@@ -7,7 +7,7 @@ import { useStudents } from "../hooks/useStudents";
 import { useClasses } from "../hooks/useClasses";
 
 export default function StudentPage() {
-  const { students, loading, addStudent, removeStudent } = useStudents();
+  const { students, loading, addStudent, updateStudent, removeStudent } = useStudents();
   const { classes, loading: classesLoading } = useClasses();
 
   return (
@@ -27,7 +27,9 @@ export default function StudentPage() {
         <StudentTable 
           students={students} 
           classes={classes}
-          onRemove={removeStudent} />
+          onRemove={removeStudent} 
+          onUpdate={updateStudent} 
+        />
       )}
     </div>
   );

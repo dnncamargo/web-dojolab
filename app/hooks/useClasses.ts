@@ -1,32 +1,42 @@
+// app/hooks/useClasses.ts
 "use client";
 
 import { useEffect, useState } from "react";
 import { db } from "../lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
-
-export interface Class {
-  id: string;
-  name: string;
-}
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  onSnapshot,
+  query,
+  orderBy,
+} from "firebase/firestore";
 
 export function useClasses() {
-  const [classes, setClasses] = useState<Class[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchClasses() {
-      try {
-        const snap = await getDocs(collection(db, "classes"));
-        setClasses(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Class[]);
-      } catch (error) {
-        console.error("Erro ao buscar turmas:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchClasses();
+    const q = query(collection(db, "classes"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (snap) => {
+      setClasses(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
-  return { classes, loading };
+  async function addClass(name: string) {
+    return await addDoc(collection(db, "classes"), {
+      name,
+      createdAt: serverTimestamp(),
+    });
+  }
+
+  async function removeClass(id: string) {
+    await deleteDoc(doc(db, "classes", id));
+  }
+
+  return { classes, loading, addClass, removeClass };
 }
