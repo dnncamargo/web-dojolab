@@ -1,9 +1,14 @@
 // app/teams/components/TeamsForm.tsx
 "use client";
 
+import { team } from "@/app/utils/types";
 import { useState } from "react";
 
-export default function TeamsForm({ onAdd }: any) {
+type TeamsFormProps = {
+  onAdd: (name: string) => void;
+};
+
+export default function TeamsForm({ onAdd }: TeamsFormProps) {
   const [teamName, setTeamName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {

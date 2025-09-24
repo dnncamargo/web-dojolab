@@ -46,7 +46,7 @@ export default function StudentTable({ students, classes, onRemove, onUpdate }: 
           </tr>
         </thead>
         <tbody>
-          {students.map((student: any) => (
+          {students.map((student: student) => (
             <tr
               key={student.id}
               className="border-t border-gray-200 hover:bg-gray-50"
@@ -70,7 +70,7 @@ export default function StudentTable({ students, classes, onRemove, onUpdate }: 
                       className="border px-2 py-1 rounded w-full"
                     >
                       <option value="">—</option>
-                      {classes.map((cls: any) => (
+                      {classes.map((cls: classroom) => (
                         <option key={cls.id} value={cls.id}>
                           {cls.name}
                         </option>
@@ -101,7 +101,7 @@ export default function StudentTable({ students, classes, onRemove, onUpdate }: 
                       Salvar
                     </button>
                     <button
-                      onClick={() => setEditingId(null)}
+                      onClick={() => setEditingId(student.id)}
                       className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
                     >
                       Cancelar

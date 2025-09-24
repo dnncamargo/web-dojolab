@@ -12,6 +12,8 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { team } from "../utils/types";
 
@@ -39,5 +41,13 @@ export function useTeams() {
     await deleteDoc(doc(db, "teams", id));
   }
 
-  return { teams, loading, addTeam, removeTeam };
+  async function addMember(params: { teamId: string; studentId: string }) {
+    const { teamId, studentId } = params;
+    const teamRef = doc(db, "teams", teamId);
+    await updateDoc(teamRef, {
+      members: arrayUnion(studentId),
+    });
+  }
+
+  return { teams, loading, addTeam, removeTeam, addMember };
 }

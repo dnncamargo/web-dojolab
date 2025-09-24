@@ -3,7 +3,7 @@
 
 
 import { useState } from "react";
-import { student, classroom } from "../../utils/types";
+import { classroom } from "../../utils/types";
 
 type StudentFormProps = {
   onAdd: (name: string, classId: string) => void;
@@ -45,7 +45,7 @@ export default function StudentForm({ onAdd, classes, loading }: StudentFormProp
         {loading ? (
           <option disabled>Carregando...</option>
         ) : (
-          classes.map((cls: any) => (
+          classes.map((cls: classroom) => (
             <option key={cls.id} value={cls.id}>
               {cls.name}
             </option>

@@ -3,12 +3,14 @@ export type student = {
   name: string;
   classId: string;
   badge?: string;
+  active: boolean;
 };
 
 export type classroom = {
   id: string;
   name: string;
   createdAt: any;
+  active: boolean;
 };
 
 export type team = {
@@ -16,4 +18,5 @@ export type team = {
   name: string;
   members: student[];
   classId: string;
+  active: boolean;
 };

@@ -1,10 +1,11 @@
 "use client";
 
+import { classroom, student } from "@/app/utils/types";
 import React, { useState } from "react";
 
 export default function ClassTable({ students, classes, onRemove }: {
-  students: any[];
-  classes: any[];
+  students: student[];
+  classes: classroom[];
   onRemove: (classId: string) => void;
 }) {
   const [expandedClassId, setExpandedClassId] = useState<string | null>(null);
@@ -27,7 +28,7 @@ export default function ClassTable({ students, classes, onRemove }: {
           </tr>
         </thead>
         <tbody>
-          {classes.map((cls: any) => (
+          {classes.map((cls: classroom) => (
             <React.Fragment key={cls.id}>
               <tr className="border-t border-gray-200 hover:bg-gray-50">
                 <td className="px-4 py-2">{cls.name}</td>
@@ -53,15 +54,15 @@ export default function ClassTable({ students, classes, onRemove }: {
                     <h3 className="font-semibold mb-2">Alunos da turma</h3>
                     <ul className="list-disc pl-6 space-y-1">
                       {students
-                        .filter((s: any) => s.classId === cls.id)
-                        .map((s: any) => (
+                        .filter((s: student) => s.classId === cls.id)
+                        .map((s: student) => (
                           <li key={s.id}>{s.name}</li>
                         ))}
-                      {students.filter((s: any) => s.classId === cls.id).length ===
+                      {students.filter((s: student) => s.classId === cls.id).length ===
                         0 && <li className="text-gray-500">Nenhum aluno associado.</li>}
                     </ul>
                     <h3 className="font-semibold mb-2 inline-block mr-2">Total: </h3>
-                    <p className="mb-4 inline-block">{students.filter((s: any) => s.classId === cls.id).length} alunos</p>
+                    <p className="mb-4 inline-block">{students.filter((s: student) => s.classId === cls.id).length} alunos</p>
                     
                   </td>
                 </tr>
