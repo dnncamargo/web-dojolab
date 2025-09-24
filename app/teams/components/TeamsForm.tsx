@@ -1,7 +1,6 @@
 // app/teams/components/TeamsForm.tsx
 "use client";
 
-import { team } from "@/app/utils/types";
 import { useState } from "react";
 
 type TeamsFormProps = {
