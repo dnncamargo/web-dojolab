@@ -18,7 +18,7 @@ export type team = {
   id: string;
   name: string;
   createdAt: string;
-  members: student[];
+  members: string[];
   classId: string;
   active: boolean;
 };

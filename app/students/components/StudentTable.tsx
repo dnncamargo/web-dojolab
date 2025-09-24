@@ -30,7 +30,7 @@ export default function StudentTable({ students, classes, onRemove, onUpdate }: 
       name: editName,
       classId: editClassId,
       badge: editBadge,
-    });
+    } as student);
     setEditingId(null);
   };
 
@@ -112,7 +112,7 @@ export default function StudentTable({ students, classes, onRemove, onUpdate }: 
                 <>
                   <td className="px-4 py-2">{student.name}</td>
                   <td className="px-4 py-2">
-                    {classes.find((cls: any) => cls.id === student.classId)?.name || "—"}
+                    {classes.find((cls: classroom) => cls.id === student.classId)?.name || "—"}
                   </td>
                   <td className="px-4 py-2">{student.badge || "—"}</td>
                   <td className="px-4 py-2 flex gap-2">
