@@ -32,9 +32,11 @@ export default function Navbar() {
     
       <nav className="bg-white shadow rounded-lg p-1 flex gap-4 mb-6 justify-evenly items-center">
         <div className="text-xl font-bold text-gray-800">
+          <Link href="/">
           <h1 className="inline-h1 title-logo-0">the</h1>
           <h1 className="inline-h1 title-logo-1">Dojo</h1>
           <h1 className="inline-h1 title-logo-2">LAB.</h1>
+          </Link>
         </div>
 
         <div className="flex gap-12 relative" ref={menuRef}>
@@ -72,7 +74,7 @@ export default function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <Link href="/awards" className="hover:text-indigo-600">
+                      <Link href="/badges" className="hover:text-indigo-600">
                         Insígnias
                       </Link>
                     </li>

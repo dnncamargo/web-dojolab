@@ -22,3 +22,12 @@ export type team = {
   classId: string;
   active: boolean;
 };
+
+export type badge = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  createdAt: string;
+  active: boolean;
+};
