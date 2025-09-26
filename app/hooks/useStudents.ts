@@ -17,15 +17,19 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import { student } from "../utils/types";
 
 export function useStudents() {
-  const [students, setStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<student[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(collection(db, "students"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setStudents(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setStudents(snap.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as Omit<student, "id">),
+      })) as student[]);
       setLoading(false);
     });
     return () => unsubscribe();
@@ -45,7 +49,7 @@ export function useStudents() {
     await deleteDoc(doc(db, "students", id));
   }
 
-  async function updateStudent(id: string, data: Partial<any>) {
+  async function updateStudent(id: string, data: Partial<student>) {
     const ref = doc(db, "students", id);
     await updateDoc(ref, data);
   }

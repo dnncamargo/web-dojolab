@@ -20,11 +20,10 @@ export default function StudentExpandRow({
     badges = [],
     onToggleTeam,
     onToggleBadge,
-    onUpdate,
 }: StudentExpandRowProps) {
     const isMemberOf = (t: team) => Array.isArray(t.members) && t.members.includes(student.id);
     const hasBadge = (b: badge) => {
-        const studentBadges: string[] = (student as any).badges || [];
+        const studentBadges: string[] = student.badges || [];
         return Array.isArray(studentBadges) ? studentBadges.includes(b.id) : false;
     };
 

@@ -14,13 +14,11 @@ type Props = {
 export default function StudentEditRow({ student, classrooms, onCancel, onSave }: Props) {
   const [name, setName] = useState(student.name);
   const [classroomId, setClassroomId] = useState(student.classroomId || "");
-  const [badge, setBadge] = useState(student.badge || "");
 
   const handleSave = () => {
     onSave(student.id, {
       name,
       classroomId: classroomId,
-      badge,
     });
     onCancel();
   };
