@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 
-export default function ClassForm({ onAdd, onUpload }: {
-  onAdd: (className: string) => void;
-  onUpload: (students: { name: string }[], className: string) => void;
+export default function ClassroomForm({ onAdd, onUpload }: {
+  onAdd: (classroomName: string) => void;
+  onUpload: (students: { name: string }[], classroomName: string) => void;
 }) {
-  const [className, setClassName] = useState("");
+  const [classroomName, setClassroomName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!className) return;
-    onAdd(className);
-    setClassName("");
+    if (!classroomName) return;
+    onAdd(classroomName);
+    setClassroomName("");
   };
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +30,7 @@ export default function ClassForm({ onAdd, onUpload }: {
         return { name: name.trim() };
       });
 
-      onUpload(studentLine, className);
+      onUpload(studentLine, classroomName);
     };
     reader.readAsText(file);
   };
@@ -43,13 +43,13 @@ export default function ClassForm({ onAdd, onUpload }: {
       <input
         className="border rounded px-3 py-2 flex-1 placeholder-black"
         placeholder="Nome da turma"
-        value={className}
-        onChange={(e) => setClassName(e.target.value)}
+        value={classroomName}
+        onChange={(e) => setClassroomName(e.target.value)}
         required
       />
       <button
         type="submit"
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
       >
         Adicionar
       </button>

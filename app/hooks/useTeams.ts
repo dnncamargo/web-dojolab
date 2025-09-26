@@ -12,19 +12,20 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  getDoc,
   updateDoc,
   arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
-import { team } from "../utils/types";
 
 export function useTeams() {
-  const [teams, setTeams] = useState<team[]>([]);
+  const [teams, setTeams] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(collection(db, "teams"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setTeams(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as team[]);
+      setTeams(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
       setLoading(false);
     });
     return () => unsubscribe();
@@ -33,7 +34,9 @@ export function useTeams() {
   async function addTeam(name: string) {
     await addDoc(collection(db, "teams"), {
       name,
+      members: [],
       createdAt: serverTimestamp(),
+      active: true,
     });
   }
 
@@ -41,13 +44,19 @@ export function useTeams() {
     await deleteDoc(doc(db, "teams", id));
   }
 
-  async function addMember(params: { teamId: string; studentId: string }) {
-    const { teamId, studentId } = params;
+  // toggle member: adiciona/remove studentId do array members da equipe
+  async function toggleMember(teamId: string, studentId: string) {
     const teamRef = doc(db, "teams", teamId);
-    await updateDoc(teamRef, {
-      members: arrayUnion(studentId),
-    });
+    const snap = await getDoc(teamRef);
+    if (!snap.exists()) return;
+
+    const members: string[] = snap.data()?.members || [];
+    if (members.includes(studentId)) {
+      await updateDoc(teamRef, { members: arrayRemove(studentId) });
+    } else {
+      await updateDoc(teamRef, { members: arrayUnion(studentId) });
+    }
   }
 
-  return { teams, loading, addTeam, removeTeam, addMember };
+  return { teams, loading, addTeam, removeTeam, toggleMember };
 }

@@ -1,20 +1,20 @@
 "use client";
 
-import { useClasses } from "../hooks/useClasses";
+import { useClassroom } from "../hooks/useClassroom";
 import { useStudents } from "../hooks/useStudents";
-import ClassForm from "./components/ClassesForm";
-import ClassTable from "./components/ClassesTable";
+import ClassroomForm from "./components/ClassroomForm";
+import ClassroomTable from "./components/ClassroomTable";
 
 export default function ClassesPage() {
-  const { classes, loading, addClass, removeClass } = useClasses();
+  const { classrooms, loading, addClassroom, removeClassroom } = useClassroom();
   const { students, addStudent } = useStudents();
 
   // Quando CSV é carregado, cria alunos para a turma mais recente
-  const handleUpload = async (studentLine: { name: string }[], className: string) => {
-    if (!classes.length) return;
+  const handleUpload = async (studentLine: { name: string }[], classroomName: string) => {
+    if (!classrooms.length) return;
 
     // pega a turma mais recente (se essa for a regra)
-    const classId = className;
+    const classId = classroomName;
 
     // garante que todas as inserções sejam feitas
     await Promise.all(
@@ -26,12 +26,12 @@ export default function ClassesPage() {
     <div>
       <h1 className="title-section">Cadastro de Turmas</h1>
 
-      <ClassForm onAdd={addClass} onUpload={handleUpload} />
+      <ClassroomForm onAdd={addClassroom} onUpload={handleUpload} />
 
       {loading ? (
         <p className="body-text">Carregando turmas...</p>
       ) : (
-        <ClassTable students={students} classes={classes} onRemove={removeClass} />
+        <ClassroomTable students={students} classrooms={classrooms} onRemove={removeClassroom} />
       )}
     </div>
   );

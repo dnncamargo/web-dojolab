@@ -11,7 +11,6 @@ export default function BadgesPage() {
   return (
     <div>
       <h1 className="title-section">Insígnias</h1>
-      <p className="body-text mb-4">Aqui você pode gerenciar as insígnias disponíveis no sistema.</p>
 
       <BadgeForm onAdd={addBadge} />
 

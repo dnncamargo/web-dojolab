@@ -12,18 +12,20 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  getDoc,
   updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
-import { student } from "../utils/types";
 
 export function useStudents() {
-  const [students, setStudents] = useState<student[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(collection(db, "students"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setStudents(snap.docs.map((d) => ({ ...d.data(), id: d.id } as student)));
+      setStudents(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
       setLoading(false);
     });
     return () => unsubscribe();
@@ -34,27 +36,40 @@ export function useStudents() {
       name,
       classId,
       createdAt: serverTimestamp(),
+      badges: [],
+      active: true,
     });
-  }
-
-  async function updateStudent(id: string, data: student) {
-    const studentRef = doc(db, "students", id);
-    await updateDoc(studentRef, data);
   }
 
   async function removeStudent(id: string) {
     await deleteDoc(doc(db, "students", id));
   }
 
-  // novo: upload CSV simplificado
-  async function addStudentsFromCSV(file: File, classId: string) {
-    const text = await file.text();
-    const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  async function updateStudent(id: string, data: Partial<any>) {
+    const ref = doc(db, "students", id);
+    await updateDoc(ref, data);
+  }
 
-    for (const name of lines) {
-      await addStudent(name, classId);
+  // toggle badge: adiciona/remove badgeId do array badges do aluno
+  async function toggleBadge(studentId: string, badgeId: string) {
+    const studentRef = doc(db, "students", studentId);
+    const snap = await getDoc(studentRef);
+    if (!snap.exists()) return;
+
+    const badges: string[] = snap.data()?.badges || [];
+    if (badges.includes(badgeId)) {
+      await updateDoc(studentRef, { badges: arrayRemove(badgeId) });
+    } else {
+      await updateDoc(studentRef, { badges: arrayUnion(badgeId) });
     }
   }
 
-  return { students, loading, addStudent, updateStudent, removeStudent, addStudentsFromCSV };
+  return {
+    students,
+    loading,
+    addStudent,
+    removeStudent,
+    updateStudent,
+    toggleBadge,
+  };
 }

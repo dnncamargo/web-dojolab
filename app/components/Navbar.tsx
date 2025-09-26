@@ -64,7 +64,7 @@ export default function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <Link href="/classes" className="hover:text-indigo-600">
+                      <Link href="/classrooms" className="hover:text-indigo-600">
                         Turmas
                       </Link>
                     </li>

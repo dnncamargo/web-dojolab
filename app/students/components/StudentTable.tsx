@@ -1,37 +1,43 @@
 // app/students/components/StudentTable.tsx
 "use client";
-
-import { useState } from "react";
-import { student, classroom } from "../../utils/types";
+import React, { useState } from "react";
+import { student, classroom, team, badge } from "../../utils/types";
+import StudentExpandRow from "./StudentExpandRow";
+import StudentEditRow from "./StudentEditRow";
 
 type StudentTableProps = {
   students: student[];
-  classes: classroom[];
+  classrooms: classroom[];
+  teams: team[];
+  badges: badge[];
   onRemove: (id: string) => void;
-  onUpdate: (id: string, data: student) => void;
+  onUpdate: (id: string, data: Partial<student>) => void;
+  onToggleTeam: (teamId: string, studentId: string) => Promise<void> | void;
+  onToggleBadge: (studentId: string, badgeId: string) => Promise<void> | void;
 };
 
-export default function StudentTable({ students, classes, onRemove, onUpdate }: StudentTableProps) {
+export default function StudentTable({
+  students,
+  classrooms,
+  teams,
+  badges,
+  onRemove,
+  onUpdate,
+  onToggleTeam,
+  onToggleBadge,
+}: StudentTableProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState("");
-  const [editClassId, setEditClassId] = useState("");
-  const [editBadge, setEditBadge] = useState("");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandType, setExpandType] = useState<"team" | "badge" | null>(null);
 
-  const startEditing = (student: student) => {
-    setEditingId(student.id);
-    setEditName(student.name);
-    setEditClassId(student.classId || "");
-    setEditBadge(student.badge || "");
-  };
-
-  const saveEdit = async (id: string) => {
-    await onUpdate(id, {
-      id,
-      name: editName,
-      classId: editClassId,
-      badge: editBadge,
-    } as student);
-    setEditingId(null);
+  const toggleExpand = (id: string, type: "team" | "badge") => {
+    if (expandedId === id && expandType === type) {
+      setExpandedId(null);
+      setExpandType(null);
+    } else {
+      setExpandedId(id);
+      setExpandType(type);
+    }
   };
 
   return (
@@ -41,101 +47,73 @@ export default function StudentTable({ students, classes, onRemove, onUpdate }: 
           <tr>
             <th className="px-4 py-2 text-left">Nome</th>
             <th className="px-4 py-2 text-left">Turma</th>
-            <th className="px-4 py-2 text-left">Insígnia</th>
-            <th className="px-4 py-2 text-left">Ações</th>
+            <th className="px-4 py-2 text-right">Ações</th>
           </tr>
         </thead>
         <tbody>
-          {students.map((student: student) => (
-            <tr
-              key={student.id}
-              className="border-t border-gray-200 hover:bg-gray-50"
-            >
-              {editingId === student.id ? (
-                <>
-                  {/* Nome */}
-                  <td className="px-4 py-2">
-                    <input
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      className="border px-2 py-1 rounded w-full"
-                    />
-                  </td>
-
-                  {/* Turma */}
-                  <td className="px-4 py-2">
-                    <select
-                      value={editClassId}
-                      onChange={(e) => setEditClassId(e.target.value)}
-                      className="border px-2 py-1 rounded w-full"
-                    >
-                      <option value="">—</option>
-                      {classes.map((cls: classroom) => (
-                        <option key={cls.id} value={cls.id}>
-                          {cls.name}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-
-                  {/* Insígnia */}
-                  <td className="px-4 py-2">
-                    <select
-                      value={editBadge}
-                      onChange={(e) => setEditBadge(e.target.value)}
-                      className="border px-2 py-1 rounded w-full"
-                    >
-                      <option value="">—</option>
-                      <option value="ouro">Ouro</option>
-                      <option value="prata">Prata</option>
-                      <option value="bronze">Bronze</option>
-                    </select>
-                  </td>
-
-                  {/* Ações */}
-                  <td className="px-4 py-2 flex gap-2">
-                    <button
-                      onClick={() => saveEdit(student.id)}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      onClick={() => setEditingId(student.id)}
-                      className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
-                    >
-                      Cancelar
-                    </button>
-                  </td>
-                </>
+          {students.map((s) => (
+            <React.Fragment key={s.id}>
+              {editingId === s.id ? (
+                <StudentEditRow
+                  student={s}
+                  classrooms={classrooms}
+                  onCancel={() => setEditingId(null)}
+                  onSave={(id, data) => {
+                    onUpdate(id, data);
+                    setEditingId(null);
+                  }}
+                />
               ) : (
-                <>
-                  <td className="px-4 py-2">{student.name}</td>
+                <tr className="border-t border-gray-200 hover:bg-gray-50">
+                  <td className="px-4 py-2">{s.name}</td>
                   <td className="px-4 py-2">
-                    {classes.find((cls: classroom) => cls.id === student.classId)?.name || "—"}
+                    {classrooms.find((c) => c.id === s.classroomId)?.name || "—"}
                   </td>
-                  <td className="px-4 py-2">{student.badge || "—"}</td>
-                  <td className="px-4 py-2 flex gap-2">
+                  <td className="px-4 py-2 flex gap-2 justify-end">
                     <button
-                      onClick={() => startEditing(student)}
+                      onClick={() => setEditingId(s.id)}
                       className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                     >
                       Editar
                     </button>
                     <button
-                      onClick={() => onRemove(student.id)}
+                      onClick={() => toggleExpand(s.id, "team")}
+                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                    >
+                      Equipe
+                    </button>
+                    <button
+                      onClick={() => toggleExpand(s.id, "badge")}
+                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                    >
+                      Insígnia
+                    </button>
+                    <button
+                      onClick={() => onRemove(s.id)}
                       className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                     >
                       Remover
                     </button>
                   </td>
-                </>
+                </tr>
               )}
-            </tr>
+
+              {expandedId === s.id && (
+                <StudentExpandRow
+                  student={s}
+                  expandType={expandType}
+                  teams={teams}
+                  badges={badges}
+                  onToggleTeam={onToggleTeam}
+                  onToggleBadge={onToggleBadge}
+                />
+              )}
+            </React.Fragment>
           ))}
+
           {students.length === 0 && (
             <tr>
-              <td colSpan={4} className="text-center py-4 text-gray-500">
+              <td colSpan={3} className="text-center py-4 text-gray-500">
                 Nenhum aluno cadastrado.
               </td>
             </tr>

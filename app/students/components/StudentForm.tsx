@@ -7,20 +7,20 @@ import { classroom } from "../../utils/types";
 
 type StudentFormProps = {
   onAdd: (name: string, classId: string) => void;
-  classes: classroom[];
+  classrooms: classroom[];
   loading: boolean;
 };
 
-export default function StudentForm({ onAdd, classes, loading }: StudentFormProps) {
+export default function StudentForm({ onAdd, classrooms, loading }: StudentFormProps) {
   const [name, setName] = useState("");
-  const [classId, setClassId] = useState("");
+  const [classroomId, setClassroomId] = useState("");
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name || !classId) return;
-    onAdd(name, classId);
+    if (!name || !classroomId) return;
+    onAdd(name, classroomId);
     setName("");
-    setClassId("");
+    setClassroomId("");
   };
 
   return (
@@ -37,15 +37,15 @@ export default function StudentForm({ onAdd, classes, loading }: StudentFormProp
       />
       <select
         className="border rounded px-3 py-2 flex-1"
-        value={classId}
-        onChange={e => setClassId(e.target.value)}
+        value={classroomId}
+        onChange={e => setClassroomId(e.target.value)}
         required
       >
         <option value="">Selecione a turma</option>
         {loading ? (
           <option disabled>Carregando...</option>
         ) : (
-          classes.map((cls: classroom) => (
+          classrooms.map((cls: classroom) => (
             <option key={cls.id} value={cls.id}>
               {cls.name}
             </option>

@@ -2,7 +2,7 @@ export type student = {
   id: string;
   name: string;
   createdAt: string;
-  classId: string;
+  classroomId: string;
   badge?: string;
   active: boolean;
 };
