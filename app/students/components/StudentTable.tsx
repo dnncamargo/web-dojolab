@@ -1,9 +1,11 @@
 // app/students/components/StudentTable.tsx
 "use client";
+
 import React, { useState } from "react";
 import { student, classroom, team, badge } from "../../utils/types";
 import StudentExpandRow from "./StudentExpandRow";
 import StudentEditRow from "./StudentEditRow";
+import StudentRow from "./StudentRow";
 
 type StudentTableProps = {
   students: student[];
@@ -64,38 +66,13 @@ export default function StudentTable({
                   }}
                 />
               ) : (
-                <tr className="border-t border-gray-200 hover:bg-gray-50">
-                  <td className="px-4 py-2">{s.name}</td>
-                  <td className="px-4 py-2">
-                    {classrooms.find((c) => c.id === s.classroomId)?.name || "—"}
-                  </td>
-                  <td className="px-4 py-2 flex gap-2 justify-end">
-                    <button
-                      onClick={() => setEditingId(s.id)}
-                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => toggleExpand(s.id, "team")}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                    >
-                      Equipe
-                    </button>
-                    <button
-                      onClick={() => toggleExpand(s.id, "badge")}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                    >
-                      Insígnia
-                    </button>
-                    <button
-                      onClick={() => onRemove(s.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Remover
-                    </button>
-                  </td>
-                </tr>
+                <StudentRow
+                  student={s}
+                  classrooms={classrooms}
+                  setEditingId={() => setEditingId(s.id)}
+                  toggleExpand={toggleExpand}
+                  onRemove={onRemove}
+                />
               )}
 
               {expandedId === s.id && (

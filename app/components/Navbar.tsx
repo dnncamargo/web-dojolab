@@ -104,7 +104,7 @@ export default function Navbar() {
                   <ul className="flex flex-col gap-2">
                     <li>
                       <Link
-                        href="/activities/new"
+                        href="/activities"
                         className="hover:text-indigo-600"
                       >
                         Nova Atividade

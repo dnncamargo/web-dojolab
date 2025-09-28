@@ -11,8 +11,8 @@ import { useBadges } from "../hooks/useBadges";
 export default function StudentPage() {
   const { students, loading, addStudent, updateStudent, removeStudent, toggleBadge } = useStudents();
   const { classrooms, loading: classroomsLoading } = useClassroom();
-  const { teams, loading: teamsLoading, toggleMember } = useTeams();
-  const { badges, loading: badgesLoading } = useBadges();
+  const { teams, toggleMember } = useTeams();
+  const { badges } = useBadges();
 
   return (
     <div>

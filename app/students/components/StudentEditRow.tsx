@@ -24,7 +24,7 @@ export default function StudentEditRow({ student, classrooms, onCancel, onSave }
   };
 
   return (
-    <>
+    <tr className="border-t border-gray-200 bg-gray-50">
       {/* Nome */}
       <td className="px-4 py-2">
         <input
@@ -65,6 +65,6 @@ export default function StudentEditRow({ student, classrooms, onCancel, onSave }
           Cancelar
         </button>
       </td>
-    </>
+    </tr>
   );
 }

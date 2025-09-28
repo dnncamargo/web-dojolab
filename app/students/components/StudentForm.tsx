@@ -1,7 +1,6 @@
 // app/students/components/StudentForm.tsx
 "use client";
 
-
 import { useState } from "react";
 import { classroom } from "../../utils/types";
 
@@ -14,7 +13,7 @@ type StudentFormProps = {
 export default function StudentForm({ onAdd, classrooms, loading }: StudentFormProps) {
   const [name, setName] = useState("");
   const [classroomId, setClassroomId] = useState("");
-  
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name || !classroomId) return;

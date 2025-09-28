@@ -31,3 +31,35 @@ export type badge = {
   createdAt: string;
   active: boolean;
 };
+
+export type criteria = {
+  id: string
+  description: string
+  evaluationType: "integer" | "boolean"
+  scoringType: "individual" | "team"
+  points?: number
+  observations?: string
+}
+
+export type ActivityStatus =
+  | "not_assigned"
+  | "assigned"
+  | "in_progress"
+  | "completed"
+  | "cancelled"
+
+export type activity = {
+  id: string
+  title: string
+  description?: string
+  classroomId?: string
+  assessment: criteria[]
+  status:   ActivityStatus
+  timeConfig?: {
+    mode: "chronometer" | "alarm"
+    value: number // em minutos
+  }
+  results?: any
+  date: Date;
+  createdAt: Date
+}
