@@ -59,7 +59,7 @@ export type activity = {
     mode: "chronometer" | "alarm"
     value: number // em minutos
   }
-  results?: any
+  //results?: number
   date: Date;
   createdAt: Date
 }
