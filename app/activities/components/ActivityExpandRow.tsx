@@ -10,8 +10,7 @@ export default function ActivityExpandRow({
   activity,
   classrooms,
 }: ActivityExpandRowProps) {
-  const turma = classrooms.find((c) => c.id === activity.classroomId);
-
+  
   return (
     <tr className="bg-gray-50">
       <td colSpan={5} className="p-4">

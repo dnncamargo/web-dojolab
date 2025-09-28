@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { activity, classroom, criteria } from "../../utils/types";
-import CriteriaEditor from "./CriteriaEditor";
 import { resolveStatus, getStatusLabel } from "../../utils/status";
 import { ActivityStatus } from "@/app/utils/types";
 import CriteriaList from "./CriteriaList";

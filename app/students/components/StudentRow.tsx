@@ -1,7 +1,6 @@
 // app/students/components/StudentRow.tsx
 "use client";
 
-import { useState } from "react";
 import { student, classroom } from "../../utils/types";
 
 type StudentRowProps = {
@@ -13,7 +12,7 @@ type StudentRowProps = {
 };
 
 export default function StudentRow({ student, classrooms, setEditingId, toggleExpand, onRemove }: StudentRowProps) {
-    const classroom = classrooms.find((cls) => cls.id === student.classroomId);
+    
     return (
 
         <tr className="border-t border-gray-200 hover:bg-gray-50">

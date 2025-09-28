@@ -18,12 +18,11 @@ export default function ActivityFormExpanded({
     const [title, setTitle] = useState(initialTitle)
     const [description, setDescription] = useState("")
     const [timeConfig, setTimeConfig] = useState<{ mode: "chronometer" | "alarm"; value: number } | undefined>()
-    const [status, setStatus] = useState<"not_assigned" | "assigned">("not_assigned")
     const [criteria, setCriteria] = useState<criteria[]>([])
     const [selectedClass, setSelectedClass] = useState<string>("")
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const { classrooms } = useClassroom()
-    const [error, setError] = useState<string | null>(null);
+    const status = "not_assigned"
 
     const handleSave = () => {
         if (!title.trim() || criteria.length === 0) return
