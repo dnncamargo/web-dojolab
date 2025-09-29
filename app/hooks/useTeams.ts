@@ -35,13 +35,18 @@ export function useTeams() {
     return () => unsubscribe();
   }, []);
 
-  async function addTeam(name: string) {
+  async function addTeam(name: string, classroomId: string) {
     await addDoc(collection(db, "teams"), {
       name,
+      classroomId,
       members: [],
       createdAt: serverTimestamp(),
       active: true,
     });
+  }
+
+  async function updateTeam(id: string, data: Partial<team>) {
+    await updateDoc(doc(db, "teams", id), data);
   }
 
   async function removeTeam(id: string) {
@@ -62,5 +67,5 @@ export function useTeams() {
     }
   }
 
-  return { teams, loading, addTeam, removeTeam, toggleMember };
+  return { teams, loading, addTeam, updateTeam, removeTeam, toggleMember };
 }

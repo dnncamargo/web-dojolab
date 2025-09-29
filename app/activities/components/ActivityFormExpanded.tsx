@@ -3,6 +3,7 @@ import { activity, criteria } from "@/app/utils/types"
 import { useClassroom } from "../../hooks/useClassroom"
 import CriteriaEditor from "./CriteriaEditor"
 import { resolveStatus } from "@/app/utils/status"
+import clsx from "clsx"
 
 type ActivityFormExpandedProps = {
     initialTitle: string
@@ -17,7 +18,7 @@ export default function ActivityFormExpanded({
 }: ActivityFormExpandedProps) {
     const [title, setTitle] = useState(initialTitle)
     const [description, setDescription] = useState("")
-    const [timeConfig, setTimeConfig] = useState<{ mode: "chronometer" | "alarm"; value: number } | undefined>()
+    const [timed, setTimed] = useState(false)
     const [criteria, setCriteria] = useState<criteria[]>([])
     const [selectedClass, setSelectedClass] = useState<string>("")
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -33,7 +34,7 @@ export default function ActivityFormExpanded({
             classroomId: selectedClass || undefined,
             assessment: criteria,
             status: resolveStatus(selectedClass, status),
-            ...(timeConfig ? { timeConfig } : {}),
+            timed,
             date: selectedDate,
             createdAt: new Date(),
         }
@@ -73,7 +74,10 @@ export default function ActivityFormExpanded({
                 </p>
             </div>
 
-            <CriteriaEditor criteria={criteria} setCriteria={setCriteria} />
+            <CriteriaEditor
+                criteria={criteria}
+                onChange={setCriteria}
+            />
 
             <div>
                 <label className="block text-sm">Selecione a Turma (opcional)</label>
@@ -93,32 +97,15 @@ export default function ActivityFormExpanded({
 
             <div>
                 <label className="block text-sm">Configuração de Tempo (opcional)</label>
-                <select
-                    value={timeConfig?.mode || ""}
-                    onChange={(e) =>
-                        setTimeConfig(
-                            e.target.value
-                                ? { mode: e.target.value as "chronometer" | "alarm", value: 0 }
-                                : undefined
-                        )
-                    }
-                    className="w-full border p-2 rounded-md"
+                <button
+                    type="button"
+                    onClick={() => setTimed(!timed)}
+                    className={clsx('w-12 h-6 rounded-full transition flex items-center p-1',
+                        timed ? 'bg-blue-600' : 'bg-gray-300')}
                 >
-                    <option value="">-- Nenhum --</option>
-                    <option value="cronometro">Cronômetro</option>
-                    <option value="despertador">Despertador</option>
-                </select>
-                {timeConfig && (
-                    <input
-                        type="number"
-                        placeholder="Tempo em minutos"
-                        value={timeConfig.value}
-                        onChange={(e) =>
-                            setTimeConfig({ ...timeConfig, value: Number(e.target.value) })
-                        }
-                        className="w-full border p-2 rounded-md mt-2"
-                    />
-                )}
+                    <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', timed ? 'translate-x-6' : 'translate-x-0')} />
+                </button>
+
             </div>
 
             <div className="flex gap-2">

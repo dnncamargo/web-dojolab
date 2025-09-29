@@ -32,17 +32,20 @@ export default function StudentExpandRow({
             <td colSpan={3} className="px-4 py-3 bg-gray-50">
                 <div className="flex gap-3 overflow-x-auto">
                     {expandType === "team" &&
-                        teams.map((t) => (
-                            <button
-                                key={t.id}
-                                onClick={() => onToggleTeam(t.id, student.id)}
-                                className={`w-12 h-12 flex items-center justify-center rounded-full transition
-                  ${isMemberOf(t) ? "bg-purple-500 text-white" : "bg-purple-200 hover:bg-purple-300"}`}
-                                title={t.name}
-                            >
-                                {t.name?.charAt(0) ?? "T"}
-                            </button>
-                        ))}
+                        teams
+                            .filter((t) => t.classroomId === student.classroomId) // 🔹 só equipes da turma
+                            .map((t) => (
+                                <button
+                                    key={t.id}
+                                    onClick={() => onToggleTeam(t.id, student.id)}
+                                    className={`w-12 h-12 flex items-center justify-center rounded-full transition
+          ${isMemberOf(t) ? "bg-purple-500 text-white" : "bg-purple-200 hover:bg-purple-300"}`}
+                                    title={t.name}
+                                >
+                                    {t.name?.charAt(0) ?? "T"}
+                                </button>
+                            ))}
+
 
                     {expandType === "badge" &&
                         badges.map((b) => (

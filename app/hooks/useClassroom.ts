@@ -12,6 +12,7 @@ import {
   onSnapshot,
   query,
   orderBy,
+  updateDoc,
 } from "firebase/firestore";
 import { classroom } from "../utils/types";
 
@@ -35,9 +36,13 @@ export function useClassroom() {
     });
   }
 
+  async function updateClassroom(id: string, data: Partial<classroom>) {
+    await updateDoc(doc(db, "classrooms", id), data);
+  }
+
   async function removeClassroom(id: string) {
     await deleteDoc(doc(db, "classrooms", id));
   }
 
-  return { classrooms, loading, addClassroom, removeClassroom };
+  return { classrooms, loading, addClassroom, updateClassroom, removeClassroom };
 }

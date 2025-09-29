@@ -17,7 +17,8 @@ import {
   DocumentData,
   QueryDocumentSnapshot,
 } from "firebase/firestore";
-import { activity } from "../utils/types";
+import { activity, ActivityStatus, scoringResult } from "../utils/types";
+import { calculatePodium, validateAllCriteriaFilled } from "../utils/scoring";
 
 /**
  * remove chaves com valor `undefined` (preserva null/0/false)
@@ -67,8 +68,8 @@ function docToActivity(d: QueryDocumentSnapshot<DocumentData>): activity {
     description: data.description ?? "",
     classroomId: data.classroomId ?? "",
     assessment: (data.assessment ?? []) as activity["assessment"],
-    status: (data.status ?? "sem_atribuicao") as activity["status"],
-    timeConfig: data.timeConfig ?? undefined,
+    status: (data.status ?? "not_assigned") as ActivityStatus,
+    timed: data.timed ?? false,
     date,
     createdAt,
     results: data.results ?? null,
@@ -145,11 +146,31 @@ export function useActivities() {
     await deleteDoc(ref);
   };
 
+  async function handleFinalize(activity: activity, results: scoringResult[]) {
+    if (!validateAllCriteriaFilled(activity, results)) {
+      alert("Preencha todos os critérios antes de finalizar.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const { studentPodium, teamPodium } = calculatePodium(activity, results);
+      await updateDoc(doc(db, "activities", activity.id), {
+        status: "completed",
+        results,
+        podium: { studentPodium, teamPodium },
+        finalizedAt: serverTimestamp(),
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return {
     activities,
     loading,
     addActivity,
     updateActivity,
     removeActivity,
+    handleFinalize
   };
 }

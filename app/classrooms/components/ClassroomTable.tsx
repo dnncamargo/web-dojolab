@@ -4,14 +4,17 @@ import { classroom, student } from "@/app/utils/types";
 import React, { useState } from "react";
 import ClassroomRow from "./ClassroomRow";
 import ClassroomExpandRow from "./ClassroomExpandRow";
+import ClassroomEditRow from "./ClassroomEditRow";
 
 type ClassroomTableProps = {
   students: student[];
   classrooms: classroom[];
+  onUpdate: (classId: string, data: Partial<classroom>) => void;
   onRemove: (classId: string) => void;
 };
 
-export default function ClassroomTable({ students, classrooms, onRemove }: ClassroomTableProps) {
+export default function ClassroomTable({ students, classrooms, onUpdate, onRemove }: ClassroomTableProps) {
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [expandedClassId, setExpandedClassId] = useState<string | null>(null);
 
   const toggleExpand = (classId: string) => {
@@ -30,12 +33,23 @@ export default function ClassroomTable({ students, classrooms, onRemove }: Class
         <tbody>
           {classrooms.map((cls) => (
             <React.Fragment key={cls.id}>
+              {editingId === cls.id ? (
+                <ClassroomEditRow
+                  classroom={cls}
+                  onCancel={() => setEditingId(null)}
+                  onSave={(id, data) => {
+                    onUpdate(id, data);
+                    setEditingId(null);
+                  }}
+                  />
+              ) : (
               <ClassroomRow
                 classroom={cls}
                 expanded={expandedClassId === cls.id}
+                setEditingId={setEditingId}
                 onToggleExpand={() => toggleExpand(cls.id)}
                 onRemove={onRemove}
-              />
+              />)}
               {expandedClassId === cls.id && (
                 <ClassroomExpandRow classroom={cls} students={students} />
               )}

@@ -33,8 +33,8 @@ export default function StudentPage() {
           classrooms={classrooms}
           teams={teams}
           badges={badges}
-          onRemove={removeStudent}
           onUpdate={updateStudent}
+          onRemove={removeStudent}
           onToggleTeam={async (teamId, studentId) => await toggleMember(teamId, studentId)}
           onToggleBadge={async (studentId, badgeId) => await toggleBadge(studentId, badgeId)}
         />

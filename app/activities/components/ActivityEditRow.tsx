@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { activity, classroom, criteria } from "../../utils/types";
 import { resolveStatus, getStatusLabel } from "../../utils/status";
 import { ActivityStatus } from "@/app/utils/types";
-import CriteriaList from "./CriteriaList";
+import CriteriaEditor from "./CriteriaEditor";
+import clsx from "clsx";
 
 type ActivityEditRowProps = {
   activity: activity;
@@ -18,13 +19,13 @@ export default function ActivityEditRow({
   classrooms,
   onSave,
   onCancel,
-  onRemove,
   onClose
 }: ActivityEditRowProps) {
   const [title, setTitle] = useState(activity.title);
   const [description, setDescription] = useState(activity.description || "");
   const [classroomId, setClassroomId] = useState(activity.classroomId || "");
   const [date, setDate] = useState(activity.date);
+  const [timed, setTimed] = useState(activity.timed || false);
   const [criteria, setCriteria] = useState<criteria[]>(activity.assessment || [])
   const [status, setStatus] = useState<ActivityStatus>(
     activity.status && ["assigned", "in_progress", "completed", "cancelled"].includes(activity.status)
@@ -36,7 +37,6 @@ export default function ActivityEditRow({
   useEffect(() => {
     setCriteria(activity.assessment || [])
   }, [activity])
-
 
   const handleSave = () => {
     onSave(activity.id, {
@@ -66,17 +66,6 @@ export default function ActivityEditRow({
             onClick={handleSave}
           >
             Salvar
-          </button>
-          <button
-            className="px-3 py-1 bg-red-500 text-white rounded"
-            onClick={() => {
-              // Exibe um alerta de confirmação
-              if (window.confirm("Tem certeza que deseja remover esta atividade?")) {
-                onRemove(activity.id);
-              }
-            }}
-          >
-            Remover
           </button>
         </div>
         <div>
@@ -124,9 +113,11 @@ export default function ActivityEditRow({
         </div>
         <div className="mt-2">
           <strong>Critérios de Avaliação:</strong>
-          <CriteriaList criteria={activity.assessment} />
+          <CriteriaEditor
+            criteria={criteria}
+            onChange={setCriteria}
+          />
         </div>
-
 
         <div>
           <label className="block text-sm font-medium">Turma</label>
@@ -142,6 +133,19 @@ export default function ActivityEditRow({
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="block text-sm">Configuração de Tempo (opcional)</label>
+          <button
+            type="button"
+            onClick={() => setTimed(!timed)}
+            className={clsx('w-12 h-6 rounded-full transition flex items-center p-1',
+              timed ? 'bg-blue-600' : 'bg-gray-300')}
+          >
+            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', timed ? 'translate-x-6' : 'translate-x-0')} />
+          </button>
+
         </div>
 
         <div>

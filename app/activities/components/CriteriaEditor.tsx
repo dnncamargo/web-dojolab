@@ -2,12 +2,12 @@ import { criteria } from "@/app/utils/types"
 
 type CriteriaEditorProps = {
   criteria: criteria[]
-  setCriteria: (c: criteria[]) => void
+  onChange: (c: criteria[]) => void
 }
 
-export default function CriteriaEditor({ criteria, setCriteria }: CriteriaEditorProps) {
+export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorProps) {
   const toggleEvaluation = (id: string) => {
-    setCriteria(
+    onChange(
       criteria.map((c) =>
         c.id === id
           ? {
@@ -20,7 +20,7 @@ export default function CriteriaEditor({ criteria, setCriteria }: CriteriaEditor
   }
 
   const toggleScoring = (id: string) => {
-    setCriteria(
+    onChange(
       criteria.map((c) =>
         c.id === id
           ? {
@@ -33,11 +33,11 @@ export default function CriteriaEditor({ criteria, setCriteria }: CriteriaEditor
   }
 
   const handleRemove = (id: string) => {
-    setCriteria(criteria.filter((c) => c.id !== id))
+    onChange(criteria.filter((c) => c.id !== id))
   }
 
   const addCriteria = () => {
-    setCriteria([
+    onChange([
       ...criteria,
       {
         id: crypto.randomUUID(),
@@ -58,7 +58,7 @@ export default function CriteriaEditor({ criteria, setCriteria }: CriteriaEditor
             placeholder="Nome do critério"
             value={c.description}
             onChange={(e) =>
-              setCriteria(
+              onChange(
                 criteria.map((item) =>
                   item.id === c.id ? { ...item, description: e.target.value } : item
                 )

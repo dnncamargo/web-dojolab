@@ -1,17 +1,21 @@
 "use client";
 
-import { student, team } from "@/app/utils/types";
+import { student, classroom, team } from "@/app/utils/types";
 import React, { useState } from "react";
 import TeamsRow from "./TeamsRow";
+import TeamsEditRow from "./TeamsEditRow";
 import TeamsExpandRow from "./TeamsExpandRow";
 
 type TeamsTableProps = {
   teams: team[];
   students: student[];
+  classrooms: classroom[];
+  onUpdate: (id: string, data: Partial<team>) => void;
   onRemove: (id: string) => void;
 };
 
-export default function TeamsTable({ teams, students, onRemove }: TeamsTableProps) {
+export default function TeamsTable({ teams, students, classrooms, onUpdate, onRemove }: TeamsTableProps) {
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
 
   const toggleExpand = (teamId: string) => {
@@ -24,20 +28,37 @@ export default function TeamsTable({ teams, students, onRemove }: TeamsTableProp
         <thead className="bg-gray-200 text-gray-700">
           <tr>
             <th className="px-4 py-2 text-left">Nome da Equipe</th>
+            <th className="px-4 py-2 text-left">Turma</th>
             <th className="px-4 py-2 text-right">Ações</th>
           </tr>
         </thead>
         <tbody>
           {teams.map((team) => (
             <React.Fragment key={team.id}>
+              {editingId === team.id ? (
+                <TeamsEditRow
+                  team={team}
+                  classrooms={classrooms}
+                  onCancel={() => setEditingId(null)}
+                  onSave={(id, data) => {
+                    onUpdate(id, data);
+                    setEditingId(null);
+                  }}
+                />
+              ) : (
               <TeamsRow
                 team={team}
+                classrooms={classrooms}
                 expanded={expandedTeamId === team.id}
+                setEditingId={setEditingId}
                 onToggleExpand={() => toggleExpand(team.id)}
                 onRemove={onRemove}
-              />
+              />)}
               {expandedTeamId === team.id && (
-                <TeamsExpandRow team={team} students={students} />
+                <TeamsExpandRow
+                  team={team}
+                  students={students}
+                />
               )}
             </React.Fragment>
           ))}

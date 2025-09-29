@@ -45,13 +45,13 @@ export function useStudents() {
     });
   }
 
-  async function removeStudent(id: string) {
-    await deleteDoc(doc(db, "students", id));
-  }
-
   async function updateStudent(id: string, data: Partial<student>) {
     const ref = doc(db, "students", id);
     await updateDoc(ref, data);
+  }
+
+  async function removeStudent(id: string) {
+    await deleteDoc(doc(db, "students", id));
   }
 
   // toggle badge: adiciona/remove badgeId do array badges do aluno

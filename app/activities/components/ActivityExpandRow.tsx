@@ -20,6 +20,9 @@ export default function ActivityExpandRow({
           <CriteriaList criteria={activity.assessment} />
         </div>
         <div className="mt-2">
+          <strong>Atividade cronometrada:</strong> {activity.timed ? "Sim" : "Não"}
+        </div>
+        <div className="mt-2">
           <strong>Criada em:</strong> {activity.createdAt.toLocaleDateString("pt-BR")}
         </div>
       </td>

@@ -19,7 +19,7 @@ export type team = {
   name: string;
   createdAt: string;
   members: string[];
-  classId: string;
+  classroomId: string;
   active: boolean;
 };
 
@@ -37,7 +37,6 @@ export type criteria = {
   description: string
   evaluationType: "integer" | "boolean"
   scoringType: "individual" | "team"
-  points?: number
   observations?: string
 }
 
@@ -55,11 +54,26 @@ export type activity = {
   classroomId?: string
   assessment: criteria[]
   status:   ActivityStatus
-  timeConfig?: {
-    mode: "chronometer" | "alarm"
-    value: number // em minutos
-  }
-  //results?: number
+  timed: boolean
+  results?: scoringResult[]
   date: Date;
+  podium?: Podium; 
   createdAt: Date
 }
+
+export type scoringResult = {
+  criteriaId: string;
+  targetId: string; // pode ser aluno ou equipe
+  targetType: "student" | "team";
+  value: number | boolean; // depende do evaluationType
+};
+
+export type PodiumEntry = {
+  id: string; // ID do aluno ou da equipe
+  score: number; // Pontuação total alcançada
+};
+
+export type Podium = {
+  studentPodium: PodiumEntry[];
+  teamPodium: PodiumEntry[];
+};

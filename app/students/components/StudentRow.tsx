@@ -12,7 +12,7 @@ type StudentRowProps = {
 };
 
 export default function StudentRow({ student, classrooms, setEditingId, toggleExpand, onRemove }: StudentRowProps) {
-    
+
     return (
 
         <tr className="border-t border-gray-200 hover:bg-gray-50">
@@ -39,9 +39,15 @@ export default function StudentRow({ student, classrooms, setEditingId, toggleEx
                 >
                     Insígnia
                 </button>
+                {/* Botão Remover */}
                 <button
-                    onClick={() => onRemove(student.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    className="px-3 py-1 bg-red-500 text-white rounded"
+                    onClick={() => {
+                        // Exibe um alerta de confirmação
+                        if (window.confirm("Tem certeza que deseja remover este aluno?")) {
+                            onRemove(student.id);
+                        }
+                    }}
                 >
                     Remover
                 </button>

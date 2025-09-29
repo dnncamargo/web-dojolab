@@ -6,7 +6,7 @@ import ClassroomForm from "./components/ClassroomForm";
 import ClassroomTable from "./components/ClassroomTable";
 
 export default function ClassesPage() {
-  const { classrooms, loading, addClassroom, removeClassroom } = useClassroom();
+  const { classrooms, loading, addClassroom, updateClassroom,removeClassroom } = useClassroom();
   const { students, addStudent } = useStudents();
 
   // Quando CSV é carregado, cria alunos para a turma mais recente
@@ -26,12 +26,20 @@ export default function ClassesPage() {
     <div>
       <h1 className="title-section">Cadastro de Turmas</h1>
 
-      <ClassroomForm onAdd={addClassroom} onUpload={handleUpload} />
+      <ClassroomForm 
+        onAdd={addClassroom} 
+        onUpload={handleUpload} 
+      />
 
       {loading ? (
         <p className="body-text">Carregando turmas...</p>
       ) : (
-        <ClassroomTable students={students} classrooms={classrooms} onRemove={removeClassroom} />
+        <ClassroomTable 
+          students={students} 
+          classrooms={classrooms} 
+          onUpdate={updateClassroom}
+          onRemove={removeClassroom} 
+        />
       )}
     </div>
   );

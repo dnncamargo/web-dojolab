@@ -15,15 +15,16 @@ export default function ActivityForm({ onAdd }: ActivityFormProps) {
   }
 
   return (
-    <div className="bg-white shadow rounded-lg p-4 mb-6 flex flex-col md:flex-row gap-2">
+    <div className="bg-white shadow rounded-lg p-4 mb-6 gap-2">
       {!expanded ? (
         <div className="flex items-center gap-2">
           <input
+            required
             type="text"
             placeholder="Título da atividade"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="flex-1 border p-2 rounded-md"
+            className="border rounded px-3 py-2 flex-1 placeholder-black"
           />
           <button
             onClick={handleExpand}
