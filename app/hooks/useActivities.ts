@@ -73,6 +73,7 @@ function docToActivity(d: QueryDocumentSnapshot<DocumentData>): activity {
     date,
     createdAt,
     results: data.results ?? null,
+    podium: data.podium ?? undefined
   } as activity;
 }
 

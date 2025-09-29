@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { team, classroom } from "../../utils/types";
+import { classroom } from "../../utils/types";
 
 type Props = {
   classroom: classroom;

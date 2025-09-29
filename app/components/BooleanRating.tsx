@@ -13,7 +13,7 @@ export default function BooleanRating({ value, onChange }: BooleanRatingProps) {
         type="button"
         className={`px-2 py-1 rounded ${value === true ? "bg-green-600 text-white" : "bg-gray-200"
           }`}
-        onClick={(e) => { onChange(true) }}
+        onClick={() => { onChange(true) }}
       >
         ✓
       </button>

@@ -37,6 +37,7 @@ export type criteria = {
   description: string
   evaluationType: "integer" | "boolean"
   scoringType: "individual" | "team"
+  points?: number;
   observations?: string
 }
 

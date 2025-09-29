@@ -3,13 +3,11 @@ import CriteriaList from "./CriteriaList";
 
 type ActivityExpandRowProps = {
   activity: activity;
-  classrooms: classroom[];
 };
 
 export default function ActivityExpandRow({
   activity,
-  classrooms,
-}: ActivityExpandRowProps) {
+  }: ActivityExpandRowProps) {
   
   return (
     <tr className="bg-gray-50">

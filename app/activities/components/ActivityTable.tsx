@@ -79,7 +79,6 @@ export default function ActivityTable({
                 {expandedId === a.id && (
                   <ActivityExpandRow
                     activity={a}
-                    classrooms={classrooms}
                   />
                 )}
               </React.Fragment>
