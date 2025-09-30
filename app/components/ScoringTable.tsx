@@ -85,10 +85,10 @@ export default function ScoringTable({
 
   // Filtrar apenas alunos e equipes da turma da atividade
   const activeStudents = students.filter(
-    (s) => s.classroomId === activity.classroomId
+    (s) => s.isActive && s.classroomId === activity.classroomId
   );
   const activeTeams = teams.filter(
-    (t) => t.classroomId === activity.classroomId
+    (t) => t.isActive && t.classroomId === activity.classroomId
   );
 
   return (
