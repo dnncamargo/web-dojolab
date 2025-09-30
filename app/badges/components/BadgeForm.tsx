@@ -4,12 +4,12 @@
 import { useState } from "react";
 import { badge } from "../../utils/types";
 
-export default function BadgeForm({
-  onAdd,
-}: {
+type BadgeFormProps = {
   onAdd: (badge: Omit<badge, "id" | "createdAt">) => void;
-}) {
-  const [name, setName] = useState("");
+}
+
+export default function BadgeForm({ onAdd }: BadgeFormProps) {
+  const [badgeName, setBadgeName] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,21 +21,25 @@ export default function BadgeForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    if (!badgeName.trim()) return;
 
     // Para versão simples, usamos apenas URL local temporária
+    // A URL é gerada aqui e passada para onAdd
     const imageUrl = file ? URL.createObjectURL(file) : "";
 
     onAdd({
-      name,
+      name: badgeName,
       imageUrl,
       description: "",
-      active: true,
+      isActive: true,
     });
 
-    setName("");
+    setBadgeName("");
     setFile(null);
   };
+
+  // Calcula o URL de pré-visualização (temporário)
+  const previewUrl = file ? URL.createObjectURL(file) : null;
 
   return (
     <form
@@ -45,16 +49,26 @@ export default function BadgeForm({
       <input
         type="text"
         placeholder="Nome da insígnia"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={badgeName}
+        onChange={(e) => setBadgeName(e.target.value)}
         className="border rounded px-3 py-2 flex-1 placeholder-black"
         required
       />
 
-      <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">
-        Selecionar Arquivo
-        <input type="file" accept="image/*" onChange={handleFile} hidden />
-      </label>
+      {/* Container para pré-visualização e input de arquivo */}
+      <div className="flex items-center gap-2">
+        {previewUrl && (
+          <img 
+            src={previewUrl} 
+            alt="Pré-visualização" 
+            className="h-10 w-10 object-cover rounded" 
+          />
+        )}
+        <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">
+          {file ? file.name : "Selecionar Arquivo"}
+          <input type="file" accept="image/*" onChange={handleFile} hidden />
+        </label>
+      </div>
 
       <button
         type="submit"

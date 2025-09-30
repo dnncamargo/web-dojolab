@@ -2,6 +2,13 @@
 
 import { useState } from "react";
 
+// Função utilitária para capitalizar o nome
+const capitalizeName = (name: string): string => {
+  return name.toLowerCase().split(' ').map((word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+};
+
 export default function ClassroomForm({ onAdd, onUpload }: {
   onAdd: (classroomName: string) => void;
   onUpload: (students: { name: string }[], classroomName: string) => void;
@@ -25,12 +32,21 @@ export default function ClassroomForm({ onAdd, onUpload }: {
       const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
 
       // Cada linha do CSV vira um aluno
-      const studentLine = lines.map((line) => {
-        const [name] = line.split(","); // pode expandir p/ mais colunas
-        return { name: name.trim() };
+      const studentLines = lines.map((line) => {
+        const [name] = line.split(","); // Apenas a primeira coluna é considerada
+        // 3. Aplica a capitalização
+        return { name: capitalizeName(name.trim()) };
       });
 
-      onUpload(studentLine, classroomName);
+      // 2. O nome da turma é o que está no input no momento do upload.
+      // A lógica para checar se a turma já existe ou criar uma nova deve ser no onUpload (ou no hook).
+      onUpload(studentLines, classroomName);
+
+      // Limpa o nome da turma e o input de arquivo após o upload
+      setClassroomName("");
+      // Resetar o input type="file" exige manipulá-lo diretamente ou re-renderizar, 
+      // mas para este exemplo, apenas limpamos o nome da turma.
+      e.target.value = '';
     };
     reader.readAsText(file);
   };
@@ -54,9 +70,18 @@ export default function ClassroomForm({ onAdd, onUpload }: {
         Adicionar
       </button>
 
-      <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">
-        Upload CSV
-        <input type="file" accept=".csv" onChange={handleFile} hidden />
+      {/* Botão para Upload de CSV */}
+      <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition">
+        Importar Alunos (CSV)
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFile}
+          className="hidden"
+          // O input de nome da turma é opcional para o upload de CSV
+          // mas é usado para nomear a turma.
+          disabled={!classroomName.trim()}
+        />
       </label>
     </form>
   );

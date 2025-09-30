@@ -5,14 +5,15 @@ import { classroom, student } from "@/app/utils/types";
 type ClassroomExpandRowProps = {
   classroom: classroom;
   students: student[];
+  colSpan: number; 
 };
 
-export default function ClassroomExpandRow({ classroom, students }: ClassroomExpandRowProps) {
+export default function ClassroomExpandRow({ classroom, students, colSpan }: ClassroomExpandRowProps) {
   const classStudents = students.filter((s) => s.classroomId === classroom.id);
 
   return (
     <tr>
-      <td colSpan={2} className="bg-gray-50 px-4 py-3">
+      <td colSpan={colSpan} className="px-4 py-3 bg-gray-50">
         <h3 className="font-semibold mb-2">Alunos da turma</h3>
         <ul className="list-disc pl-6 space-y-1">
           {classStudents.length > 0 ? (

@@ -8,13 +8,25 @@ type ClassroomRowProps = {
   setEditingId: (id: string | null) => void;
   onToggleExpand: () => void;
   onRemove: (id: string) => void;
+  colSpan: number;
 };
 
-export default function ClassroomRow({ classroom, expanded, setEditingId, onToggleExpand, onRemove }: ClassroomRowProps) {
+export default function ClassroomRow({ classroom, expanded, setEditingId, onToggleExpand, onRemove, colSpan }: ClassroomRowProps) {
+
+  // Lógica de estilo condicional para inativo
+  const isInactive = classroom.isActive === false;
+  const textClass = isInactive ? "text-gray-500" : "text-gray-900";
+
   return (
-    <tr className="border-t border-gray-200 hover:bg-gray-50">
-      <td className="px-4 py-2">{classroom.name}</td>
-      <td className="px-4 py-2 flex gap-2 justify-end">
+    <tr className={`border-t border-gray-200 hover:bg-gray-50 ${isInactive ? "bg-gray-100" : ""}`}>
+      <td className={`px-4 py-2 ${textClass}`}>{classroom.name}</td>
+
+      {/* CORREÇÃO: Coluna 2: Ativo (Célula vazia, corresponde a w-20) */}
+      <td className="px-4 py-2">
+        {/* Conteúdo vazio para manter a largura da coluna 'Ativo' */}
+      </td>
+      
+      <td className="px-4 py-2 flex gap-2 justify-end " colSpan={2}>
         <button
           onClick={() => setEditingId(classroom.id)}
           className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"

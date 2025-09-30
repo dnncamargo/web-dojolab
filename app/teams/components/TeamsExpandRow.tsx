@@ -5,6 +5,7 @@ import { student, team } from "@/app/utils/types";
 type TeamsExpandRowProps = {
   team: team;
   students: student[];
+  colSpan: number
 };
 
 export default function TeamsExpandRow({ team, students }: TeamsExpandRowProps) {

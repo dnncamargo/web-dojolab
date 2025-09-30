@@ -41,7 +41,7 @@ export function useTeams() {
       classroomId,
       members: [],
       createdAt: serverTimestamp(),
-      active: true,
+      isActive: true,
     });
   }
 

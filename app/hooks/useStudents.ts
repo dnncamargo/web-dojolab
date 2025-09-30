@@ -35,13 +35,13 @@ export function useStudents() {
     return () => unsubscribe();
   }, []);
 
-  async function addStudent(name: string, classId: string) {
+  async function addStudent(name: string, classroomId: string) {
     await addDoc(collection(db, "students"), {
       name,
-      classId,
+      classroomId,
       createdAt: serverTimestamp(),
       badges: [],
-      active: true,
+      isActive: true,
     });
   }
 

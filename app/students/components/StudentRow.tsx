@@ -4,23 +4,35 @@
 import { student, classroom } from "../../utils/types";
 
 type StudentRowProps = {
-    student: student;
+    student: student & { isActive?: boolean };
     classrooms: classroom[];
     setEditingId: (id: string | null) => void;
     toggleExpand: (id: string, type: "team" | "badge") => void;
     onRemove: (id: string) => void;
+    isExpanded: boolean;
+    currentExpandType: "team" | "badge" | null;
+    colSpan: number; 
 };
 
-export default function StudentRow({ student, classrooms, setEditingId, toggleExpand, onRemove }: StudentRowProps) {
+export default function StudentRow({ student, classrooms, setEditingId, isExpanded, currentExpandType, toggleExpand, onRemove, colSpan }: StudentRowProps) {
+
+    // Funções auxiliares para determinar se o *próprio* botão deve ser "Fechar"
+    const isTeamExpanded = isExpanded && currentExpandType === "team";
+    const isBadgeExpanded = isExpanded && currentExpandType === "badge";
+
+        // Lógica de estilo condicional para inativo
+    const isInactive = student.isActive === false;
+    const textClass = isInactive ? "text-gray-500" : "text-gray-900";
 
     return (
 
-        <tr className="border-t border-gray-200 hover:bg-gray-50">
-            <td className="px-4 py-2">{student.name}</td>
-            <td className="px-4 py-2">
+        <tr className={`border-t border-gray-200 hover:bg-gray-50 ${isInactive ? "bg-gray-100" : ""}`}>
+            {/* Nome (Aplica a classe condicional) */}
+            <td className={`px-4 py-2 ${textClass}`}>{student.name}</td>
+            <td className={`px-4 py-2 ${textClass}`} colSpan={2}>
                 {classrooms.find((c) => c.id === student.classroomId)?.name || "—"}
             </td>
-            <td className="px-4 py-2 flex gap-2 justify-end">
+            <td colSpan={colSpan} className="px-4 py-2 flex gap-2 justify-end">
                 <button
                     onClick={() => setEditingId(student.id)}
                     className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
@@ -29,15 +41,21 @@ export default function StudentRow({ student, classrooms, setEditingId, toggleEx
                 </button>
                 <button
                     onClick={() => toggleExpand(student.id, "team")}
-                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                    className={
+                        `px-3 py-1 rounded transition ` +
+                        (isTeamExpanded ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-green-500 text-white hover:bg-green-600")
+                    }
                 >
-                    Equipe
+                    {isTeamExpanded ? "Fechar" : "Equipe"}
                 </button>
                 <button
                     onClick={() => toggleExpand(student.id, "badge")}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                    className={
+                        `px-3 py-1 rounded transition ` +
+                        (isBadgeExpanded ? "bg-orange-500 text-white hover:bg-orange-600" : "bg-yellow-500 text-white hover:bg-yellow-600")
+                    }
                 >
-                    Insígnia
+                    {isBadgeExpanded ? "Fechar" : "Insígnia"}
                 </button>
                 {/* Botão Remover */}
                 <button

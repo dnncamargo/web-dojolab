@@ -17,6 +17,8 @@ type TeamsTableProps = {
 export default function TeamsTable({ teams, students, classrooms, onUpdate, onRemove }: TeamsTableProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
+  const isEditing = editingId !== null;
+  const colSpanCount = 4; // Nome(1), Turma(1), Ativo/Vazio(1), Ações(1)
 
   const toggleExpand = (teamId: string) => {
     setExpandedTeamId(expandedTeamId === teamId ? null : teamId);
@@ -25,10 +27,18 @@ export default function TeamsTable({ teams, students, classrooms, onUpdate, onRe
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white shadow p-4 mb-6 rounded-lg overflow-hidden">
+
         <thead className="bg-gray-200 text-gray-700">
           <tr>
             <th className="px-4 py-2 text-left">Nome da Equipe</th>
             <th className="px-4 py-2 text-left">Turma</th>
+            
+            {/* Coluna para 'Ativo'. Visível apenas em edição, mas o <th> deve existir para manter a largura. */}
+            <th className="px-4 py-2 text-left" style={{ width: isEditing ? 'auto' : '0', padding: isEditing ? '0.5rem 1rem' : '0' }}>
+              {isEditing ? "Ativo" : ""}
+            </th>
+
+            {/* Ações deve estar sempre presente no cabeçalho e alinhado à direita */}
             <th className="px-4 py-2 text-right">Ações</th>
           </tr>
         </thead>
@@ -53,11 +63,13 @@ export default function TeamsTable({ teams, students, classrooms, onUpdate, onRe
                 setEditingId={setEditingId}
                 onToggleExpand={() => toggleExpand(team.id)}
                 onRemove={onRemove}
+                colSpan={colSpanCount}
               />)}
               {expandedTeamId === team.id && (
                 <TeamsExpandRow
                   team={team}
                   students={students}
+                  colSpan={colSpanCount}
                 />
               )}
             </React.Fragment>

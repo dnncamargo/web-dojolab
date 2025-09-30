@@ -32,6 +32,7 @@ export function useClassroom() {
   async function addClassroom(name: string) {
     return await addDoc(collection(db, "classrooms"), {
       name,
+      isActive: true,
       createdAt: serverTimestamp(),
     });
   }

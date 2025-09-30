@@ -9,15 +9,21 @@ type TeamsRowProps = {
   setEditingId: (id: string | null) => void;
   onToggleExpand: () => void;
   onRemove: (id: string) => void;
+  colSpan: number
 };
 
-export default function TeamsRow({ team, classrooms, expanded, setEditingId, onToggleExpand, onRemove }: TeamsRowProps) {
+export default function TeamsRow({ team, classrooms, expanded, setEditingId, onToggleExpand, onRemove, colSpan }: TeamsRowProps) {
+
+  // Lógica de estilo condicional para inativo
+  const isInactive = team.isActive === false;
+  const textClass = isInactive ? "text-gray-500" : "text-gray-900";
+
   return (
     <tr className="border-t border-gray-200 hover:bg-gray-50">
-      <td className="px-4 py-2">
+      <td className={`px-4 py-2 ${textClass}`}>
         {team.name}
       </td>
-      <td className="px-4 py-2">
+      <td className={`px-4 py-2 ${textClass}`} colSpan={2}>
         {classrooms.find((c) => c.id === team.classroomId)?.name || "—"}
       </td>
       <td className="px-4 py-2 flex gap-2 justify-end">

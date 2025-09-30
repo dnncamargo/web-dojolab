@@ -35,7 +35,7 @@ export function useBadges() {
     await addDoc(collection(db, "badges"), {
       ...newBadge,
       createdAt: serverTimestamp(),
-      active: true,
+      isActive: true,
     });
   };
 

@@ -14,11 +14,13 @@ type Props = {
 export default function TeamEditRow({ team, classrooms, onCancel, onSave }: Props) {
   const [teamName, setTeamName] = useState(team.name);
   const [classroomId, setClassroomId] = useState(team.classroomId || "");
+  const [isActive, setIsActive] = useState(team.isActive !== undefined ? team.isActive : true);
 
   const handleSave = () => {
     onSave(team.id, {
       name: teamName,
       classroomId: classroomId,
+      isActive
     });
     onCancel();
   };
@@ -48,6 +50,19 @@ export default function TeamEditRow({ team, classrooms, onCancel, onSave }: Prop
             </option>
           ))}
         </select>
+      </td>
+
+      {/* Ativo */}
+      <td className="px-4 py-2">
+        <div className="flex items-center justify-start h-full">
+          <input
+            type="checkbox"
+            checked={isActive}
+            onChange={(e) => setIsActive(e.target.checked)}
+            className="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500"
+            title={isActive ? "Desativar Equipe" : "Ativar Equipe"}
+          />
+        </div>
       </td>
 
       {/* Ações */}

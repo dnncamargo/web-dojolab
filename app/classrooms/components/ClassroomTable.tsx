@@ -15,10 +15,12 @@ type ClassroomTableProps = {
 
 export default function ClassroomTable({ students, classrooms, onUpdate, onRemove }: ClassroomTableProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [expandedClassId, setExpandedClassId] = useState<string | null>(null);
+  const [expandedClassroomId, setExpandedClassroomId] = useState<string | null>(null);
+  const isEditing = editingId !== null;
+  const colSpanCount = 3; // Nome(1), Ativo/Vazio(1), Ações(1)
 
-  const toggleExpand = (classId: string) => {
-    setExpandedClassId(expandedClassId === classId ? null : classId);
+  const toggleExpand = (classroomId: string) => {
+    setExpandedClassroomId(expandedClassroomId === classroomId ? null : classroomId);
   };
 
   return (
@@ -26,8 +28,16 @@ export default function ClassroomTable({ students, classrooms, onUpdate, onRemov
       <table className="min-w-full bg-white shadow p-4 mb-6 rounded-lg overflow-hidden">
         <thead className="bg-gray-200 text-gray-700">
           <tr>
-            <th className="px-4 py-2 text-left">Nome</th>
-            <th className="px-4 py-2 text-right">Ações</th>
+            {/* CORREÇÃO 1: Largura fixa para 'Nome' (Permite que o nome ocupe a maior parte) */}
+            <th className="px-4 py-2 text-left w-1/2">Nome</th>
+
+            {/* CORREÇÃO 2: Coluna 'Ativo' sempre presente, com largura fixa e pequena (w-20) */}
+            <th className="px-4 py-2 text-left w-20">
+              {isEditing ? "Ativo" : ""} {/* Mostra "Ativo" apenas em modo de edição */}
+            </th>
+
+            {/* CORREÇÃO 3: Largura fixa para 'Ações' (suficiente para os botões) */}
+            <th className="px-4 py-2 text-right w-48">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -41,17 +51,22 @@ export default function ClassroomTable({ students, classrooms, onUpdate, onRemov
                     onUpdate(id, data);
                     setEditingId(null);
                   }}
-                  />
+                />
               ) : (
-              <ClassroomRow
-                classroom={cls}
-                expanded={expandedClassId === cls.id}
-                setEditingId={setEditingId}
-                onToggleExpand={() => toggleExpand(cls.id)}
-                onRemove={onRemove}
-              />)}
-              {expandedClassId === cls.id && (
-                <ClassroomExpandRow classroom={cls} students={students} />
+                <ClassroomRow
+                  classroom={cls}
+                  expanded={expandedClassroomId === cls.id}
+                  setEditingId={setEditingId}
+                  onToggleExpand={() => toggleExpand(cls.id)}
+                  onRemove={onRemove}
+                  colSpan={colSpanCount}
+                />)}
+              {expandedClassroomId === cls.id && (
+                <ClassroomExpandRow
+                  classroom={cls}
+                  students={students}
+                  colSpan={colSpanCount}
+                />
               )}
             </React.Fragment>
           ))}

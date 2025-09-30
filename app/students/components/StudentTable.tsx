@@ -31,6 +31,8 @@ export default function StudentTable({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [expandType, setExpandType] = useState<"team" | "badge" | null>(null);
+  const isEditing = editingId !== null;
+  const colSpanCount = 4; // Nome(1), Turma(1), Ativo/Vazio(1), Ações(1)
 
   const toggleExpand = (id: string, type: "team" | "badge") => {
     if (expandedId === id && expandType === type) {
@@ -49,6 +51,13 @@ export default function StudentTable({
           <tr>
             <th className="px-4 py-2 text-left">Nome</th>
             <th className="px-4 py-2 text-left">Turma</th>
+
+            {/* NOVO: Coluna para 'Ativo'. Visível apenas em edição, mas o <th> deve existir para manter a largura. */}
+            <th className="px-4 py-2 text-left" style={{ width: isEditing ? 'auto' : '0', padding: isEditing ? '0.5rem 1rem' : '0' }}>
+              {isEditing ? "Ativo" : ""}
+            </th>
+
+            {/* Ações deve estar sempre presente no cabeçalho e alinhado à direita */}
             <th className="px-4 py-2 text-right">Ações</th>
           </tr>
         </thead>
@@ -72,6 +81,9 @@ export default function StudentTable({
                   setEditingId={() => setEditingId(s.id)}
                   toggleExpand={toggleExpand}
                   onRemove={onRemove}
+                  isExpanded={expandedId === s.id}
+                  currentExpandType={expandedId === s.id ? expandType : null}
+                  colSpan={colSpanCount}
                 />
               )}
 
@@ -83,6 +95,7 @@ export default function StudentTable({
                   badges={badges}
                   onToggleTeam={onToggleTeam}
                   onToggleBadge={onToggleBadge}
+                  colSpan={colSpanCount}
                 />
               )}
             </React.Fragment>

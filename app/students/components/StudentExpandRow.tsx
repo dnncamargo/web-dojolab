@@ -11,6 +11,7 @@ type StudentExpandRowProps = {
     onToggleTeam: (teamId: string, studentId: string) => Promise<void> | void;
     onToggleBadge: (studentId: string, badgeId: string) => Promise<void> | void;
     onUpdate?: (id: string, data: student) => void;
+    colSpan: number; 
 };
 
 export default function StudentExpandRow({
@@ -20,6 +21,7 @@ export default function StudentExpandRow({
     badges = [],
     onToggleTeam,
     onToggleBadge,
+    colSpan
 }: StudentExpandRowProps) {
     const isMemberOf = (t: team) => Array.isArray(t.members) && t.members.includes(student.id);
     const hasBadge = (b: badge) => {
@@ -29,7 +31,7 @@ export default function StudentExpandRow({
 
     return (
         <tr>
-            <td colSpan={3} className="px-4 py-3 bg-gray-50">
+            <td colSpan={colSpan} className="px-4 py-3 bg-gray-50">
                 <div className="flex gap-3 overflow-x-auto">
                     {expandType === "team" &&
                         teams

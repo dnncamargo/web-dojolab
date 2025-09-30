@@ -4,14 +4,14 @@ export type student = {
   createdAt: string;
   classroomId: string;
   badges?: string[];
-  active: boolean;
+  isActive: boolean;
 };
 
 export type classroom = {
   id: string;
   name: string;
   createdAt: string;
-  active: boolean;
+  isActive: boolean;
 };
 
 export type team = {
@@ -20,7 +20,7 @@ export type team = {
   createdAt: string;
   members: string[];
   classroomId: string;
-  active: boolean;
+  isActive: boolean;
 };
 
 export type badge = {
@@ -29,7 +29,7 @@ export type badge = {
   imageUrl: string;
   description: string;
   createdAt: string;
-  active: boolean;
+  isActive: boolean;
 };
 
 export type criteria = {

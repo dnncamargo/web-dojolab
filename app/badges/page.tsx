@@ -2,11 +2,15 @@
 "use client";
 
 import { useBadges } from "../hooks/useBadges";
+import { useClassroom } from "../hooks/useClassroom";
+import { useStudents } from "../hooks/useStudents";
 import BadgeForm from "./components/BadgeForm";
 import BadgeTable from "./components/BadgeTable";
 
 export default function BadgesPage() {
   const { badges, loading, addBadge, updateBadge, removeBadge } = useBadges();
+  const { students } = useStudents();
+  const { classrooms } = useClassroom();
 
   return (
     <div>
@@ -17,7 +21,12 @@ export default function BadgesPage() {
       {loading ? (
         <p>Carregando...</p>
       ) : (
-        <BadgeTable badges={badges} onRemove={removeBadge} onUpdate={updateBadge} />
+        <BadgeTable 
+          badges={badges} 
+          students={students}
+          classrooms={classrooms}
+          onRemove={removeBadge} 
+          onUpdate={updateBadge} />
       )}
     </div>
   );

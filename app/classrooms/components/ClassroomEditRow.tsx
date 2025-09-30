@@ -4,18 +4,20 @@
 import { useState } from "react";
 import { classroom } from "../../utils/types";
 
-type Props = {
+type ClassroomEditRowProps = {
   classroom: classroom;
   onCancel: () => void;
   onSave: (id: string, data: Partial<classroom>) => Promise<void> | void;
 };
 
-export default function ClassroomEditRow({ classroom, onCancel, onSave }: Props) {
+export default function ClassroomEditRow({ classroom, onCancel, onSave }: ClassroomEditRowProps) {
   const [classroomName, setClassroomName] = useState(classroom.name);
+  const [isActive, setIsActive] = useState(classroom.isActive !== undefined ? classroom.isActive : true);
 
   const handleSave = () => {
     onSave(classroom.id, {
       name: classroomName,
+      isActive
     });
     onCancel();
   };
@@ -29,6 +31,19 @@ export default function ClassroomEditRow({ classroom, onCancel, onSave }: Props)
           onChange={(e) => setClassroomName(e.target.value)}
           className="border px-2 py-1 rounded w-full"
         />
+      </td>
+
+      {/* Ativo */}
+      <td className="px-4 py-2">
+        <div className="flex items-center justify-start h-full">
+          <input
+            type="checkbox"
+            checked={isActive}
+            onChange={(e) => setIsActive(e.target.checked)}
+            className="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500"
+            title={isActive ? "Desativar Turma" : "Ativar Turma"}
+          />
+        </div>
       </td>
 
       {/* Ações */}
