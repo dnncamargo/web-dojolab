@@ -4,27 +4,31 @@ import { useState } from "react";
 import { parseStudentsCsv } from "@/app/utils/parseCsv";
 
 type ClassroomFormProps = {
-  onAdd: (classroomName: string) => void;
-  onUpload: (students: { name: string }[], classroomName: string ) => void;
+  onAdd: (classroomName: string) => Promise<void>;
+  onUpload: (students: { name: string }[], classroomName: string) => Promise<void>;
 }
 
-export default function ClassroomForm({ onAdd, onUpload }:ClassroomFormProps ) {
+export default function ClassroomForm({ onAdd, onUpload }: ClassroomFormProps) {
   const [classroomName, setClassroomName] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!classroomName) return;
-    onAdd(classroomName);
-    setClassroomName("");
+    if (!classroomName.trim()) return;
+    try {
+      await onAdd(classroomName);
+      setClassroomName("");
+    } catch (err) {
+      console.error("Erro ao adicionar turma:", err);
+      alert("Erro ao adicionar turma.");
+    }
   };
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     try {
       const students = await parseStudentsCsv(file);
-      onUpload(students, classroomName);
+      await onUpload(students, classroomName); // hook já decide criar/usar turma
 
       // Limpa
       setClassroomName("");

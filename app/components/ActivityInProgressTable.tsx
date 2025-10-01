@@ -29,7 +29,9 @@ export default function ActivityInProgressTable({ activities, classrooms }: Prop
               <td className="py-2 px-4">{activity.title}</td>
               <td className="px-4 py-2">
                 {activity.classroomId
-                  ? classrooms.find(c => c.id === activity.classroomId)?.name || "Turma não encontrada"
+                  ? classrooms
+                      .sort((a,b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))
+                      .find(c => c.id === activity.classroomId)?.name || "Turma não encontrada"
                   : "—"}
               </td>
               <td className="py-2 px-4 text-right">
