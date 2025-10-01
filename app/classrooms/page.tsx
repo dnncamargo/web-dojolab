@@ -14,7 +14,7 @@ export default function ClassesPage() {
       <h1 className="title-section">Cadastro de Turmas</h1>
 
       <ClassroomForm 
-        onAdd={addClassroom} 
+        onAdd={async (classroomName: string) => { await addClassroom(classroomName); }} 
         onUpload={handleUpload} 
       />
 
