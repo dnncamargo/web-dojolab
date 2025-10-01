@@ -20,7 +20,7 @@ export default function StarRating({ value, onChange }: StarRatingProps) {
 
   return (
     <div className="flex gap-1">
-      {[0, 1, 2].map((i) => (
+      {[0, 1, 2, 4, 5].map((i) => (
         <StarSolid
           key={i}
           className={`cursor-pointer ${
