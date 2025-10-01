@@ -6,21 +6,8 @@ import ClassroomForm from "./components/ClassroomForm";
 import ClassroomTable from "./components/ClassroomTable";
 
 export default function ClassesPage() {
-  const { classrooms, loading, addClassroom, updateClassroom,removeClassroom } = useClassroom();
-  const { students, addStudent } = useStudents();
-
-  // Quando CSV é carregado, cria alunos para a turma mais recente
-  const handleUpload = async (studentLine: { name: string }[], classroomName: string) => {
-    if (!classrooms.length) return;
-
-    // pega a turma mais recente (se essa for a regra)
-    const classId = classroomName;
-
-    // garante que todas as inserções sejam feitas
-    await Promise.all(
-      studentLine.map((student) => addStudent(student.name, classId))
-    );
-  };
+  const { classrooms, loading, addClassroom, updateClassroom, removeClassroom, handleUpload } = useClassroom();
+  const { students } = useStudents();
 
   return (
     <div>

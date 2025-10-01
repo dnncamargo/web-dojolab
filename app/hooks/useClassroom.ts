@@ -6,82 +6,76 @@ import { db } from "../lib/firebase";
 import {
   collection,
   addDoc,
-  updateDoc,
+  deleteDoc,
   doc,
-  onSnapshot,
   serverTimestamp,
+  onSnapshot,
   query,
   orderBy,
+  updateDoc,
   getDocs,
   where,
-  deleteDoc,
 } from "firebase/firestore";
 import { classroom } from "../utils/types";
+import { useStudents } from "../hooks/useStudents";
 
 export function useClassroom() {
   const [classrooms, setClassrooms] = useState<classroom[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addStudent } = useStudents();
 
   useEffect(() => {
     const q = query(collection(db, "classrooms"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs.map((d) => {
-        const data = d.data();
-        return {
+    const unsubscribe = onSnapshot(q, (snap) => {
+      setClassrooms(
+        snap.docs.map((d) => ({
           id: d.id,
-          name: data.name ?? "",
-          createdAt: data.createdAt?.toDate() ?? new Date(),
-          isActive: data.active ?? true,
-        } as classroom;
-      });
-      setClassrooms(list);
+          ...d.data(),
+        })) as classroom[]
+      );
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
   /**
-  * Adiciona uma turma. Se já existir com mesmo nome, retorna a existente.
-  */
-  async function addClassroom(classroomName: string) {
+   * Cria ou retorna turma existente pelo nome.
+   */
+  async function addClassroom(name: string) {
+    const normalized = name.trim();
 
-    // Normaliza o nome (para evitar duplicados com maiúsculas/minúsculas diferentes)
-    const normalizedName = classroomName.trim();
+    // procura no Firestore por turma já existente
+    const q = query(collection(db, "classrooms"), where("name", "==", normalized));
+    const existing = await getDocs(q);
 
-    // Verifica se já existe no Firestore
-    const q = query(
-      collection(db, "classrooms"),
-      where("name", "==", normalizedName)
-    );
-    const snapshot = await getDocs(q);
-
-    if (!snapshot.empty) {
-      // Já existe, retorna a primeira encontrada
-      const docData = snapshot.docs[0];
-      return {
-        id: docData.id,
-        name: docData.data().name,
-        createdAt: docData.data().createdAt?.toDate() ?? new Date(),
-        isActive: docData.data().active ?? true,
-      };
+    if (!existing.empty) {
+      // retorna o doc existente
+      const docSnap = existing.docs[0];
+      return {...(docSnap.data() as classroom) };
+      //return {id: docSnap.id, ...(docSnap.data() as classroom) };
     }
 
-    // Caso não exista, cria uma nova
-    const newClassroom = {
-      name: normalizedName,
-      createdAt: serverTimestamp(),
+    // cria nova turma
+    const docRef = await addDoc(collection(db, "classrooms"), {
+      name: normalized,
       active: true,
-    };
+      createdAt: serverTimestamp(),
+    });
 
-    const docRef = await addDoc(collection(db, "classrooms"), newClassroom);
+    return { id: docRef.id, name: normalized, active: true, createdAt: new Date() };
+  }
 
-    return {
-      id: docRef.id,
-      name: normalizedName,
-      createdAt: new Date(),
-      isActive: true,
-    };
+  /**
+   * Upload CSV → cria alunos em turma já existente ou cria nova turma e adiciona.
+   */
+  async function handleUpload(studentLines: { name: string }[], classroomName: string) {
+    const classroom = await addClassroom(classroomName); // já resolve existente ou cria
+    const classroomId = classroom.id;
+
+    // garante inserção de todos os alunos
+    await Promise.all(
+      studentLines.map((student) => addStudent(student.name, classroomId))
+    );
   }
 
   async function updateClassroom(id: string, data: Partial<classroom>) {
@@ -92,5 +86,12 @@ export function useClassroom() {
     await deleteDoc(doc(db, "classrooms", id));
   }
 
-  return { classrooms, loading, addClassroom, updateClassroom, removeClassroom };
+  return {
+    classrooms,
+    loading,
+    addClassroom,
+    updateClassroom,
+    removeClassroom,
+    handleUpload,
+  };
 }
