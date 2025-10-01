@@ -13,8 +13,6 @@ import {
   query,
   orderBy,
   updateDoc,
-  getDocs,
-  where,
 } from "firebase/firestore";
 import { classroom } from "../utils/types";
 import { useStudents } from "../hooks/useStudents";
@@ -27,56 +25,32 @@ export function useClassroom() {
   useEffect(() => {
     const q = query(collection(db, "classrooms"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setClassrooms(
-        snap.docs.map((d) => ({
-          id: d.id,
-          ...d.data(),
-        })) as classroom[]
-      );
+      setClassrooms(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as classroom[]);
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  /**
-   * Cria ou retorna turma existente pelo nome.
-   */
   async function addClassroom(name: string) {
-    const normalized = name.trim();
-
-    // procura no Firestore por turma já existente
-    const q = query(collection(db, "classrooms"), where("name", "==", normalized));
-    const existing = await getDocs(q);
-
-    if (!existing.empty) {
-      // retorna o doc existente
-      const docSnap = existing.docs[0];
-      return {...(docSnap.data() as classroom) };
-      //return {id: docSnap.id, ...(docSnap.data() as classroom) };
-    }
-
-    // cria nova turma
-    const docRef = await addDoc(collection(db, "classrooms"), {
-      name: normalized,
-      active: true,
+    return await addDoc(collection(db, "classrooms"), {
+      name,
+      isActive: true,
       createdAt: serverTimestamp(),
     });
-
-    return { id: docRef.id, name: normalized, active: true, createdAt: new Date() };
   }
 
-  /**
-   * Upload CSV → cria alunos em turma já existente ou cria nova turma e adiciona.
-   */
-  async function handleUpload(studentLines: { name: string }[], classroomName: string) {
-    const classroom = await addClassroom(classroomName); // já resolve existente ou cria
-    const classroomId = classroom.id;
+  // Quando CSV é carregado, cria alunos para a turma mais recente
+  const handleUpload = async (studentLine: { name: string }[], classroomName: string) => {
+    if (!classrooms.length) return;
 
-    // garante inserção de todos os alunos
+    // pega a turma mais recente (se essa for a regra)
+    const classroomId = classroomName;
+
+    // garante que todas as inserções sejam feitas
     await Promise.all(
-      studentLines.map((student) => addStudent(student.name, classroomId))
+      studentLine.map((student) => addStudent(student.name, classroomId))
     );
-  }
+  };
 
   async function updateClassroom(id: string, data: Partial<classroom>) {
     await updateDoc(doc(db, "classrooms", id), data);
@@ -86,12 +60,5 @@ export function useClassroom() {
     await deleteDoc(doc(db, "classrooms", id));
   }
 
-  return {
-    classrooms,
-    loading,
-    addClassroom,
-    updateClassroom,
-    removeClassroom,
-    handleUpload,
-  };
+  return { classrooms, loading, addClassroom, updateClassroom, removeClassroom, handleUpload };
 }
