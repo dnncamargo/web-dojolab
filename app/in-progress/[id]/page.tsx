@@ -15,7 +15,7 @@ export default function ActivityInProgressPage() {
   const params = useParams();
   const router = useRouter();
 
-  const { activities, loading: activitiesLoading, handleFinalize } = useActivities();
+  const { activities, loading: activitiesLoading, handleFinalize, setStatusCanceled } = useActivities();
   const { students } = useStudents();
   const { teams } = useTeams();
 
@@ -62,8 +62,10 @@ export default function ActivityInProgressPage() {
   }
 
   // ... o resto do componente, que não contém chamadas de Hook.
-  const handleCancel = () => {
+  const handleCancel = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (confirm("Cancelar atividade? Os dados não serão salvos.")) {
+      await setStatusCanceled(activity);
       router.push("/");
     }
   };

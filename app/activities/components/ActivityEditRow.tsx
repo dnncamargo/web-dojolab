@@ -38,6 +38,17 @@ export default function ActivityEditRow({
     setCriteria(activity.assessment || [])
   }, [activity])
 
+  const wasCompleted = () => {
+    return (
+      activity.status === "completed" &&
+      Array.isArray(activity.results) &&
+      activity.results.length > 0 &&
+      activity.podium !== undefined &&
+      activity.finalizedAt !== undefined
+    );
+  };
+
+
   const handleSave = () => {
     onSave(activity.id, {
       title,
@@ -96,7 +107,12 @@ export default function ActivityEditRow({
             >
               <option value="assigned">{getStatusLabel("assigned")}</option>
               <option value="in_progress">{getStatusLabel("in_progress")}</option>
-              <option value="completed">{getStatusLabel("completed")}</option>
+              <option
+                value="completed"
+                disabled={!wasCompleted()}   // 🔒 desabilita Completed se não houver resultados
+              >
+                {getStatusLabel("completed")}
+              </option>
               <option value="cancelled">{getStatusLabel("cancelled")}</option>
             </select>
 

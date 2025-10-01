@@ -60,6 +60,7 @@ export type activity = {
   date: Date;
   podium?: Podium; 
   createdAt: Date
+  finalizedAt?: Date
 }
 
 export type scoringResult = {

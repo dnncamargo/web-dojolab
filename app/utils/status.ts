@@ -4,7 +4,7 @@ export const getStatusLabel = (status: ActivityStatus) => {
   return ({
     not_assigned: "Sem atribuição",
     assigned: "Atribuída",
-    in_progress: "Em andamento",
+    in_progress: "Em Andamento",
     completed: "Concluída",
     cancelled: "Cancelada"
   }[status] || status)
@@ -15,9 +15,21 @@ export function resolveStatus(
   classroomId: string | null | undefined,
   status?: ActivityStatus
 ): ActivityStatus {
+  // Se não há turma, nunca pode ser assigned/in_progress/completed
   if (!classroomId) {
-    return "not_assigned"
+    return "not_assigned";
   }
-  // se tem turma, não pode ficar "not_assigned"
-  return status && status !== "not_assigned" ? status : "assigned"
+
+  // Se a atividade tem turma mas ainda não começou
+  if (!status || status === "not_assigned") {
+    return "assigned";
+  }
+
+  // Regras adicionais:
+/*   if (status === "completed") {
+    // Só pode ser completed se passou por in_progress
+    return "in_progress";
+  } */
+
+  return status;
 }

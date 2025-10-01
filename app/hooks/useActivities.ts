@@ -147,6 +147,24 @@ export function useActivities() {
     await deleteDoc(ref);
   };
 
+
+  /**
+   * Duplica uma activity com novos id, date e createdAt.
+   * classroomId fica null.
+   */
+  const duplicateActivity = async (source: activity) => {
+    const newData: Omit<activity, "id" | "createdAt"> = {
+      title: source.title,
+      description: source.description,
+      assessment: source.assessment,
+      timed: source.timed,
+      classroomId: undefined,
+      status: "not_assigned",
+      date: new Date(),
+    };
+    await addActivity(newData);
+  };
+
   async function handleFinalize(activity: activity, results: scoringResult[]) {
     if (!validateAllCriteriaFilled(activity, results)) {
       alert("Preencha todos os critérios antes de finalizar.");
@@ -166,12 +184,24 @@ export function useActivities() {
     }
   }
 
+  async function setStatusCanceled(activity: activity) {
+    try {
+      await updateDoc(doc(db, "activities", activity.id), {
+        status: "cancelled",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return {
     activities,
     loading,
     addActivity,
     updateActivity,
     removeActivity,
-    handleFinalize
+    duplicateActivity,
+    handleFinalize,
+    setStatusCanceled
   };
 }

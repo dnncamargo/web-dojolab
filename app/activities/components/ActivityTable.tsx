@@ -6,6 +6,7 @@ import { activity, classroom } from "../../utils/types";
 import ActivityRow from "./ActivityRow";
 import ActivityEditRow from "./ActivityEditRow";
 import ActivityExpandRow from "./ActivityExpandRow";
+import { useRouter } from "next/navigation";
 
 type ActivityTableProps = {
   activities: activity[];
@@ -13,6 +14,7 @@ type ActivityTableProps = {
   loadingClassrooms: boolean;
   onUpdate: (id: string, data: Partial<activity>) => void;
   onDelete: (id: string) => void;
+  onCopy: (activity: activity) => void;
 };
 
 export default function ActivityTable({
@@ -21,12 +23,20 @@ export default function ActivityTable({
   loadingClassrooms,
   onUpdate,
   onDelete,
+  onCopy,
+
 }: ActivityTableProps) {
+  const router = useRouter();
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
+  };
+
+  const handleViewResults = (id: string) => {
+    router.push(`/in-progress/${id}/results`);
   };
 
   return (
@@ -79,6 +89,8 @@ export default function ActivityTable({
                 {expandedId === a.id && (
                   <ActivityExpandRow
                     activity={a}
+                    onCopy={onCopy}
+                    onViewResults={handleViewResults}
                   />
                 )}
               </React.Fragment>

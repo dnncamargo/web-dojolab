@@ -28,11 +28,11 @@ const ActivityRow = ({ activity, classrooms, onRemove, onExpand, onEdit, expande
       </td>
 
       <td className="px-4 py-2">{getStatusLabel(Array.isArray(activity.status) ? activity.status[0] : activity.status)}</td>
-      <td className="px-4 py-2 flex gap-2 justify-end">
+      <td className="px-4 py-2 flex justify-end">
 
         {/* Botão Ver/Fechar */}
         <button
-          className="px-3 py-1 bg-blue-500 text-white rounded"
+          className="px-3 py-1 ml-2 bg-blue-500 text-white rounded"
           onClick={() => onExpand(activity.id)}
           disabled={editing} // não permite expandir se está editando
         >
@@ -41,7 +41,7 @@ const ActivityRow = ({ activity, classrooms, onRemove, onExpand, onEdit, expande
 
         {/* Botão Editar/Salvar */}
         <button
-          className="px-3 py-1 bg-green-500 text-white rounded"
+          className="px-3 py-1 ml-2 bg-green-500 text-white rounded"
           onClick={() => onEdit(activity.id)}
           disabled={expanded} // não permite editar se está expandido
         >
@@ -50,7 +50,7 @@ const ActivityRow = ({ activity, classrooms, onRemove, onExpand, onEdit, expande
 
         {/* Botão Remover */}
         <button
-          className="px-3 py-1 bg-red-500 text-white rounded"
+          className="px-3 py-1 ml-2 bg-red-500 text-white rounded"
           onClick={() => {
             // Exibe um alerta de confirmação
             if (window.confirm("Tem certeza que deseja remover esta atividade?")) {

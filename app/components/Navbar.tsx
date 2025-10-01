@@ -30,7 +30,7 @@ export default function Navbar() {
 
   return (
     
-      <nav className="bg-white shadow rounded-lg p-1 flex gap-4 mb-6 justify-evenly items-center">
+      <nav className="bg-white shadow rounded-lg p-2 flex gap-4 mb-6 justify-evenly items-center">
         <div className="text-xl font-bold text-gray-800">
           <Link href="/">
           <h1 className="inline-h1 title-logo-0">the</h1>
@@ -44,7 +44,7 @@ export default function Navbar() {
           <div className="relative">
             <button
               onClick={() => toggleMenu("classroom")}
-              className="flex items-center gap-1 text-gray-700 hover:text-indigo-600 transition"
+              className="flex items-center gap-1 mr-4 text-gray-700 hover:text-indigo-600 transition"
             >
               Sala de Aula <ChevronDown size={16} />
             </button>
@@ -88,7 +88,7 @@ export default function Navbar() {
           <div className="relative">
             <button
               onClick={() => toggleMenu("activities")}
-              className="flex items-center gap-1 text-gray-700 hover:text-indigo-600 transition"
+              className="flex items-center gap-1 ml-4 text-gray-700 hover:text-indigo-600 transition"
             >
               Atividades <ChevronDown size={16} />
             </button>
