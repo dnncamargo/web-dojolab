@@ -232,7 +232,7 @@ rounded-l-md
             <select
               value={filterClassroom}
               onChange={(e) => setFilterClassroom(e.target.value)}
-              className="border rounded p-2 w-full"
+              className="bg-white border rounded p-2 w-full"
             >
               <option value="">Todas</option>
               {classrooms.map((c) => (
@@ -248,7 +248,7 @@ rounded-l-md
             <select
               value={filterBadge}
               onChange={(e) => setFilterBadge(e.target.value)}
-              className="border rounded p-2 w-full"
+              className="bg-white border rounded p-2 w-full"
             >
               <option value="">Todos</option>
               {badges.map((b) => (
