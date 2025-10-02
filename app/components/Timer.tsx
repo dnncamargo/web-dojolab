@@ -100,8 +100,13 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
           <p className="text-5xl clock-digital text-gray-500 mb-4">
             {now.toLocaleTimeString("pt-BR")}
           </p>
-          <p className="text-[12rem] clock-digital tracking-widest [font-variant-numeric: tabular-nums] font-bold mb-10">
-            {formatTime(seconds)}
+          <p className="text-[12rem] clock-digital tracking-widest font-bold mb-10">
+
+            {formatTime(seconds).split("").map((char, i) => (
+              <span key={i} className="inline-block w-[0.75ch] text-center">
+                  {char}
+              </span>
+            ))}
           </p>
           <div className="flex justify-center gap-2">
             <button
