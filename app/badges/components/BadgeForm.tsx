@@ -44,19 +44,19 @@ export default function BadgeForm({ onAdd }: BadgeFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white shadow rounded-lg p-4 mb-6 flex flex-col md:flex-row gap-2"
+      className="bg-white shadow rounded-lg p-4 mb-6 flex flex-col md:flex-row"
     >
       <input
         type="text"
         placeholder="Nome da insígnia"
         value={badgeName}
         onChange={(e) => setBadgeName(e.target.value)}
-        className="border rounded px-3 py-2 flex-1 placeholder-black"
+        className="border rounded px-3 py-2 flex-1 m-1 placeholder-black"
         required
       />
 
       {/* Container para pré-visualização e input de arquivo */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center m-1">
         {previewUrl && (
           <img 
             src={previewUrl} 
@@ -64,7 +64,7 @@ export default function BadgeForm({ onAdd }: BadgeFormProps) {
             className="h-10 w-10 object-cover rounded" 
           />
         )}
-        <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">
+        <label className="flex items-center m-1 cursor-pointer bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">
           {file ? file.name : "Selecionar Arquivo"}
           <input type="file" accept="image/*" onChange={handleFile} hidden />
         </label>
@@ -72,7 +72,7 @@ export default function BadgeForm({ onAdd }: BadgeFormProps) {
 
       <button
         type="submit"
-        className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
+        className="bg-yellow-600 text-white px-4 py-2 m-1 rounded hover:bg-yellow-700"
       >
         Adicionar
       </button>

@@ -38,18 +38,18 @@ export default function BadgeRow({ badge, expanded, setEditingId, onToggleExpand
             <td className="px-4 py-2 flex gap-2 justify-end">
                 <button
                     onClick={() => setEditingId(badge.id)}
-                    className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600"
+                    className="bg-orange-500 text-white px-3 py-1 m-1 rounded hover:bg-orange-600"
                 >
                     Editar
                 </button>
                 <button
                     onClick={onToggleExpand}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                    className="bg-yellow-500 text-white px-3 py-1 m-1 rounded hover:bg-yellow-600"
                 >
                     {expanded ? "Fechar" : "Ver Alunos"}
                 </button>
                 <button
-                    className="px-3 py-1 bg-red-500 text-white rounded"
+                    className="px-3 py-1 m-1 bg-red-500 text-white rounded"
                     onClick={() => {
                         // Exibe um alerta de confirmação
                         if (window.confirm("Tem certeza que deseja remover esta insígnia?")) {
