@@ -40,7 +40,7 @@ export default function StudentExpandRow({
                                 <button
                                     key={t.id}
                                     onClick={() => onToggleTeam(t.id, student.id)}
-                                    className={`w-12 h-12 flex items-center justify-center rounded-full transition
+                                    className={`w-12 h-12 m-1 flex items-center justify-center rounded-full transition
           ${isMemberOf(t) ? "bg-purple-500 text-white" : "bg-purple-200 hover:bg-purple-300"}`}
                                     title={t.name}
                                 >
@@ -54,7 +54,7 @@ export default function StudentExpandRow({
                             <button
                                 key={b.id}
                                 onClick={() => onToggleBadge(student.id, b.id)}
-                                className={`w-12 h-12 flex items-center justify-center rounded-full transition
+                                className={`w-12 h-12 m-1 flex items-center justify-center rounded-full transition
                   ${hasBadge(b) ? "bg-yellow-500 text-white" : "bg-yellow-200 hover:bg-yellow-300"}`}
                                 title={b.name}
                             >

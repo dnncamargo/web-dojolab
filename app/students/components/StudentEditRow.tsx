@@ -32,7 +32,7 @@ export default function StudentEditRow({ student, classrooms, onCancel, onSave }
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border px-2 py-1 rounded w-full"
+          className="border px-2 py-1 m-1 rounded w-full"
         />
       </td>
 
@@ -41,7 +41,7 @@ export default function StudentEditRow({ student, classrooms, onCancel, onSave }
         <select
           value={classroomId}
           onChange={(e) => setClassroomId(e.target.value)}
-          className="border px-2 py-1 rounded w-full"
+          className="border px-2 py-1 m-1 rounded w-full"
         >
           <option value="">—</option>
           {classrooms.map((cls) => (

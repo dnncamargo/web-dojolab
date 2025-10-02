@@ -44,7 +44,7 @@ export default function Navbar() {
           <div className="relative">
             <button
               onClick={() => toggleMenu("classroom")}
-              className="flex items-center gap-1 mr-4 text-gray-700 hover:text-indigo-600 transition"
+              className="bg-white flex items-center gap-1 mr-4 text-gray-700 hover:text-indigo-600 transition"
             >
               Sala de Aula <ChevronDown size={16} />
             </button>
@@ -88,7 +88,7 @@ export default function Navbar() {
           <div className="relative">
             <button
               onClick={() => toggleMenu("activities")}
-              className="flex items-center gap-1 ml-4 text-gray-700 hover:text-indigo-600 transition"
+              className="bg-white flex items-center gap-1 ml-4 text-gray-700 hover:text-indigo-600 transition"
             >
               Atividades <ChevronDown size={16} />
             </button>
