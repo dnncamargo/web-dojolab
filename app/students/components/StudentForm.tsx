@@ -54,7 +54,7 @@ export default function StudentForm({ onAdd, classrooms, loading }: StudentFormP
 
       <button
         type="submit"
-        className="bg-blue-600 ml-1 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="bg-blue-600 ml-1 text-white px-4 py-1 rounded hover:bg-blue-700"
       >
         Adicionar
       </button>
