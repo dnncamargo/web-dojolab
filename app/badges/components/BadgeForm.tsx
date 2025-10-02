@@ -72,7 +72,7 @@ export default function BadgeForm({ onAdd }: BadgeFormProps) {
 
       <button
         type="submit"
-        className="bg-yellow-600 text-white px-4 py-2 m-1 rounded hover:bg-yellow-700"
+        className="bg-yellow-600 text-white px-4 py-1 m-1 rounded hover:bg-yellow-700"
       >
         Adicionar
       </button>
