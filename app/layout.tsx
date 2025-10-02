@@ -23,6 +23,11 @@ const Agency_FB_Font = localFont({
   variable: '--font-agency-fb'
 });
 
+const Clock_Mono_Font = localFont({
+  src: '../public/fonts/trackerclock-regular.otf',
+  variable: '--font-clock-mono'
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`${Harlow_Solid_Std_Font.variable} ${Agency_FB_Font.variable} ${Antica_Regular_Font.variable} antialiased`}
+        className={`${Harlow_Solid_Std_Font.variable} ${Agency_FB_Font.variable} ${Antica_Regular_Font.variable} ${Clock_Mono_Font.variable} antialiased`}
       ><div className="min-h-screen bg-gray-100 p-6">
           <Navbar />
           {children}

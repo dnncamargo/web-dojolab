@@ -53,8 +53,8 @@ body {
 } 
 
 .clock-digital {
-    font-family: var(--font-mbf-treti-mono);
-    font-size: 1.5rem;
+    font-family: var(--font-clock-mono);
+    //font-size: 1.5rem;
     font-weight: 500;
     color: #333333;
     margin-bottom: 6px;
