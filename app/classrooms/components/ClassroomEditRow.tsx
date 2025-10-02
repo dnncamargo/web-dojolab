@@ -50,13 +50,13 @@ export default function ClassroomEditRow({ classroom, onCancel, onSave }: Classr
       <td className="px-4 py-2 flex gap-2 justify-end">
         <button
           onClick={handleSave}
-          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          className="bg-green-500 m-1 text-white px-3 py-1 rounded hover:bg-green-600"
         >
           Salvar
         </button>
         <button
           onClick={onCancel}
-          className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+          className="bg-gray-400 m-1 text-white px-3 py-1 rounded hover:bg-gray-500"
         >
           Cancelar
         </button>

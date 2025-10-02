@@ -28,14 +28,14 @@ export default function TeamsForm({ onAdd, classrooms, loading }: TeamsFormProps
       className="bg-white shadow rounded-lg p-4 mb-6 flex flex-col md:flex-row gap-2"
     >
       <input
-        className="border rounded px-3 py-2 flex-1 placeholder-black"
+        className="border rounded px-3 py-2 flex-1 m-1 placeholder-black"
         placeholder="Nome da equipe"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
         required
       />
       <select
-        className="border rounded px-3 py-2 flex-1"
+        className="border rounded px-3 py-2 m-1 flex-1"
         value={classroomId}
         onChange={e => setClassroomId(e.target.value)}
         required
@@ -53,7 +53,7 @@ export default function TeamsForm({ onAdd, classrooms, loading }: TeamsFormProps
       </select>
       <button
         type="submit"
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        className="bg-green-600 text-white px-4 py-2 m-1 rounded hover:bg-green-700"
       >
         Adicionar
       </button>

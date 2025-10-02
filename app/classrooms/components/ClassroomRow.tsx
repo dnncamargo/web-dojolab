@@ -29,18 +29,18 @@ export default function ClassroomRow({ classroom, expanded, setEditingId, onTogg
       <td className="px-4 py-2 flex gap-2 justify-end " colSpan={2}>
         <button
           onClick={() => setEditingId(classroom.id)}
-          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+          className="bg-blue-500 m-1 text-white px-3 py-1 rounded hover:bg-blue-600"
         >
           Editar
         </button>
         <button
           onClick={onToggleExpand}
-          className="bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600"
+          className="bg-pink-500 m-1 text-white px-3 py-1 rounded hover:bg-pink-600"
         >
           {expanded ? "Fechar" : "Ver Alunos"}
         </button>
         <button
-          className="px-3 py-1 bg-red-500 text-white rounded"
+          className="px-3 py-1 m-1 bg-red-500 text-white rounded"
           onClick={() => {
             // Exibe um alerta de confirmação
             if (window.confirm("Tem certeza que deseja remover esta classe?")) {

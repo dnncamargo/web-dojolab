@@ -102,7 +102,7 @@ export default function ActivitiesPage() {
       {showFilter && (
         <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
+            <label className="block bg-white text-sm font-medium mb-1">Filtrar por Status</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as ActivityStatus | "")}
@@ -118,7 +118,7 @@ export default function ActivitiesPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Filtrar por Turma</label>
+            <label className="block bg-white text-sm font-medium mb-1">Filtrar por Turma</label>
             <select
               value={filterClassroom}
               onChange={(e) => setFilterClassroom(e.target.value)}

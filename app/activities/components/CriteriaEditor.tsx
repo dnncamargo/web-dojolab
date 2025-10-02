@@ -74,21 +74,21 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
           <button
             type="button"
             onClick={() => toggleEvaluation(c.id)}
-            className="px-2 py-1 bg-blue-200 rounded-md"
+            className="px-2 py-1 mr-1 bg-blue-200 rounded-md"
           >
             {c.evaluationType === "integer" ? "Inteiro" : "Booleano"}
           </button>
           <button
             type="button"
             onClick={() => toggleScoring(c.id)}
-            className="px-2 py-1 bg-purple-200 rounded-md"
+            className="px-2 py-1 m-1 bg-purple-200 rounded-md"
           >
             {c.scoringType === "individual" ? "Individual" : "Equipe"}
           </button>
           <button
             type="button"
             onClick={() => handleRemove(c.id)}
-            className="px-2 py-1 bg-red-300 rounded-md"
+            className="px-2 py-1 ml-1 bg-red-300 rounded-md"
           >
             ✕
           </button>

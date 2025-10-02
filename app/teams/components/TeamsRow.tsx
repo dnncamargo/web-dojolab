@@ -29,18 +29,18 @@ export default function TeamsRow({ team, classrooms, expanded, setEditingId, onT
       <td className="px-4 py-2 flex gap-2 justify-end">
         <button
           onClick={() => setEditingId(team.id)}
-          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-3 py-1 m-1 rounded hover:bg-blue-600"
         >
           Editar
         </button>
         <button
           onClick={onToggleExpand}
-          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          className="bg-green-500 text-white px-3 py-1 m-1 rounded hover:bg-green-600"
         >
           {expanded ? "Fechar" : "Ver Alunos"}
         </button>
         <button
-          className="px-3 py-1 bg-red-500 text-white rounded"
+          className="px-3 py-1 bg-red-500 m-1 text-white rounded"
           onClick={() => {
             // Exibe um alerta de confirmação
             if (window.confirm("Tem certeza que deseja remover esta equipe?")) {

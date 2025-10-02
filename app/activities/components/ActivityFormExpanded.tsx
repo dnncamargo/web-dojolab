@@ -48,7 +48,7 @@ export default function ActivityFormExpanded({
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full border p-2 rounded-md"
+                className="w-full ml-1 border p-2 rounded-md"
             />
 
             <textarea

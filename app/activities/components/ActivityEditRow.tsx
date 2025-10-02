@@ -93,15 +93,15 @@ export default function ActivityEditRow({
     <tr className="bg-gray-50">
       <td colSpan={5} className="p-4 space-y-4">
 
-        <div className="flex gap-2 justify-end">
+        <div className="flex justify-end">
           <button
-            className="px-3 py-1 bg-gray-500 text-white rounded"
+            className="px-3 py-1 m-1 bg-gray-500 text-white rounded"
             onClick={onCancel}
           >
             Cancelar
           </button>
           <button
-            className="px-3 py-1 bg-green-600 text-white rounded"
+            className="px-3 py-1 m-1 bg-green-600 text-white rounded"
             onClick={handleSave}
           >
             Salvar
