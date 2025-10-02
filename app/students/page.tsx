@@ -120,18 +120,113 @@ export default function StudentPage() {
       {showFilter && (
         <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Presença</label>
-            <select
-              value={filterActive}
-              onChange={(e) => setFilterActive(e.target.value as typeof filterActive)}
-              className="border rounded p-2 w-full"
-            >
-              <option value="">Todos</option>
-              <option value="true">Presentes</option>
-              <option value="false">Ausentes</option>
-            </select>
+            <label className="block text-sm font-medium mb-2">Presença</label>
+            <div className="flex border rounded-md border-gray-200 divide-x divide-gray-200">
+
+              {/* Botão PRESENTES (Ativo) */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterActive === "true"
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+rounded-l-md
+      `}
+                onClick={() => setFilterActive("true")}
+              >
+                Presentes Hoje
+              </button>
+
+              {/* Botão AUSENTES (Inativo) */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterActive === "false"
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+      `}
+                onClick={() => setFilterActive("false")}
+              >
+                Ausentes
+              </button>
+
+
+              {/* Botão TODOS */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterActive === ""
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+                    rounded-r-md
+      `}
+                onClick={() => setFilterActive("")}
+              >
+                Todos
+              </button>
+            </div>
           </div>
 
+          <div>
+            <label className="block text-sm font-medium mb-2">Equipe</label>
+            <div className="flex border rounded-md border-gray-200 divide-x divide-gray-200">
+
+              {/* Botão Com Equipe */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterTeam === "included"
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+rounded-l-md
+      `}
+                onClick={() => setFilterTeam("included")}
+              >
+                Com Equipe
+              </button>
+
+                            {/* Botão Sem Equipe */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterTeam === "not_included"
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+      `}
+                onClick={() => setFilterTeam("not_included")}
+              >
+                Sem Equipe
+              </button>
+
+              {/* Botão Todos */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 rounded-r transition-colors duration-150
+        ${filterTeam === ""
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+                    rounded-r-md
+      `}
+                onClick={() => setFilterTeam("")}
+              >
+                Todos
+              </button>
+            </div>
+          </div>
+
+          
           <div>
             <label className="block text-sm font-medium mb-1">Turma</label>
             <select
@@ -164,18 +259,6 @@ export default function StudentPage() {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Equipe</label>
-            <select
-              value={filterTeam}
-              onChange={(e) => setFilterTeam(e.target.value as typeof filterTeam)}
-              className="border rounded p-2 w-full"
-            >
-              <option value="">Todos</option>
-              <option value="with">Com equipe</option>
-              <option value="without">Sem equipe</option>
-            </select>
-          </div>
         </div>
       )}
 

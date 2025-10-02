@@ -110,16 +110,57 @@ export default function TeamsPage() {
       {showFilter && (
         <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Equipe Ativa</label>
-            <select
-              value={filterActive}
-              onChange={(e) => setFilterActive(e.target.value as typeof filterActive)}
-              className="border rounded p-2 w-full"
-            >
-              <option value="">Todos</option>
-              <option value="true">Ativados</option>
-              <option value="false">Desativados</option>
-            </select>
+            <label className="block text-sm font-medium mb-1">Equipe Ativa Hoje</label>
+            <div className="flex border rounded-md border-gray-200 divide-x divide-gray-200">
+
+              {/* Botão PRESENTES (Ativo) */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterActive === "true"
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+rounded-l-md
+      `}
+                onClick={() => setFilterActive("true")}
+              >
+                Ativada
+              </button>
+
+              {/* Botão AUSENTES (Inativo) */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterActive === "false"
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+      `}
+                onClick={() => setFilterActive("false")}
+              >
+                Desativada
+              </button>
+
+
+              {/* Botão TODOS */}
+              <button
+                type="button"
+                className={`
+        flex-1 text-sm py-1 px-4 transition-colors duration-150
+        ${filterActive === ""
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  }
+                    rounded-r-md
+      `}
+                onClick={() => setFilterActive("")}
+              >
+                Todas
+              </button>
+            </div>
           </div>
 
           <div>
@@ -146,8 +187,8 @@ export default function TeamsPage() {
               className="border rounded p-2 w-full"
             >
               <option value="">Todos</option>
-              <option value="with">Com membros</option>
-              <option value="without">Sem membros</option>
+              <option value="withMembers">Com membros</option>
+              <option value="withoutMembers">Sem membros</option>
             </select>
           </div>
         </div>

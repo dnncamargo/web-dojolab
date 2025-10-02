@@ -52,6 +52,14 @@ body {
     margin-bottom: 4px;
 } 
 
+.clock-digital {
+    font-family: var(--font-mbf-treti-mono);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
 .inline-h1 {
   display: inline-block;
   /* margin-right: 10px;  Opcional: para dar um espaçamento entre eles */

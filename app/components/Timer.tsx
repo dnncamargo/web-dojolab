@@ -65,16 +65,16 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
     return (
         <div className="p-4 bg-white rounded-xl shadow w-full">
             {/* Controle de modos */}
-            <div className="flex justify-center gap-4 mb-4">
+            <div className="flex justify-center  mb-4">
                 <button
-                    className={`px-3 py-1 rounded ${mode === "chronometer" ? "bg-blue-600 text-white" : "bg-gray-200"
+                    className={`px-3 py-1 rounded mr-2 ${mode === "chronometer" ? "bg-blue-600 text-white" : "bg-gray-200"
                         }`}
                     onClick={() => setMode("chronometer")}
                 >
                     Cronômetro
                 </button>
                 <button
-                    className={`px-3 py-1 rounded ${mode === "alarm" ? "bg-blue-600 text-white" : "bg-gray-200"
+                    className={`px-3 py-1 rounded ml-2 ${mode === "alarm" ? "bg-blue-600 text-white" : "bg-gray-200"
                         }`}
                     onClick={() => setMode("alarm")}
                 >
@@ -89,23 +89,23 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
                         {now.toLocaleTimeString("pt-BR")}
                     </p>
                     <p className="text-9xl font-mono  mb-4">{formatTime(seconds)}</p>
-                    <div className="flex justify-center gap-2">
+                    <div className="flex justify-center">
                         <button
-                            className="px-3 py-1 bg-green-600 text-white rounded"
+                            className="px-3 py-1 mr-1 bg-green-600 text-white rounded"
                             onClick={() => setRunning(true)}
                             disabled={running}
                         >
                             Iniciar
                         </button>
                         <button
-                            className="px-3 py-1 bg-yellow-500 text-white rounded"
+                            className="px-3 py-1 mr-1 ml-1 bg-yellow-500 text-white rounded"
                             onClick={() => setRunning(false)}
                             disabled={!running}
                         >
                             Pausar
                         </button>
                         <button
-                            className="px-3 py-1 bg-red-600 text-white rounded"
+                            className="px-3 py-1 ml-1 bg-red-600 text-white rounded"
                             onClick={() => {
                                 setRunning(false);
                                 setSeconds(0);

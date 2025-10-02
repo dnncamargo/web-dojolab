@@ -35,7 +35,7 @@ export default function StudentExpandRow({
                 <div className="flex gap-3 overflow-x-auto">
                     {expandType === "team" &&
                         teams
-                            .filter((t) => t.classroomId === student.classroomId) // 🔹 só equipes da turma
+                            .filter((t) => t.isActive && t.classroomId === student.classroomId) // 🔹 só equipes da turma
                             .map((t) => (
                                 <button
                                     key={t.id}

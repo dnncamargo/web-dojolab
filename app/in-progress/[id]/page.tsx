@@ -115,7 +115,7 @@ export default function ActivityInProgressPage() {
           <button
             type="button"
             onClick={handleCancel}
-            className="px-4 py-2 rounded bg-gray-200"
+            className="px-4 py-2 rounded mr-2 bg-gray-200"
           >
             Cancelar
           </button>

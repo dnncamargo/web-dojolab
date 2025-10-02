@@ -33,6 +33,11 @@ export default function ActivityEditRow({
       : "assigned" // fallback seguro
   );
 
+  const [hasImage, setHasImage] = useState(true || false);
+  const [image, setImage] = useState(activity.imageUrl || "");
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState(activity.imageUrl || "");
+
 
   useEffect(() => {
     setCriteria(activity.assessment || [])
@@ -48,12 +53,35 @@ export default function ActivityEditRow({
     );
   };
 
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (selected) {
+      setFile(selected);
+      const url = URL.createObjectURL(selected);
+      setPreviewUrl(url); // Mostra o preview do arquivo
+      setImage(""); // Limpa a URL de texto, dando precedência ao arquivo
+    }
+  };
+
+  const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value;
+    setImage(url);
+    setPreviewUrl(url); // Atualiza o preview com a URL digitada
+    setFile(null); // Limpa o arquivo, dando precedência à URL de texto
+  }
 
   const handleSave = () => {
+
+    let finalImageUrl = image;
+        if (file) {
+            finalImageUrl = URL.createObjectURL(file);
+        }
+
     onSave(activity.id, {
       title,
       description,
       classroomId,
+      imageUrl: finalImageUrl,
       date,
       assessment: criteria,
       status: resolveStatus(classroomId, status),
@@ -128,7 +156,6 @@ export default function ActivityEditRow({
           />
         </div>
         <div className="mt-2">
-          <strong>Critérios de Avaliação:</strong>
           <CriteriaEditor
             criteria={criteria}
             onChange={setCriteria}
@@ -152,7 +179,7 @@ export default function ActivityEditRow({
         </div>
 
         <div>
-          <label className="block text-sm">Configuração de Tempo (opcional)</label>
+          <label className="block text-sm mb-1">Configuração de Tempo (opcional)</label>
           <button
             type="button"
             onClick={() => setTimed(!timed)}
@@ -165,6 +192,58 @@ export default function ActivityEditRow({
         </div>
 
         <div>
+          <label className="block text-sm mb-1">Adicionar imagem (opcional)</label>
+          <button
+            type="button"
+            onClick={() =>
+              setHasImage(!hasImage)
+            }
+            className={clsx('w-12 h-6 rounded-full transition flex items-center p-1',
+              hasImage ? 'bg-blue-600' : 'bg-gray-300')}
+          >
+            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', hasImage ? 'translate-x-6' : 'translate-x-0')} />
+          </button>
+
+          {hasImage && (
+            <td className="px-4 py-2">
+              <div className="flex flex-col gap-1">
+                {/* Preview Image */}
+                {previewUrl ? (
+                  <img
+                    src={previewUrl}
+                    alt="Pré-visualização da insígnia"
+                    className="h-10 w-10 object-cover rounded mb-2"
+                  />
+                ) : (
+                  <div className="h-10 w-10 bg-gray-200 rounded mb-2 flex items-center justify-center text-xs text-gray-500">
+                    Sem Imagem
+                  </div>
+                )}
+                {/* File Input Button */}
+                <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-3 py-1 rounded text-sm hover:bg-gray-300">
+                  {file ? file.name : (previewUrl ? "Mudar Imagem" : "Selecionar Imagem")}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFile}
+                    hidden
+                  />
+                </label>
+                {/* Input de URL para quem quiser colar um link */}
+                <input
+                  type="text"
+                  placeholder="Ou cole a URL da imagem"
+                  value={image}
+                  onChange={handleImageUrlChange}
+                  className="border rounded px-2 py-1 w-full text-sm mt-1"
+                />
+              </div>
+            </td>
+          )}
+
+        </div>
+
+        <div>
           <label className="block text-sm font-medium">Data</label>
           <input
             type="date"
@@ -173,6 +252,8 @@ export default function ActivityEditRow({
             className="border rounded p-2"
           />
         </div>
+
+
 
       </td>
     </tr>

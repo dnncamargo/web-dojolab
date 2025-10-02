@@ -1,4 +1,5 @@
 import { criteria } from "@/app/utils/types"
+import { v4 as uuidv4 } from 'uuid';
 
 type CriteriaEditorProps = {
   criteria: criteria[]
@@ -33,14 +34,17 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
   }
 
   const handleRemove = (id: string) => {
-    onChange(criteria.filter((c) => c.id !== id))
+    if(criteria.length > 1)
+      onChange(criteria.filter((c) => c.id !== id))
+    else
+      alert('A atividade deve ter pelo menos 1 critério')
   }
 
   const addCriteria = () => {
     onChange([
       ...criteria,
       {
-        id: crypto.randomUUID(),
+        id: uuidv4(),
         description: "",
         evaluationType: "integer",
         scoringType: "individual",
@@ -54,6 +58,7 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
       {criteria.map((c) => (
         <div key={c.id} className="flex items-center gap-2">
           <input
+            required
             type="text"
             placeholder="Nome do critério"
             value={c.description}

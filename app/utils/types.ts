@@ -53,6 +53,7 @@ export type activity = {
   title: string
   description?: string
   classroomId?: string
+  imageUrl?: string;
   assessment: criteria[]
   status:   ActivityStatus
   timed: boolean

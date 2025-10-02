@@ -58,20 +58,39 @@ export default function ActivityFormExpanded({
                 className="w-full border p-2 rounded-md"
             />
 
-            <div>
-                <label className="block text-sm mb-1">Data da Atividade (obrigatória)</label>
-                <input
-                    type="date"
-                    // conversão só para exibir no input
-                    value={selectedDate.toISOString().split("T")[0]}
-                    // conversão só na leitura do input → volta para Date
-                    onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                    className="border p-2 rounded-md w-full"
-                    required
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                    A data deve ser hoje ou posterior. (campo obrigatório)
-                </p>
+            <div className="flex self-start  justify-between">
+
+                <div >
+                    <label className="text-sm mb-1">Data da Atividade (obrigatória)</label>
+                    <input
+                        type="date"
+                        // conversão só para exibir no input
+                        value={selectedDate.toISOString().split("T")[0]}
+                        // conversão só na leitura do input → volta para Date
+                        onChange={(e) => setSelectedDate(new Date(e.target.value))}
+                        className="border p-2 rounded-md w-full"
+                        required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                        A data deve ser hoje ou posterior. (campo obrigatório)
+                    </p>
+                </div>
+
+                <div>
+                    <label className="text-sm mb-1">Selecione a Turma (opcional)</label>
+                    <select
+                        value={selectedClass}
+                        onChange={(e) => setSelectedClass(e.target.value)}
+                        className="w-full border p-2 rounded-md"
+                    >
+                        <option value="">-- Nenhuma turma --</option>
+                        {classrooms.map((classroom) => (
+                            <option key={classroom.id} value={classroom.id}>
+                                {classroom.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
 
             <CriteriaEditor
@@ -79,24 +98,10 @@ export default function ActivityFormExpanded({
                 onChange={setCriteria}
             />
 
-            <div>
-                <label className="block text-sm">Selecione a Turma (opcional)</label>
-                <select
-                    value={selectedClass}
-                    onChange={(e) => setSelectedClass(e.target.value)}
-                    className="w-full border p-2 rounded-md"
-                >
-                    <option value="">-- Nenhuma turma --</option>
-                    {classrooms.map((classroom) => (
-                        <option key={classroom.id} value={classroom.id}>
-                            {classroom.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
+
 
             <div>
-                <label className="block text-sm">Configuração de Tempo (opcional)</label>
+                <label className="block text-sm mb-1">Configuração de Tempo (opcional)</label>
                 <button
                     type="button"
                     onClick={() => setTimed(!timed)}
@@ -108,16 +113,16 @@ export default function ActivityFormExpanded({
 
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex">
                 <button
                     onClick={handleSave}
-                    className="px-4 py-2 bg-green-500 text-white rounded-md"
+                    className="px-4 py-2 mr-1 bg-green-500 text-white rounded-md"
                 >
                     Salvar Atividade
                 </button>
                 <button
                     onClick={onCancel}
-                    className="px-4 py-2 bg-gray-300 rounded-md"
+                    className="px-4 py-2 ml-1 bg-gray-300 rounded-md"
                 >
                     Cancelar
                 </button>

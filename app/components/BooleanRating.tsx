@@ -19,7 +19,7 @@ export default function BooleanRating({ value, onChange }: BooleanRatingProps) {
       </button>
       <button
         type="button"
-        className={`px-2 py-1 rounded ${value === false ? "bg-red-600 text-white" : "bg-gray-200"
+        className={`px-2 py-1 ml-1 rounded ${value === false ? "bg-red-600 text-white" : "bg-gray-200"
           }`}
         onClick={() => onChange(false)}
       >
