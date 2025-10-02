@@ -100,7 +100,7 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
           <p className="text-5xl clock-digital text-gray-500 mb-4">
             {now.toLocaleTimeString("pt-BR")}
           </p>
-          <p className="text-[12rem] clock-digital font-bold mb-10">
+          <p className="text-[12rem] clock-digital tracking-widest [font-variant-numeric: tabular-nums] font-bold mb-10">
             {formatTime(seconds)}
           </p>
           <div className="flex justify-center gap-2">
@@ -167,7 +167,11 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
 
       {mode === "alarm" && (
         <div className="text-center">
-          <p className="text-[10rem] clock-digital mb-10">
+          <p className="text-[1076426
+          7´9754es '  -r+
+          
+          
+       /   '   em] clock-digital mb-10">
             {now.toLocaleTimeString("pt-BR")}
           </p>
           <input
