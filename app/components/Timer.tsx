@@ -103,28 +103,28 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
           <p className="text-[12rem] clock-digital tracking-widest font-bold mb-10">
 
             {formatTime(seconds).split("").map((char, i) => (
-              <span key={i} className="inline-block w-[0.75ch] text-center">
+              <span key={i} className="inline-block w-[3ch] text-center">
                   {char}
               </span>
             ))}
           </p>
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center">
             <button
-              className="px-4 py-2 bg-green-600 text-white rounded"
+              className="px-4 py-2 m-1 bg-green-600 text-white rounded"
               onClick={() => setRunning(true)}
               disabled={running}
             >
               Iniciar
             </button>
             <button
-              className="px-4 py-2 bg-yellow-500 text-white rounded"
+              className="px-4 py-2 m-1 bg-yellow-500 text-white rounded"
               onClick={() => setRunning(false)}
               disabled={!running}
             >
               Pausar
             </button>
             <button
-              className="px-4 py-2 bg-red-600 text-white rounded"
+              className="px-4 py-2 m-1 bg-red-600 text-white rounded"
               onClick={() => {
                 setRunning(false);
                 setSeconds(0);
@@ -134,7 +134,7 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
               Resetar
             </button>
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded"
+              className="px-4 py-2 m-1 bg-blue-600 text-white rounded"
               onClick={handleMark}
               disabled={!running}
             >
