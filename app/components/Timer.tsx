@@ -77,17 +77,15 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
       {/* Controle de modos */}
       <div className="flex justify-center mb-6">
         <button
-          className={`px-3 py-1 rounded mr-2 ${
-            mode === "chronometer" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
+          className={`px-3 py-1 rounded mr-2 ${mode === "chronometer" ? "bg-blue-600 text-white" : "bg-gray-200"
+            }`}
           onClick={() => setMode("chronometer")}
         >
           Cronômetro
         </button>
         <button
-          className={`px-3 py-1 rounded ml-2 ${
-            mode === "alarm" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
+          className={`px-3 py-1 rounded ml-2 ${mode === "alarm" ? "bg-blue-600 text-white" : "bg-gray-200"
+            }`}
           onClick={() => setMode("alarm")}
         >
           Alarme
@@ -97,17 +95,24 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
       {/* Exibição do modo */}
       {mode === "chronometer" && (
         <div className="text-center">
+          {/* Hora Agora */}
           <p className="text-5xl clock-digital text-gray-500 mb-4">
-            {now.toLocaleTimeString("pt-BR")}
-          </p>
-          <p className="text-[12rem] clock-digital tracking-widest font-bold mb-10">
-
-            {formatTime(seconds).split("").map((char, i) => (
-              <span key={i} className="inline-block w-[3ch] text-center">
-                  {char}
+            {now.toLocaleTimeString("pt-BR").split("").map((char, i) => (
+              <span key={i} className="inline-block w-[1ch] text-center">
+                {char}
               </span>
             ))}
           </p>
+
+          {/* Cronômetro */}
+          <p className="text-[12rem] clock-digital tracking-widest font-bold mb-10">
+            {formatTime(seconds).split("").map((char, i) => (
+              <span key={i} className="inline-block w-[1ch] text-center">
+                {char}
+              </span>
+            ))}
+          </p>
+
           <div className="flex justify-center">
             <button
               className="px-4 py-2 m-1 bg-green-600 text-white rounded"
@@ -172,12 +177,14 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
 
       {mode === "alarm" && (
         <div className="text-center">
-          <p className="text-[1076426
-          7´9754es '  -r+
-          
-          
-       /   '   em] clock-digital mb-10">
-            {now.toLocaleTimeString("pt-BR")}
+
+          {/* Hora Agora */}
+          <p className="text-[12rem] clock-digital tracking-widest font-bold mb-10">
+            {now.toLocaleTimeString("pt-BR").split("").map((char, i) => (
+              <span key={i} className="inline-block w-[1ch] text-center">
+                  {char}
+              </span>
+            ))}
           </p>
           <input
             type="time"
