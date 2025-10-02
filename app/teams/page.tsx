@@ -98,7 +98,7 @@ export default function TeamsPage() {
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value as typeof sortKey)}
-            className="border rounded p-2 w-full"
+            className="border bg-white rounded p-2 w-full"
           >
             <option value="name">Nome</option>
             <option value="classroom">Turma</option>
@@ -168,7 +168,7 @@ rounded-l-md
             <select
               value={filterClassroom}
               onChange={(e) => setFilterClassroom(e.target.value)}
-              className="border rounded p-2 w-full"
+              className="border bg-white rounded p-2 w-full"
             >
               <option value="">Todas</option>
               {classrooms.map((c) => (
@@ -184,7 +184,7 @@ rounded-l-md
             <select
               value={filterWithMembers}
               onChange={(e) => setFilterWithMembers(e.target.value as typeof filterWithMembers)}
-              className="border rounded p-2 w-full"
+              className="border bg-white rounded p-2 w-full"
             >
               <option value="">Todos</option>
               <option value="withMembers">Com membros</option>

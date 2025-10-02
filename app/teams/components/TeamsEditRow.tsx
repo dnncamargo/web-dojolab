@@ -41,7 +41,7 @@ export default function TeamEditRow({ team, classrooms, onCancel, onSave }: Prop
         <select
           value={classroomId}
           onChange={(e) => setClassroomId(e.target.value)}
-          className="border px-2 py-1 rounded w-full"
+          className="border bg-white px-2 py-1 rounded w-full"
         >
           <option value="">—</option>
           {classrooms.map((cls) => (
@@ -69,13 +69,13 @@ export default function TeamEditRow({ team, classrooms, onCancel, onSave }: Prop
       <td className="px-4 py-2 flex gap-2 justify-end">
         <button
           onClick={handleSave}
-          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          className="bg-green-500 m-1 text-white px-3 py-1 rounded hover:bg-green-600"
         >
           Salvar
         </button>
         <button
           onClick={onCancel}
-          className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+          className="bg-gray-400 m-1 text-white px-3 py-1 rounded hover:bg-gray-500"
         >
           Cancelar
         </button>

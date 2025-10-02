@@ -35,7 +35,7 @@ export default function TeamsForm({ onAdd, classrooms, loading }: TeamsFormProps
         required
       />
       <select
-        className="border rounded px-3 py-2 m-1 flex-1"
+        className="bg-white border rounded px-3 py-2 m-1 flex-1"
         value={classroomId}
         onChange={e => setClassroomId(e.target.value)}
         required
