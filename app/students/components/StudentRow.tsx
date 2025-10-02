@@ -35,15 +35,15 @@ export default function StudentRow({ student, classrooms, setEditingId, isExpand
             <td colSpan={colSpan} className="px-4 py-2 flex justify-end">
                 <button
                     onClick={() => setEditingId(student.id)}
-                    className="bg-blue-500 mr-1 text-white px-3 py-1 rounded hover:bg-blue-600"
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                 >
                     Editar
                 </button>
                 <button
                     onClick={() => toggleExpand(student.id, "team")}
                     className={
-                        `px-3 py-1 m-1 rounded transition ` +
-                        (isTeamExpanded ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-green-500 text-white hover:bg-green-600")
+                        `px-3 py-1 rounded transition ` +
+                        (isTeamExpanded ? "bg-emerald-500 m-2 text-white hover:bg-emerald-600" : "bg-green-500 text-white hover:bg-green-600")
                     }
                 >
                     {isTeamExpanded ? "Fechar" : "Equipe"}
@@ -51,15 +51,15 @@ export default function StudentRow({ student, classrooms, setEditingId, isExpand
                 <button
                     onClick={() => toggleExpand(student.id, "badge")}
                     className={
-                        `px-3 py-1 m-1 rounded transition ` +
-                        (isBadgeExpanded ? "bg-orange-500 text-white hover:bg-orange-600" : "bg-yellow-500 text-white hover:bg-yellow-600")
+                        `px-3 py-1 rounded transition ` +
+                        (isBadgeExpanded ? "bg-orange-500 m-2 text-white hover:bg-orange-600" : "bg-yellow-500 text-white hover:bg-yellow-600")
                     }
                 >
                     {isBadgeExpanded ? "Fechar" : "Insígnia"}
                 </button>
                 {/* Botão Remover */}
                 <button
-                    className="px-3 py-1 ml-1 bg-red-500 text-white rounded"
+                    className="px-3 py-1 bg-red-500 text-white rounded"
                     onClick={() => {
                         // Exibe um alerta de confirmação
                         if (window.confirm("Tem certeza que deseja remover este aluno?")) {
