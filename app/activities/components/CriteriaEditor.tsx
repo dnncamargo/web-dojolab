@@ -37,7 +37,7 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
     onChange(
       criteria.map((c) => {
         if (c.id !== id) return c;
-        const current = normalizeWeight((c as any).weight as number); // garante número
+        const current = normalizeWeight((c as criteria).weight as number); // garante número
         const next = current >= 5 ? 1 : current + 1;
         return { ...c, weight: next };
       })
