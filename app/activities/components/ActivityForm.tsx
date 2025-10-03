@@ -24,12 +24,12 @@ export default function ActivityForm({ onAdd }: ActivityFormProps) {
             placeholder="Título da atividade"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border rounded px-3 py-2 mr-1 flex-1 placeholder-black"
+            className="border rounded px-3 py-2 flex-1 placeholder-black"
           />
           <button
             onClick={handleExpand}
             disabled={!title.trim()}
-            className="px-4 py-2 ml-1 bg-blue-500 text-white rounded-md disabled:opacity-50"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50"
           >
             Nova Atividade
           </button>

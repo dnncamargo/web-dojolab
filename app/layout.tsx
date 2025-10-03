@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body
         className={`${Harlow_Solid_Std_Font.variable} ${Agency_FB_Font.variable} ${Antica_Regular_Font.variable} ${Clock_Mono_Font.variable} antialiased`}
-      ><div className="min-h-screen bg-gray-100 p-6">
+      ><div className="min-h-screen bg-gray-100">
           <Navbar />
           {children}
         </div>

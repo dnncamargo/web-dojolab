@@ -1,41 +1,42 @@
 // app/utils/scoring.ts
-import { activity, scoringResult } from "./types"; // ajuste o path conforme seu projeto
+import { activity, scoringResult } from "./types";
 
-export function validateAllCriteriaFilled(activity: activity, results: scoringResult[]): boolean {
-  if (!Array.isArray(results)) return false;
-
-  // exige que cada criterion da activity apareça pelo menos uma vez em results
-  const expectedIds = new Set(activity.assessment.map((c) => c.id));
-  const presentIds = new Set(results.map((r) => r.criteriaId));
-
-  // todos os critérios devem estar presentes
-  for (const id of expectedIds) {
-    if (!presentIds.has(id)) return false;
-  }
-  return true;
+export function validateAllCriteriaFilled(
+  activity: activity,
+  results: scoringResult[]
+): boolean {
+  const expected = activity.assessment.length;
+  const byCriteria = new Set(results.map((r) => r.criteriaId));
+  return byCriteria.size === expected;
 }
 
 /**
- * Calcula pódio de estudantes e equipes:
- * - normaliza r.value para número (boolean -> 1/0)
- * - soma por targetId + targetType
+ * Calcula pontuação final de estudantes e equipes
+ * - booleanos: 1 ou 0 multiplicado pelo peso
+ * - inteiros: soma direta multiplicada pelo peso
  */
-export function calculatePodium(activity: activity, results: scoringResult[]) {
+export function calculatePodium(
+  activity: activity,
+  results: scoringResult[]
+) {
   const studentScores: Record<string, number> = {};
   const teamScores: Record<string, number> = {};
 
   for (const r of results) {
-    const crit = activity.assessment.find((a) => a.id === r.criteriaId);
-    if (!crit) continue;
+    const c = activity.assessment.find((a) => a.id === r.criteriaId);
+    if (!c) continue;
 
-    // coerção robusta: se value for boolean, converte; se number, usa Number()
-    const numericValue: number =
-      typeof r.value === "boolean" ? (r.value ? 1 : 0) : Number(r.value ?? 0);
+    let value = 0;
+    if (c.evaluationType === "boolean") {
+      value = (r.value ? 1 : 0) * (c.weight ?? 1);
+    } else {
+      value = (r.value as number) * (c.weight ?? 1);
+    }
 
     if (r.targetType === "student") {
-      studentScores[r.targetId] = (studentScores[r.targetId] || 0) + numericValue;
+      studentScores[r.targetId] = (studentScores[r.targetId] || 0) + value;
     } else if (r.targetType === "team") {
-      teamScores[r.targetId] = (teamScores[r.targetId] || 0) + numericValue;
+      teamScores[r.targetId] = (teamScores[r.targetId] || 0) + value;
     }
   }
 

@@ -13,7 +13,7 @@ export default function BadgesPage() {
   const { classrooms } = useClassroom();
 
   return (
-    <div>
+    <div className="bg-gray-100 pl-6 pr-6">
       <h1 className="title-section">Insígnias</h1>
 
       <BadgeForm onAdd={addBadge} />

@@ -1,7 +1,7 @@
 // app/students/page.tsx
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import StudentForm from "./components/StudentForm";
 import StudentTable from "./components/StudentTable";
 import type { student } from "../utils/types"
@@ -10,6 +10,7 @@ import { useClassroom } from "../hooks/useClassroom";
 import { useTeams } from "../hooks/useTeams";
 import { useBadges } from "../hooks/useBadges";
 import { ArrowDownAZ, Filter } from "lucide-react"
+import { getCurrentClassroom, setCurrentClassroom } from "../utils/currentClassroom";
 
 export default function StudentPage() {
   const { students, loading, addStudent, updateStudent, removeStudent, toggleBadge } = useStudents();
@@ -23,10 +24,14 @@ export default function StudentPage() {
 
   const [sortKey, setSortKey] = useState<"name" | "classroom">("name")
 
-  const [filterActive, setFilterActive] = useState<"" | "true" | "false">("")
-  const [filterClassroom, setFilterClassroom] = useState<string>("")
+  const [filterActive, setFilterActive] = useState<"" | "true" | "false">("true")
+  const [filterClassroom, setFilterClassroom] = useState<string>(getCurrentClassroom())
   const [filterBadge, setFilterBadge] = useState<string>("")
   const [filterTeam, setFilterTeam] = useState<"" | "included" | "not_included">("")
+
+  useEffect(() => {
+    setCurrentClassroom(getCurrentClassroom())
+  }, []);
 
   // apply filters + sort
   const filteredStudents = useMemo(() => {
@@ -76,7 +81,8 @@ export default function StudentPage() {
   }, [students, sortKey, filterActive, filterClassroom, filterBadge, filterTeam, teams])
 
   return (
-    <div>
+    <div className="bg-gray-100 pl-6 pr-6">
+
       {/* Header com botões */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="title-section">Cadastro de Alunos</h1>
@@ -104,11 +110,11 @@ export default function StudentPage() {
       {/* Painel de ordenação */}
       {showSort && (
         <div className="mb-4 p-3 bg-gray-100 rounded">
-          <label className="block text-sm font-medium mb-1">Ordenar por:</label>
+          <label className="block  text-sm font-medium mb-1">Ordenar por:</label>
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value as typeof sortKey)}
-            className="border rounded p-2 w-full"
+            className="border rounded bg-white p-2 w-full"
           >
             <option value="name">Nome</option>
             <option value="classroom">Turma</option>
@@ -193,7 +199,7 @@ rounded-l-md
                 Com Equipe
               </button>
 
-                            {/* Botão Sem Equipe */}
+              {/* Botão Sem Equipe */}
               <button
                 type="button"
                 className={`
@@ -226,12 +232,16 @@ rounded-l-md
             </div>
           </div>
 
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Turma</label>
             <select
               value={filterClassroom}
-              onChange={(e) => setFilterClassroom(e.target.value)}
+              onChange={(e) => {
+                const selected = e.target.value;
+                setFilterClassroom(selected);
+                setCurrentClassroom(selected);
+              }}
               className="bg-white border rounded p-2 w-full"
             >
               <option value="">Todas</option>

@@ -30,7 +30,7 @@ export default function Navbar() {
 
   return (
     
-      <nav className="bg-white shadow rounded-lg p-2 flex gap-4 mb-6 justify-evenly items-center">
+      <nav className="bg-white shadow p-2 flex gap-4 mb-6 justify-evenly items-center">
         <div className="text-xl font-bold text-gray-800">
           <Link href="/">
           <h1 className="inline-h1 title-logo-0">the</h1>

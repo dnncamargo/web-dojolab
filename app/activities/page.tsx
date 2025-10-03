@@ -1,12 +1,13 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import ActivityForm from "./components/ActivityForm"
 import ActivityTable from "./components/ActivityTable"
 import { useClassroom } from "../hooks/useClassroom"
 import { useActivities } from "../hooks/useActivities"
 import type { activity, ActivityStatus } from "../utils/types"
 import { ArrowDownAZ, Filter } from "lucide-react"
+import { getCurrentClassroom, setCurrentClassroom } from "../utils/currentClassroom";
 
 export default function ActivitiesPage() {
   const { activities, addActivity, updateActivity, removeActivity, duplicateActivity } = useActivities()
@@ -17,7 +18,11 @@ export default function ActivitiesPage() {
   const [showFilter, setShowFilter] = useState(false)
   const [sortKey, setSortKey] = useState<"title" | "classroom" | "date" | "status">("date")
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "">("")
-  const [filterClassroom, setFilterClassroom] = useState<string>("")
+  const [filterClassroom, setFilterClassroom] = useState<string>(getCurrentClassroom)
+
+  useEffect(() => {
+    setCurrentClassroom(getCurrentClassroom())
+  }, []);
 
   // apply filters + sort
   const filteredActivities = useMemo(() => {
@@ -53,7 +58,7 @@ export default function ActivitiesPage() {
 
 
   return (
-    <div>
+    <div className="bg-gray-100 pl-6 pr-6">
 
       {/* Header com botões */}
       <div className="flex justify-between items-center mb-4">
@@ -102,7 +107,7 @@ export default function ActivitiesPage() {
       {showFilter && (
         <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block bg-white text-sm font-medium mb-1">Filtrar por Status</label>
+            <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as ActivityStatus | "")}
@@ -118,10 +123,15 @@ export default function ActivitiesPage() {
           </div>
 
           <div>
-            <label className="block bg-white text-sm font-medium mb-1">Filtrar por Turma</label>
+            <label className="block text-sm font-medium mb-1">Filtrar por Turma</label>
             <select
               value={filterClassroom}
-              onChange={(e) => setFilterClassroom(e.target.value)}
+              onChange={(e) => {
+                  const selected = e.target.value;
+                  setFilterClassroom(selected);
+                  setCurrentClassroom(selected);
+                }
+              }
               className="border rounded p-2 w-full"
             >
               <option value="">Todas</option>

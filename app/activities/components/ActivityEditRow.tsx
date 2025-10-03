@@ -205,7 +205,7 @@ export default function ActivityEditRow({
           </button>
 
           {hasImage && (
-            <td className="px-4 py-2">
+            <div className="px-4 py-2">
               <div className="flex flex-col gap-1">
                 {/* Preview Image */}
                 {previewUrl ? (
@@ -238,7 +238,7 @@ export default function ActivityEditRow({
                   className="border rounded px-2 py-1 w-full text-sm mt-1"
                 />
               </div>
-            </td>
+            </div>
           )}
 
         </div>

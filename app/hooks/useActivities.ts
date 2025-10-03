@@ -189,6 +189,7 @@ export function useActivities() {
       await updateDoc(doc(db, "activities", activity.id), {
         status: "cancelled",
       });
+      
     } finally {
       setLoading(false);
     }

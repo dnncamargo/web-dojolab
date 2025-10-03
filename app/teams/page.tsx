@@ -1,7 +1,7 @@
 // app/teams/page.tsx
 "use client";
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import TeamsForm from "./components/TeamsForm";
 import TeamsTable from "./components/TeamsTable";
 import { useTeams } from "../hooks/useTeams";
@@ -9,6 +9,7 @@ import { useClassroom } from "../hooks/useClassroom";
 import { useStudents } from "../hooks/useStudents";
 import { ArrowDownAZ, Filter } from "lucide-react"
 import { team } from "../utils/types";
+import { getCurrentClassroom, setCurrentClassroom } from "../utils/currentClassroom";
 
 export default function TeamsPage() {
   const { teams, loading: teamsLoading, addTeam, updateTeam, removeTeam } = useTeams();
@@ -21,9 +22,13 @@ export default function TeamsPage() {
 
   const [sortKey, setSortKey] = useState<"name" | "classroom">("name")
 
-  const [filterActive, setFilterActive] = useState<"" | "true" | "false">("")
-  const [filterClassroom, setFilterClassroom] = useState<string>("")
+  const [filterActive, setFilterActive] = useState<"" | "true" | "false">("true")
+  const [filterClassroom, setFilterClassroom] = useState<string>(getCurrentClassroom)
   const [filterWithMembers, setFilterWithMembers] = useState<"" | "withMembers" | "withoutMembers">("")
+
+  useEffect(() => {
+    setCurrentClassroom(getCurrentClassroom())
+  }, []);
 
   // apply filters + sort
   const filteredTeams = useMemo(() => {
@@ -66,7 +71,7 @@ export default function TeamsPage() {
   }, [teams, sortKey, filterActive, filterClassroom, filterWithMembers])
 
   return (
-    <div>
+    <div className="bg-gray-100 pl-6 pr-6">
       {/* Header com botões */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="title-section">Cadastro de Equipes</h1>
@@ -167,8 +172,13 @@ rounded-l-md
             <label className="block text-sm font-medium mb-1">Turma</label>
             <select
               value={filterClassroom}
-              onChange={(e) => setFilterClassroom(e.target.value)}
-              className="border bg-white rounded p-2 w-full"
+              onChange={(e) => {
+                  const selected = e.target.value;
+                  setFilterClassroom(selected);
+                  setCurrentClassroom(selected);
+                }
+              }
+              className="border rounded p-2 w-full"
             >
               <option value="">Todas</option>
               {classrooms.map((c) => (

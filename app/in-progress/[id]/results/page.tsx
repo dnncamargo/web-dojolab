@@ -3,10 +3,10 @@
 
 import React, { useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useActivities } from "@/app/hooks/useActivities"; // Assumindo este path
-import { useStudents } from "@/app/hooks/useStudents"; // Assumindo este hook
-import { useTeams } from "@/app/hooks/useTeams"; // Assumindo este hook
-import PodiumDisplay from "@/app/components/PodiumDisplay"; // Nosso novo componente
+import { useActivities } from "../../../hooks/useActivities"
+import { useStudents } from "../../../hooks/useStudents";
+import { useTeams } from "../../../hooks/useTeams";
+import PodiumDisplay from "../../../components/PodiumDisplay";
 
 export default function ActivityResultsPage() {
   const params = useParams();
@@ -44,13 +44,13 @@ export default function ActivityResultsPage() {
   if (!activity) {
     return <div className="p-6 text-red-600">Atividade não encontrada.</div>;
   }
-  
+
   // A atividade deve estar finalizada para ter um pódio
   if (activity.status !== "completed" || !activity.podium) {
     console.log(activity.podium)
     return <div className="p-6 text-red-600">Esta atividade ainda não foi finalizada.</div>;
   }
-  
+
   const { studentPodium, teamPodium } = activity.podium;
 
 
@@ -62,22 +62,26 @@ export default function ActivityResultsPage() {
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+      <div className="grid mt-6">
         {/* Pódio de Alunos */}
-        <PodiumDisplay
-          title="🏆 Pódio de Alunos"
-          entries={studentPodium}
-          entityMap={studentMap}
-          entityType="student"
-        />
+        {studentPodium.length > 0 && (
+          <PodiumDisplay
+            title="🏆 Pódio de Alunos"
+            entries={studentPodium}
+            entityMap={studentMap}
+          />
+        )}
+
 
         {/* Pódio de Equipes */}
-        <PodiumDisplay
-          title="🏅 Pódio de Equipes"
-          entries={teamPodium}
-          entityMap={teamMap}
-          entityType="team"
-        />
+        {teamPodium.length > 0 && (
+          <PodiumDisplay
+            title="🏅 Pódio de Equipes"
+            entries={teamPodium}
+            entityMap={teamMap}
+          />
+        )}
+
       </div>
 
       {/* Botão de Finalização/Voltar */}

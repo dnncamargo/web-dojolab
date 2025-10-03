@@ -11,7 +11,7 @@ export default function Home() {
   const { classrooms } = useClassroom();
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 pl-6 pr-6">
 
       <h1 className="title-section">Atividades em Andamento</h1>
 

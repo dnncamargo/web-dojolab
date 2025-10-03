@@ -10,7 +10,7 @@ export default function ClassesPage() {
   const { students } = useStudents();
 
   return (
-    <div>
+    <div className="bg-gray-100 pl-6 pr-6">
       <h1 className="title-section">Cadastro de Turmas</h1>
 
       <ClassroomForm 
