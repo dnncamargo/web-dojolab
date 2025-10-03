@@ -25,17 +25,17 @@ export default function StudentForm({ onAdd, classrooms, loading }: StudentFormP
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white shadow rounded-lg p-4 mb-6 flex flex-col md:flex-row"
+      className="bg-white shadow rounded-lg gap-2 p-4 mb-6 flex flex-col md:flex-row"
     >
       <input
-        className="border rounded mr-1 px-3 py-2 flex-1 placeholder-black"
+        className="border rounded-l-lg px-3 py-2 flex-1 placeholder-black"
         placeholder="Nome do aluno"
         value={name}
         onChange={e => setName(e.target.value)}
         required
       />
       <select
-        className="bg-white m-1 border rounded px-3 py-2 flex-1"
+        className="bg-white border rounded-none px-3 py-2 flex-1 placeholder-black"
         value={classroomId}
         onChange={e => setClassroomId(e.target.value)}
         required
@@ -54,7 +54,7 @@ export default function StudentForm({ onAdd, classrooms, loading }: StudentFormP
 
       <button
         type="submit"
-        className="bg-blue-600 ml-1 text-white px-4 py-1 rounded hover:bg-blue-700"
+        className="bg-blue-600 text-white px-4 py-1 rounded-r-lg hover:bg-blue-700"
       >
         Adicionar
       </button>

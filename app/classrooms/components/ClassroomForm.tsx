@@ -45,7 +45,7 @@ export default function ClassroomForm({ onAdd, onUpload }: ClassroomFormProps) {
       className="bg-white shadow rounded-lg p-4 mb-6 flex flex-col md:flex-row gap-2"
     >
       <input
-        className="border rounded px-3 py-2 m-1 flex-1 placeholder-black"
+        className="border rounded-l-lg px-3 py-2 flex-1 placeholder-black"
         placeholder="Nome da turma"
         value={classroomName}
         onChange={(e) => setClassroomName(e.target.value)}
@@ -53,7 +53,7 @@ export default function ClassroomForm({ onAdd, onUpload }: ClassroomFormProps) {
       />
 
       {/* Botão para Upload de CSV */}
-      <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition">
+      <label className="flex items-center gap-2 cursor-pointer bg-gray-200 px-3 py-2 rounded-none hover:bg-gray-300 transition">
         Importar Alunos (CSV)
         <input
           type="file"
@@ -67,7 +67,7 @@ export default function ClassroomForm({ onAdd, onUpload }: ClassroomFormProps) {
       </label>
       <button
         type="submit"
-        className="bg-pink-600 text-white px-4 py-2 m-1 rounded hover:bg-pink-700"
+        className="bg-pink-600 text-white px-3 py-2 rounded-r-lg hover:bg-pink-700"
       >
         Adicionar
       </button>

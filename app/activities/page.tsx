@@ -93,7 +93,7 @@ export default function ActivitiesPage() {
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value as typeof sortKey)}
-            className="border rounded p-2 w-full"
+            className="border rounded p-1 w-full"
           >
             <option value="title">Título</option>
             <option value="classroom">Turma</option>
@@ -111,7 +111,7 @@ export default function ActivitiesPage() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as ActivityStatus | "")}
-              className="border rounded p-2 w-full"
+              className="border rounded p-1 w-full"
             >
               <option value="">Todos</option>
               <option value="not_assigned">Sem atribuição</option>
@@ -132,7 +132,7 @@ export default function ActivitiesPage() {
                   setCurrentClassroom(selected);
                 }
               }
-              className="border rounded p-2 w-full"
+              className="border rounded p-1 w-full"
             >
               <option value="">Todas</option>
               {classrooms.map((c) => (
