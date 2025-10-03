@@ -24,7 +24,6 @@ O projeto está em constante evolução: atualmente na versão **1.9**, com a **
   - Inteiro / Booleano
   - Com **peso avaliativo** (1 a 5).
 - 🔎 **Filtros e ordenação** avançados.
-- 🖼️ Atividades com imagens.
 - 🏆 **Pódio dinâmico** com suporte a empates.
 - 📊 Armazenamento e visualização dos **resultados das atividades**.
 
