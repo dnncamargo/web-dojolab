@@ -3,7 +3,7 @@
 [![Deploy](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)](https://web-dojolab.vercel.app)
 
 O **The Dojo Lab** é um sistema web de **gamificação com avaliação de alunos**, voltado para professores e gestores que desejam tornar o processo de ensino mais dinâmico, justo e envolvente.  
-O projeto está em constante evolução: atualmente na versão **0.1**, com a **v2.0** já em desenvolvimento 🚀.
+O projeto está em constante evolução: atualmente na versão **1.9**, com a **v2.0** já em desenvolvimento 🚀.
 
 ---
 
@@ -24,7 +24,6 @@ O projeto está em constante evolução: atualmente na versão **0.1**, com a **
   - Inteiro / Booleano
   - Com **peso avaliativo** (1 a 5).
 - 🔎 **Filtros e ordenação** avançados.
-- 🖼️ Atividades com imagens.
 - 🏆 **Pódio dinâmico** com suporte a empates.
 - 📊 Armazenamento e visualização dos **resultados das atividades**.
 
@@ -46,7 +45,12 @@ O projeto está em constante evolução: atualmente na versão **0.1**, com a **
 - 📈 **KPIs** para avaliação e relatórios de desempenho de alunos.  
 - 📝 **Registros de ocorrências** e observações individuais.  
 - 🎶 **Alarme sonoro** para atividades cronometradas.  
-- 🛠️ **Toolbar de edição formatada** (rich text) para descrição de atividades.  
+- 🛠️ **Toolbar de edição formatada** (rich text) para descrição de atividades.
+
+## 🐞 Correções de bugs e Melhorias a fazer
+- 🔃 **Ordenação correta pelo nome das turmas**
+- ⛵ **Navbar sempre no topo**
+- 🎨 **Melhora visual dos formulários**
 
 ---
 
@@ -58,7 +62,7 @@ O projeto está em constante evolução: atualmente na versão **0.1**, com a **
 
 ## 📌 Status do Projeto
 
-- Versão atual: **0.1**  
+- Versão atual: **0.9**  
 - Próxima milestone: **2.0** (em desenvolvimento)
 
 ---
