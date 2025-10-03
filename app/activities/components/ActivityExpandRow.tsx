@@ -1,4 +1,4 @@
-import { activity, classroom } from "../../utils/types";
+import { activity } from "../../utils/types";
 import CriteriaList from "./CriteriaList";
 
 type ActivityExpandRowProps = {

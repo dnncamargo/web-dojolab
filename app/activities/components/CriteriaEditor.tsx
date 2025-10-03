@@ -37,7 +37,7 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
     onChange(
       criteria.map((c) => {
         if (c.id !== id) return c;
-        const current = normalizeWeight((c as any).weight); // garante número
+        const current = normalizeWeight((c as any).weight as number); // garante número
         const next = current >= 5 ? 1 : current + 1;
         return { ...c, weight: next };
       })
@@ -73,7 +73,7 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
       <label className="block text-sm font-medium">Critérios de Avaliação</label>
 
       {criteria.map((c) => {
-        const weight = normalizeWeight((c as any).weight);
+        const weight = normalizeWeight((c as criteria).weight);
         return (
           <div key={c.id} className="flex items-center gap-2">
             <input

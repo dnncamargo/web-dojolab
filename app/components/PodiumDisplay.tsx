@@ -39,7 +39,7 @@ function splitName(name: string): string[] {
   const mid = Math.floor(name.length / 2);
   const before = name.lastIndexOf(" ", mid);
   const after = name.indexOf(" ", mid);
-  let splitIndex = before > 0 ? before : after > 0 ? after : mid;
+  const splitIndex = before > 0 ? before : after > 0 ? after : mid;
   return [name.slice(0, splitIndex).trim(), name.slice(splitIndex).trim()];
 }
 

@@ -110,13 +110,8 @@ export default function HistoryPage() {
           <div>
             <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
             <select
-              value={filterClassroom}
-              onChange={(e) => {
-                  const selected = e.target.value;
-                  setFilterClassroom(selected);
-                  setCurrentClassroom(selected);
-                }
-              }
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value as ActivityStatus | "")}
               className="border rounded p-2 w-full"
             >
               <option value="">Todos</option>

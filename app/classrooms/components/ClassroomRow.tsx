@@ -11,7 +11,7 @@ type ClassroomRowProps = {
   colSpan: number;
 };
 
-export default function ClassroomRow({ classroom, expanded, setEditingId, onToggleExpand, onRemove, colSpan }: ClassroomRowProps) {
+export default function ClassroomRow({ classroom, expanded, setEditingId, onToggleExpand, onRemove }: ClassroomRowProps) {
 
   // Lógica de estilo condicional para inativo
   const isInactive = classroom.isActive === false;

@@ -15,8 +15,7 @@ import {
   updateDoc,
   getDocs,
   where,
-  DocumentData,
-  QueryDocumentSnapshot
+  DocumentData
 } from "firebase/firestore";
 import { classroom } from "../utils/types";
 import { useStudents } from "../hooks/useStudents";

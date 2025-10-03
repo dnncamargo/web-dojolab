@@ -12,7 +12,7 @@ type TeamsRowProps = {
   colSpan: number
 };
 
-export default function TeamsRow({ team, classrooms, expanded, setEditingId, onToggleExpand, onRemove, colSpan }: TeamsRowProps) {
+export default function TeamsRow({ team, classrooms, expanded, setEditingId, onToggleExpand, onRemove }: TeamsRowProps) {
 
   // Lógica de estilo condicional para inativo
   const isInactive = team.isActive === false;

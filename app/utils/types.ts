@@ -83,7 +83,7 @@ export type podium = {
   teamPodium: podiumEntry[];
 };
 
-type report = {
+/* type report = {
   id: string;
 
 }
@@ -97,4 +97,4 @@ type observation = {
   activityId?: string;
   date: Date;
   createdAt: Date
-}
+} */
