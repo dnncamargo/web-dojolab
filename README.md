@@ -45,7 +45,12 @@ O projeto está em constante evolução: atualmente na versão **1.9**, com a **
 - 📈 **KPIs** para avaliação e relatórios de desempenho de alunos.  
 - 📝 **Registros de ocorrências** e observações individuais.  
 - 🎶 **Alarme sonoro** para atividades cronometradas.  
-- 🛠️ **Toolbar de edição formatada** (rich text) para descrição de atividades.  
+- 🛠️ **Toolbar de edição formatada** (rich text) para descrição de atividades.
+
+## 🐞 Correções de bugs e Melhorias a fazer
+- 🔃 **Ordenação correta pelo nome das turmas**
+- ⛵ **Navbar sempre no topo**
+- 🎨 **Melhora visual dos formulários**
 
 ---
 
@@ -57,7 +62,7 @@ O projeto está em constante evolução: atualmente na versão **1.9**, com a **
 
 ## 📌 Status do Projeto
 
-- Versão atual: **0.1**  
+- Versão atual: **0.9**  
 - Próxima milestone: **2.0** (em desenvolvimento)
 
 ---
