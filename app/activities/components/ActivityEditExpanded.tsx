@@ -6,7 +6,7 @@ import CriteriaEditor from "./CriteriaEditor";
 import clsx from "clsx";
 import RichTextEditor from "@/app/components/RichTextEditor";
 
-type ActivityEditRowProps = {
+type ActivityEditExpandedProps = {
   activity: activity;
   classrooms: classroom[];
   onSave: (id: string, data: Partial<activity>) => void;
@@ -15,13 +15,13 @@ type ActivityEditRowProps = {
   onClose: () => void;
 };
 
-export default function ActivityEditRow({
+export default function ActivityEditExpanded({
   activity,
   classrooms,
   onSave,
   onCancel,
   onClose
-}: ActivityEditRowProps) {
+}: ActivityEditExpandedProps) {
   const [title, setTitle] = useState(activity.title);
   const [description, setDescription] = useState(activity.description || "");
   const [classroomId, setClassroomId] = useState(activity.classroomId || "");
@@ -33,12 +33,6 @@ export default function ActivityEditRow({
       ? (activity.status as ActivityStatus)
       : "assigned" // fallback seguro
   );
-
-  //const [hasImage, setHasImage] = useState(true || false);
-  //const [image, setImage] = useState(activity.imageUrl || "");
-  //const [file, setFile] = useState<File | null>(null);
-  //const [previewUrl, setPreviewUrl] = useState(activity.imageUrl || "");
-
 
   useEffect(() => {
     setCriteria(activity.assessment || [])
@@ -102,11 +96,6 @@ export default function ActivityEditRow({
             value={description} 
             onChange={setDescription} />
 
-{/*           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="border rounded p-2 w-full"
-          /> */}
         </div>
         <div className="flex justify-between">
           <div className="flex flex-row w-10/12">

@@ -4,6 +4,7 @@ import { useClassroom } from "../../hooks/useClassroom"
 import CriteriaEditor from "./CriteriaEditor"
 import { resolveStatus } from "@/app/utils/status"
 import clsx from "clsx"
+import RichTextEditor from "@/app/components/RichTextEditor"
 
 type ActivityFormExpandedProps = {
     initialTitle: string
@@ -51,17 +52,35 @@ export default function ActivityFormExpanded({
                 className="w-full ml-1 border p-2 rounded-md"
             />
 
-            <textarea
-                placeholder="Descrição (opcional)"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full border p-2 rounded-md"
-            />
+            <div>
+                <label className="block text-sm font-medium">Descrição</label>
+                <RichTextEditor
+                    value={description}
+                    onChange={setDescription} />
 
-            <div className="flex self-start  justify-between">
+            </div>
 
-                <div >
-                    <label className="text-sm mb-1">Data da Atividade (obrigatória)</label>
+            <div className="flex justify-between">
+                <div className="flex flex-row w-10/12">
+
+                    <div className="flex-1 ml-4">
+                        <label className="block text-sm font-medium">Turma</label>
+                        <select
+                            value={selectedClass}
+                            onChange={(e) => setSelectedClass(e.target.value)}
+                            className="w-full border p-2 rounded-md"
+                        >
+                            <option value="">-- Nenhuma turma --</option>
+                            {classrooms.map((classroom) => (
+                                <option key={classroom.id} value={classroom.id}>
+                                    {classroom.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className=" ml-4">
+                        <label className="block text-sm font-medium">Data</label>
                     <input
                         type="date"
                         // conversão só para exibir no input
@@ -71,47 +90,29 @@ export default function ActivityFormExpanded({
                         className="border p-2 rounded-md w-full"
                         required
                     />
-                    <p className="text-xs text-gray-500 mt-1">
-                        A data deve ser hoje ou posterior. (campo obrigatório)
-                    </p>
+                    </div>
+                </div>
+                <div>
+                    <div className="ml-8 flex flex-col self-center">
+                        <label className="block text-sm mb-1">Temporizador</label>
+                        <button
+                            type="button"
+                            onClick={() => setTimed(!timed)}
+                            className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
+                                timed ? 'bg-blue-600' : 'bg-gray-300')}
+                        >
+                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', timed ? 'translate-x-6' : 'translate-x-0')} />
+                        </button>
+
+                    </div>
                 </div>
 
-                <div>
-                    <label className="text-sm mb-1">Selecione a Turma (opcional)</label>
-                    <select
-                        value={selectedClass}
-                        onChange={(e) => setSelectedClass(e.target.value)}
-                        className="w-full border p-2 rounded-md"
-                    >
-                        <option value="">-- Nenhuma turma --</option>
-                        {classrooms.map((classroom) => (
-                            <option key={classroom.id} value={classroom.id}>
-                                {classroom.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
             </div>
 
             <CriteriaEditor
                 criteria={criteria}
                 onChange={setCriteria}
             />
-
-
-
-            <div>
-                <label className="block text-sm mb-1">Configuração de Tempo (opcional)</label>
-                <button
-                    type="button"
-                    onClick={() => setTimed(!timed)}
-                    className={clsx('w-12 h-6 rounded-full transition flex items-center p-1',
-                        timed ? 'bg-blue-600' : 'bg-gray-300')}
-                >
-                    <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', timed ? 'translate-x-6' : 'translate-x-0')} />
-                </button>
-
-            </div>
 
             <div className="flex">
                 <button

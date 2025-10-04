@@ -4,8 +4,8 @@
 import React, { useState } from "react";
 import { activity, classroom } from "../../utils/types";
 import ActivityRow from "./ActivityRow";
-import ActivityEditRow from "./ActivityEditRow";
-import ActivityExpandRow from "./ActivityExpandRow";
+import ActivityEditRow from "./ActivityEditExpanded";
+import ActivityRowExpanded from "./ActivityRowExpanded";
 import { useRouter } from "next/navigation";
 
 type ActivityTableProps = {
@@ -87,7 +87,7 @@ export default function ActivityTable({
                 )}
 
                 {expandedId === a.id && (
-                  <ActivityExpandRow
+                  <ActivityRowExpanded
                     activity={a}
                     onCopy={onCopy}
                     onViewResults={handleViewResults}

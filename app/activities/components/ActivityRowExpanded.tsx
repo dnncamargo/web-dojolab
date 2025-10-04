@@ -1,17 +1,17 @@
 import { activity } from "../../utils/types";
 import CriteriaList from "./CriteriaList";
 
-type ActivityExpandRowProps = {
+type ActivityRowExpandedProps = {
   activity: activity;
   onCopy: (activity: activity) => void;
   onViewResults: (id: string) => void;
 };
 
-export default function ActivityExpandRow({
+export default function ActivityRowExpanded({
   activity,
   onCopy,
   onViewResults
-}: ActivityExpandRowProps) {
+}: ActivityRowExpandedProps) {
 
     const canViewResults =
     activity.status === "completed" &&
