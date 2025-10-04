@@ -4,7 +4,7 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useActivities } from "@/app/hooks/useActivities";
-import RichTextDescription from "@/app/components/RichTextDescription";
+import RichTextDescription from "@/app/components/RichTextDescription_legacy";
 import Timer from "@/app/components/Timer";
 import ScoringTable from "@/app/components/ScoringTable";
 import { useStudents } from "@/app/hooks/useStudents";
@@ -15,7 +15,7 @@ export default function ActivityInProgressPage() {
   const params = useParams();
   const router = useRouter();
 
-  const { activities, loading: activitiesLoading, handleFinalize, setStatusCanceled } = useActivities();
+  const { activities, loading: activitiesLoading, handleFinalize, handleCancel } = useActivities();
   const { students } = useStudents();
   const { teams } = useTeams();
 
@@ -61,15 +61,6 @@ export default function ActivityInProgressPage() {
     return <div className="p-6 text-red-600">Atividade não encontrada</div>;
   }
 
-  // ... o resto do componente, que não contém chamadas de Hook.
-  const handleCancel = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (confirm("Cancelar atividade? Os dados não serão salvos.")) {
-      await setStatusCanceled(activity);
-      router.push("/");
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!confirm("Finalizar a atividade?")) return;
@@ -92,6 +83,7 @@ export default function ActivityInProgressPage() {
       </div>
 
       {/* Descrição */}
+      
       <RichTextDescription content={activity.description || ""} className="mt-4 mb-6" />
 
       {/* Timer */}
@@ -112,14 +104,7 @@ export default function ActivityInProgressPage() {
         />
 
         <div className="flex justify-end gap-4 mt-6">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2 rounded mr-2 bg-gray-200"
-          >
-            Cancelar
-          </button>
-
+ 
           <button
             type="submit"
             disabled={activitiesLoading || activity.status === 'completed'} // Desabilita se já estiver concluído

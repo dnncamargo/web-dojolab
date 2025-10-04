@@ -3,6 +3,7 @@
 
 import { criteria } from "@/app/utils/types";
 import React from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 type CriteriaEditorProps = {
   criteria: criteria[];
@@ -54,7 +55,7 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
 
   const addCriteria = () => {
     const newC: criteria = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       description: "",
       evaluationType: "integer",
       scoringType: "individual",
@@ -75,48 +76,50 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
       {criteria.map((c) => {
         const weight = normalizeWeight((c as criteria).weight);
         return (
-          <div key={c.id} className="flex items-center gap-2">
+          <div key={c.id} className="flex items-center justify-between gap-2">
             <input
               type="text"
               placeholder="Nome do critério"
               value={c.description}
               onChange={(e) => handleDescriptionChange(c.id, e.target.value)}
-              className="flex-1 border p-2 rounded-md"
+              className="w-10/12 border p-2 justify-start rounded-md"
             />
+            <div className="flex justify-end">
 
-            <button
-              type="button"
-              onClick={() => toggleEvaluation(c.id)}
-              className="px-2 py-1 bg-blue-200 rounded-md"
-            >
-              {c.evaluationType === "integer" ? "Inteiro" : "Booleano"}
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleEvaluation(c.id)}
+                className="px-2 py-2 ml-2 bg-blue-200 rounded-md"
+              >
+                {c.evaluationType === "integer" ? "Inteiro" : "Booleano"}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleScoring(c.id)}
-              className="px-2 py-1 bg-purple-200 rounded-md"
-            >
-              {c.scoringType === "individual" ? "Individual" : "Equipe"}
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleScoring(c.id)}
+                className="px-2 py-2 ml-2 bg-purple-200 rounded-md"
+              >
+                {c.scoringType === "individual" ? "Individual" : "Equipe"}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => toggleWeight(c.id)}
-              className="py-1 px-3 bg-yellow-200 rounded-md font-semibold text-center"
-              title="Peso (clicar para aumentar 1..5)"
-            >
-              {weight}
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleWeight(c.id)}
+                className="py-2 px-3 ml-2 bg-yellow-200 rounded-md font-semibold text-center"
+                title="Peso (clicar para aumentar 1..5)"
+              >
+                {weight}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => handleRemove(c.id)}
-              className="px-2 py-1 bg-red-300 rounded-md"
-              title="Remover critério"
-            >
-              ✕
-            </button>
+              <button
+                type="button"
+                onClick={() => handleRemove(c.id)}
+                className="px-2 py-2 ml-2 bg-red-300 rounded-md"
+                title="Remover critério"
+              >
+                ✕
+              </button>
+            </div>
           </div>
         );
       })}

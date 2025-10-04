@@ -4,6 +4,7 @@ import { resolveStatus, getStatusLabel } from "../../utils/status";
 import { ActivityStatus } from "@/app/utils/types";
 import CriteriaEditor from "./CriteriaEditor";
 import clsx from "clsx";
+import RichTextEditor from "@/app/components/RichTextEditor";
 
 type ActivityEditRowProps = {
   activity: activity;
@@ -61,6 +62,7 @@ export default function ActivityEditRow({
       classroomId,
       date,
       assessment: criteria,
+      timed,
       status: resolveStatus(classroomId, status),
     });
     onClose();
@@ -85,7 +87,6 @@ export default function ActivityEditRow({
           </button>
         </div>
         <div>
-
           <label className="block text-sm font-medium">Título</label>
           <input
             type="text"
@@ -96,89 +97,97 @@ export default function ActivityEditRow({
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Status</label>
-          {!classroomId ? (
-            <input
-              type="text"
-              value={getStatusLabel("not_assigned")}
-              disabled
-              className="border rounded p-2 w-full bg-gray-100 text-gray-500"
-            />
-          ) : (
-            <select
-              value={status || "assigned"} // nunca undefined
-              onChange={(e) => setStatus(e.target.value as ActivityStatus)}
-              className="border rounded p-2 w-full"
-            >
-              <option value="assigned">{getStatusLabel("assigned")}</option>
-              <option value="in_progress">{getStatusLabel("in_progress")}</option>
-              <option
-                value="completed"
-                disabled={!wasCompleted()}   // 🔒 desabilita Completed se não houver resultados
-              >
-                {getStatusLabel("completed")}
-              </option>
-              <option value="cancelled">{getStatusLabel("cancelled")}</option>
-            </select>
-
-          )}
-        </div>
-
-        <div>
           <label className="block text-sm font-medium">Descrição</label>
-          <textarea
+          <RichTextEditor 
+            value={description} 
+            onChange={setDescription} />
+
+{/*           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="border rounded p-2 w-full"
-          />
+          /> */}
         </div>
+        <div className="flex justify-between">
+          <div className="flex flex-row w-10/12">
+
+            <div className="flex-1">
+              <label className="block text-sm font-medium">Status</label>
+              {!classroomId ? (
+                <input
+                  type="text"
+                  value={getStatusLabel("not_assigned")}
+                  disabled
+                  className="border rounded p-2 w-full bg-gray-100 text-gray-500"
+                />
+              ) : (
+                <select
+                  value={status || "assigned"} // nunca undefined
+                  onChange={(e) => setStatus(e.target.value as ActivityStatus)}
+                  className="border rounded p-2 w-full"
+                >
+                  <option value="assigned">{getStatusLabel("assigned")}</option>
+                  <option value="in_progress">{getStatusLabel("in_progress")}</option>
+                  <option
+                    value="completed"
+                    disabled={!wasCompleted()}   // 🔒 desabilita Completed se não houver resultados
+                  >
+                    {getStatusLabel("completed")}
+                  </option>
+                  <option value="cancelled">{getStatusLabel("cancelled")}</option>
+                </select>
+              )}
+            </div>
+
+            <div className="flex-1 ml-4">
+              <label className="block text-sm font-medium">Turma</label>
+              <select
+                value={classroomId}
+                onChange={(e) => setClassroomId(e.target.value)}
+                className="border rounded p-2 w-full"
+              >
+                <option value="">— Nenhuma turma —</option>
+                {classrooms.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className=" ml-4">
+              <label className="block text-sm font-medium">Data</label>
+              <input
+                type="date"
+                value={date.toISOString().split("T")[0]}
+                onChange={(e) => setDate(new Date(e.target.value))}
+                className="border rounded p-1"
+              />
+            </div>
+          </div>
+          <div>
+            <div className="ml-8 flex flex-col self-center">
+              <label className="block text-sm mb-1">Temporizador</label>
+              <button
+                type="button"
+                onClick={() => setTimed(!timed)}
+                className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
+                  timed ? 'bg-blue-600' : 'bg-gray-300')}
+              >
+                <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', timed ? 'translate-x-6' : 'translate-x-0')} />
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+
         <div className="mt-2">
           <CriteriaEditor
             criteria={criteria}
             onChange={setCriteria}
           />
         </div>
-
-        <div>
-          <label className="block text-sm font-medium">Turma</label>
-          <select
-            value={classroomId}
-            onChange={(e) => setClassroomId(e.target.value)}
-            className="border rounded p-2 w-full"
-          >
-            <option value="">— Nenhuma turma —</option>
-            {classrooms.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Configuração de Tempo (opcional)</label>
-          <button
-            type="button"
-            onClick={() => setTimed(!timed)}
-            className={clsx('w-12 h-6 rounded-full transition flex items-center p-1',
-              timed ? 'bg-blue-600' : 'bg-gray-300')}
-          >
-            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', timed ? 'translate-x-6' : 'translate-x-0')} />
-          </button>
-
-        </div>
-        <div>
-          <label className="block text-sm font-medium">Data</label>
-          <input
-            type="date"
-            value={date.toISOString().split("T")[0]}
-            onChange={(e) => setDate(new Date(e.target.value))}
-            className="border rounded p-2"
-          />
-        </div>
-
-
-
       </td>
     </tr>
   );
