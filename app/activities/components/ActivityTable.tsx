@@ -4,8 +4,8 @@
 import React, { useState } from "react";
 import { activity, classroom } from "../../utils/types";
 import ActivityRow from "./ActivityRow";
-import ActivityEditRow from "./ActivityEditExpanded";
 import ActivityRowExpanded from "./ActivityRowExpanded";
+import ActivityEditExpanded from "./ActivityEditExpanded";
 import { useRouter } from "next/navigation";
 
 type ActivityTableProps = {
@@ -66,7 +66,7 @@ export default function ActivityTable({
             activities.map((a) => (
               <React.Fragment key={a.id}>
                 {editingId === a.id ? (
-                  <ActivityEditRow
+                  <ActivityEditExpanded
                     activity={a}
                     classrooms={classrooms}
                     onSave={onUpdate}

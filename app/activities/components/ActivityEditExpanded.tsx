@@ -4,7 +4,7 @@ import { resolveStatus, getStatusLabel } from "../../utils/status";
 import { ActivityStatus } from "@/app/utils/types";
 import CriteriaEditor from "./CriteriaEditor";
 import clsx from "clsx";
-import RichTextEditor from "@/app/components/RichTextEditor";
+import DescriptionEditor from "./DescriptionEditor";
 import { decodeHtmlEntities } from "@/app/utils/htmlUtils";
 
 type ActivityEditExpandedProps = {
@@ -28,7 +28,7 @@ export default function ActivityEditExpanded({
   const [classroomId, setClassroomId] = useState(activity.classroomId || "");
   const [date, setDate] = useState(activity.date);
   const [timed, setTimed] = useState(activity.timed || false);
-  const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">("richtext")
+  const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">(activity.descriptionType)
   const [criteria, setCriteria] = useState<criteria[]>(activity.assessment || [])
   const [status, setStatus] = useState<ActivityStatus>(
     activity.status && ["assigned", "in_progress", "completed", "cancelled"].includes(activity.status)
@@ -74,10 +74,9 @@ export default function ActivityEditExpanded({
     onClose();
   };
 
-  const handleChangeDescriptionType = () => {
-    setDescriptionType(descriptionType ? "interactive" : "richtext")
+  const handleChangeDescriptionType = (newType: 'richtext' | 'interactive') => {
+    setDescriptionType(newType)
   }
-
 
   return (
     <tr className="bg-gray-50">
@@ -109,7 +108,7 @@ export default function ActivityEditExpanded({
 
         <div>
           <label className="block text-sm font-medium">Descrição</label>
-          <RichTextEditor
+          <DescriptionEditor
             value={description}
             onChange={setDescription}
             descriptionType={descriptionType}

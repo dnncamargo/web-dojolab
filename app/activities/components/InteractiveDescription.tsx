@@ -67,7 +67,7 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
   return (
     <iframe
       ref={iframeRef}
-      className="w-full border-0 rounded-xl shadow bg-white transition-all duration-300"
+      className="w-full border-0 mb-8 rounded-xl shadow bg-white transition-all duration-300"
       sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
       title="Atividade Interativa"
     />

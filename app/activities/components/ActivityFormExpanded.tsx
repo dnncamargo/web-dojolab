@@ -2,10 +2,10 @@ import { useState } from "react"
 import { activity, criteria } from "@/app/utils/types"
 import { useClassroom } from "../../hooks/useClassroom"
 import CriteriaEditor from "./CriteriaEditor"
+import DescriptionEditor from "./DescriptionEditor"
 import { resolveStatus } from "@/app/utils/status"
-import clsx from "clsx"
-import RichTextEditor from "@/app/components/RichTextEditor"
 import { decodeHtmlEntities } from "@/app/utils/htmlUtils"
+import clsx from "clsx"
 
 type ActivityFormExpandedProps = {
     initialTitle: string
@@ -56,8 +56,8 @@ export default function ActivityFormExpanded({
         onCancel()
     }
 
-    const handleChangeDescriptionType = () => {
-        setDescriptionType(descriptionType ? "interactive" : "richtext")
+    const handleChangeDescriptionType = (newType: 'richtext' | 'interactive') => {
+        setDescriptionType(newType)
     }
 
     return (
@@ -71,7 +71,7 @@ export default function ActivityFormExpanded({
 
             <div>
                 <label className="block text-sm font-medium">Descrição</label>
-                <RichTextEditor
+                <DescriptionEditor
                     value={description}
                     onChange={setDescription}
                     descriptionType={descriptionType}

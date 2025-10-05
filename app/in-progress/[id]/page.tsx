@@ -10,13 +10,13 @@ import ScoringTable from "@/app/components/ScoringTable";
 import { useStudents } from "@/app/hooks/useStudents";
 import { useTeams } from "@/app/hooks/useTeams";
 import type { scoringResult } from "@/app/utils/types";
-import InteractiveDescription from "@/app/components/InteractiveDescription";
+import InteractiveDescription from "@/app/activities/components/InteractiveDescription";
 
 export default function ActivityInProgressPage() {
   const params = useParams();
   const router = useRouter();
 
-  const { activities, loading: activitiesLoading, handleFinalize, handleCancel } = useActivities();
+  const { activities, loading: activitiesLoading, handleFinalize } = useActivities();
   const { students } = useStudents();
   const { teams } = useTeams();
 
