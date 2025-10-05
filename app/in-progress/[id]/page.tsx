@@ -10,6 +10,7 @@ import ScoringTable from "@/app/components/ScoringTable";
 import { useStudents } from "@/app/hooks/useStudents";
 import { useTeams } from "@/app/hooks/useTeams";
 import type { scoringResult } from "@/app/utils/types";
+import InteractiveDescription from "@/app/components/InteractiveDescription";
 
 export default function ActivityInProgressPage() {
   const params = useParams();
@@ -37,15 +38,15 @@ export default function ActivityInProgressPage() {
     }
   }, [activity]);
 
-    // Quando a atividade for marcada localmente como 'completed', redirecione.
+  // Quando a atividade for marcada localmente como 'completed', redirecione.
   useEffect(() => {
     // 1. Verifica se a atividade existe
     if (!activity) return;
 
     // 2. Verifica se a atividade foi finalizada no Firebase E sincronizada localmente
     if (activity.status === 'completed' && activity.podium) {
-        // Redireciona APENAS quando o estado local estiver atualizado.
-        router.push(`/in-progress/${activity.id}/results`);
+      // Redireciona APENAS quando o estado local estiver atualizado.
+      router.push(`/in-progress/${activity.id}/results`);
     }
   }, [activity, router]); // Depende da atividade e do router
 
@@ -54,7 +55,7 @@ export default function ActivityInProgressPage() {
   const handleResultsChange = useCallback((next: scoringResult[]) => {
     setResults(next);
   }, []);
-  
+
   // 2. AGORA, FAÇA O RETORNO CONDICIONAL (EARLY EXIT)
 
   if (!activity) {
@@ -83,8 +84,12 @@ export default function ActivityInProgressPage() {
       </div>
 
       {/* Descrição */}
-      
-      <RichTextDescription content={activity.description || ""} className="mt-4 mb-6" />
+
+      {activity.descriptionType === "interactive" ? (
+        <InteractiveDescription htmlContent={activity.description ?? ""} />
+      ) : (
+        <RichTextDescription content={activity.description ?? ""} className="mt-4 mb-6" />
+      )}
 
       {/* Timer */}
       {activity.timed && (
@@ -94,17 +99,25 @@ export default function ActivityInProgressPage() {
       )}
 
       {/* Formulário de critérios */}
+
       <form onSubmit={handleSubmit}>
-        <ScoringTable
-          activity={activity}
-          students={students}
-          teams={teams}
-          initialResults={results}
-          onChange={handleResultsChange}
-        />
+
+        {activity.assessment.length > 0 ? (
+          <ScoringTable
+            activity={activity}
+            students={students}
+            teams={teams}
+            initialResults={results}
+            onChange={handleResultsChange}
+          />
+        ) : (
+          <p className="text-red-500">
+            Não há critérios avaliativos cadastrados nesta atividade
+          </p>)
+        }
 
         <div className="flex justify-end gap-4 mt-6">
- 
+
           <button
             type="submit"
             disabled={activitiesLoading || activity.status === 'completed'} // Desabilita se já estiver concluído

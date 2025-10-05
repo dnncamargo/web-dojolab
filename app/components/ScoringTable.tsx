@@ -25,16 +25,16 @@ type ScoresState = Record<
 
 // Função auxiliar para converter initialResults -> ScoresState
 const mapInitialResultsToScoresState = (initialResults: scoringResult[]): ScoresState => {
-    if (!initialResults.length) return {};
-    const initial: ScoresState = {};
-    for (const r of initialResults) {
-      if (!initial[r.criteriaId]) {
-        initial[r.criteriaId] = {};
-      }
-      // O valor inicial pode ser null, mas o tipo scores[crit][ent] é number | boolean | null
-      initial[r.criteriaId][r.targetId] = r.value as (number | boolean | null); 
+  if (!initialResults.length) return {};
+  const initial: ScoresState = {};
+  for (const r of initialResults) {
+    if (!initial[r.criteriaId]) {
+      initial[r.criteriaId] = {};
     }
-    return initial;
+    // O valor inicial pode ser null, mas o tipo scores[crit][ent] é number | boolean | null
+    initial[r.criteriaId][r.targetId] = r.value as (number | boolean | null);
+  }
+  return initial;
 }
 
 export default function ScoringTable({
@@ -49,6 +49,7 @@ export default function ScoringTable({
   );
 
   // Converte o estado local em scoringResult[] e envia ao pai
+
   useEffect(() => {
     if (!onChange) return;
 
@@ -69,7 +70,7 @@ export default function ScoringTable({
     onChange(results);
   }, [scores, activity, onChange]);
 
-    const handleScoreChange = (
+  const handleScoreChange = (
     criteriaId: string,
     entityId: string,
     value: number | boolean
@@ -84,12 +85,12 @@ export default function ScoringTable({
   };
 
   // Filtrar apenas alunos e equipes da turma da atividade
-  
+
   const activeStudents = students
-    .sort((a,b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))
     .filter(
-    (s) => s.isActive && s.classroomId === activity.classroomId
-  );
+      (s) => s.isActive && s.classroomId === activity.classroomId
+    );
   const activeTeams = teams.filter(
     (t) => t.isActive && t.classroomId === activity.classroomId
   );

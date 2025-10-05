@@ -18,7 +18,7 @@ export default function ActivitiesPage() {
   const [showFilter, setShowFilter] = useState(false)
   const [sortKey, setSortKey] = useState<"title" | "classroom" | "date" | "status">("date")
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "">("")
-  const [filterClassroom, setFilterClassroom] = useState<string>(getCurrentClassroom)
+  const [filterClassroom, setFilterClassroom] = useState<string>("")
 
   useEffect(() => {
     setCurrentClassroom(getCurrentClassroom())

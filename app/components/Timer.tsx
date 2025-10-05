@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 type Mode = "chronometer" | "alarm";
+const ALARM_SOUND_PATH = "../../public/sounds/sfx-robotic-beeping.mp3";
 
 interface TimerProps {
   initialMode?: Mode;
@@ -23,6 +24,14 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
   // --- Alarme ---
   const [alarmTime, setAlarmTime] = useState("");
   const [now, setNow] = useState(new Date());
+
+  // ---- Som do Alarme ----
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+   useEffect(() => {
+    // Cria a instância de Audio apenas uma vez quando o componente é montado.
+    audioRef.current = new Audio(ALARM_SOUND_PATH);
+  }, []);
 
   // Atualiza o relógio do "alarme"
   useEffect(() => {
@@ -54,7 +63,8 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
         m === now.getMinutes() &&
         now.getSeconds() === 0
       ) {
-        alert("⏰ Alarme disparado!");
+        playAlarmSound();
+        //alert("⏰ Alarme disparado!");
       }
     }
   }, [now, mode, alarmTime]);
@@ -71,6 +81,19 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
   const handleMark = () => {
     setLaps((prev) => [...prev, seconds]);
   };
+
+  const playAlarmSound = () => {
+    if (audioRef.current) {
+      // Reinicia o som para que ele possa ser tocado novamente
+      audioRef.current.currentTime = 0; 
+      // Tenta reproduzir. play() retorna uma Promise.
+      audioRef.current.play().catch(error => {
+        // Captura e loga erros de reprodução (ex: interrupção de um som anterior)
+        console.error("Erro ao tentar reproduzir o áudio:", error); 
+      });
+    }
+  };
+
 
   return (
     <div className="p-6 bg-white rounded-xl shadow w-full">
@@ -182,7 +205,7 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
           <p className="text-[12rem] clock-digital tracking-widest font-bold mb-10">
             {now.toLocaleTimeString("pt-BR").split("").map((char, i) => (
               <span key={i} className="inline-block w-[1ch] text-center">
-                  {char}
+                {char}
               </span>
             ))}
           </p>

@@ -54,13 +54,13 @@ export type activity = {
   title: string
   description?: string
   classroomId?: string
-  imageUrl?: string;
   assessment: criteria[]
   status:   ActivityStatus
   timed: boolean
+  descriptionType: "richtext" | "interactive"
   results?: scoringResult[]
-  date: Date;
-  podium?: podium; 
+  date: Date
+  podium?: podium
   createdAt: Date
   finalizedAt?: Date
 }

@@ -5,6 +5,7 @@ import { ActivityStatus } from "@/app/utils/types";
 import CriteriaEditor from "./CriteriaEditor";
 import clsx from "clsx";
 import RichTextEditor from "@/app/components/RichTextEditor";
+import { decodeHtmlEntities } from "@/app/utils/htmlUtils";
 
 type ActivityEditExpandedProps = {
   activity: activity;
@@ -27,6 +28,7 @@ export default function ActivityEditExpanded({
   const [classroomId, setClassroomId] = useState(activity.classroomId || "");
   const [date, setDate] = useState(activity.date);
   const [timed, setTimed] = useState(activity.timed || false);
+  const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">("richtext")
   const [criteria, setCriteria] = useState<criteria[]>(activity.assessment || [])
   const [status, setStatus] = useState<ActivityStatus>(
     activity.status && ["assigned", "in_progress", "completed", "cancelled"].includes(activity.status)
@@ -50,17 +52,32 @@ export default function ActivityEditExpanded({
 
   const handleSave = () => {
 
+    let finalDescription = description;
+
+    if (descriptionType === "interactive") {
+      // Se o conteúdo veio do RichTextEditor e contém tags escapadas
+      if (finalDescription.includes("&lt;")) {
+        finalDescription = decodeHtmlEntities(finalDescription);
+      }
+    }
+
     onSave(activity.id, {
       title,
-      description,
+      description: finalDescription,
       classroomId,
       date,
       assessment: criteria,
+      descriptionType,
       timed,
       status: resolveStatus(classroomId, status),
     });
     onClose();
   };
+
+  const handleChangeDescriptionType = () => {
+    setDescriptionType(descriptionType ? "interactive" : "richtext")
+  }
+
 
   return (
     <tr className="bg-gray-50">
@@ -92,9 +109,12 @@ export default function ActivityEditExpanded({
 
         <div>
           <label className="block text-sm font-medium">Descrição</label>
-          <RichTextEditor 
-            value={description} 
-            onChange={setDescription} />
+          <RichTextEditor
+            value={description}
+            onChange={setDescription}
+            descriptionType={descriptionType}
+            onSetDescriptionType={handleChangeDescriptionType}
+          />
 
         </div>
         <div className="flex justify-between">

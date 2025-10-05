@@ -5,6 +5,7 @@ import CriteriaEditor from "./CriteriaEditor"
 import { resolveStatus } from "@/app/utils/status"
 import clsx from "clsx"
 import RichTextEditor from "@/app/components/RichTextEditor"
+import { decodeHtmlEntities } from "@/app/utils/htmlUtils"
 
 type ActivityFormExpandedProps = {
     initialTitle: string
@@ -20,6 +21,7 @@ export default function ActivityFormExpanded({
     const [title, setTitle] = useState(initialTitle)
     const [description, setDescription] = useState("")
     const [timed, setTimed] = useState(false)
+    const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">("richtext")
     const [criteria, setCriteria] = useState<criteria[]>([])
     const [selectedClass, setSelectedClass] = useState<string>("")
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -29,18 +31,33 @@ export default function ActivityFormExpanded({
     const handleSave = () => {
         if (!title.trim() || criteria.length === 0) return
 
+        let finalDescription = description;
+
+        if (descriptionType === "interactive") {
+            // Se o conteúdo veio do RichTextEditor e contém tags escapadas
+            if (finalDescription.includes("&lt;")) {
+                finalDescription = decodeHtmlEntities(finalDescription);
+            }
+        }
+
+
         const newActivity: Omit<activity, "id"> = {
             title,
-            description,
+            description: finalDescription,
             classroomId: selectedClass || undefined,
             assessment: criteria,
             status: resolveStatus(selectedClass, status),
             timed,
+            descriptionType: descriptionType,
             date: selectedDate,
             createdAt: new Date(),
         }
         onAdd(newActivity)
         onCancel()
+    }
+
+    const handleChangeDescriptionType = () => {
+        setDescriptionType(descriptionType ? "interactive" : "richtext")
     }
 
     return (
@@ -56,7 +73,9 @@ export default function ActivityFormExpanded({
                 <label className="block text-sm font-medium">Descrição</label>
                 <RichTextEditor
                     value={description}
-                    onChange={setDescription} />
+                    onChange={setDescription}
+                    descriptionType={descriptionType}
+                    onSetDescriptionType={handleChangeDescriptionType} />
 
             </div>
 
@@ -81,15 +100,15 @@ export default function ActivityFormExpanded({
 
                     <div className=" ml-4">
                         <label className="block text-sm font-medium">Data</label>
-                    <input
-                        type="date"
-                        // conversão só para exibir no input
-                        value={selectedDate.toISOString().split("T")[0]}
-                        // conversão só na leitura do input → volta para Date
-                        onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                        className="border p-2 rounded-md w-full"
-                        required
-                    />
+                        <input
+                            type="date"
+                            // conversão só para exibir no input
+                            value={selectedDate.toISOString().split("T")[0]}
+                            // conversão só na leitura do input → volta para Date
+                            onChange={(e) => setSelectedDate(new Date(e.target.value))}
+                            className="border p-2 rounded-md w-full"
+                            required
+                        />
                     </div>
                 </div>
                 <div>

@@ -72,6 +72,7 @@ function docToActivity(d: QueryDocumentSnapshot<DocumentData>): activity {
     status: (data.status ?? "not_assigned") as ActivityStatus,
     timed: data.timed ?? false,
     date,
+    descriptionType: data.descriptionType ?? "",
     createdAt,
     results: data.results ?? null,
     podium: data.podium ?? undefined
@@ -159,6 +160,7 @@ export function useActivities() {
       description: source.description,
       assessment: source.assessment,
       timed: source.timed,
+      descriptionType: source.descriptionType,
       classroomId: undefined,
       status: "not_assigned",
       date: new Date(),
