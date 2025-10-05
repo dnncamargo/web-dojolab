@@ -129,7 +129,7 @@ export default function ScoringTable({
               {crit.scoringType === "team" &&
                 activeTeams.map((tm) => (
                   <div key={tm.id} className="mb-2 flex items-center gap-2">
-                    <span className="w-32">{tm.name}</span>
+                    <span className="w-96">{tm.name}</span>
                     {crit.evaluationType === "integer" ? (
                       <StarRating
                         value={(scores[crit.id]?.[tm.id] as number) || 0}

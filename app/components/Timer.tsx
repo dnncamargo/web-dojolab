@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 type Mode = "chronometer" | "alarm";
-const ALARM_SOUND_PATH = "../../public/sounds/sfx-robotic-beeping.mp3";
+const ALARM_SOUND_PATH = "/sounds/sfx-robotic-beeping.mp3";
 
 interface TimerProps {
   initialMode?: Mode;
@@ -24,11 +24,12 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
   // --- Alarme ---
   const [alarmTime, setAlarmTime] = useState("");
   const [now, setNow] = useState(new Date());
+  const [alarmActive, setAlarmActive] = useState(false);
 
   // ---- Som do Alarme ----
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-   useEffect(() => {
+  useEffect(() => {
     // Cria a instância de Audio apenas uma vez quando o componente é montado.
     audioRef.current = new Audio(ALARM_SOUND_PATH);
   }, []);
@@ -63,11 +64,31 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
         m === now.getMinutes() &&
         now.getSeconds() === 0
       ) {
+        setAlarmActive(true);
         playAlarmSound();
         //alert("⏰ Alarme disparado!");
       }
     }
   }, [now, mode, alarmTime]);
+
+   const stopAlarmSound = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setAlarmActive(false);
+  };
+
+  const snoozeAlarm = () => {
+    stopAlarmSound();
+    const [h, m] = alarmTime.split(":").map(Number);
+    const snoozeDate = new Date();
+    snoozeDate.setHours(h, m + 5); // +5 minutos
+    const newH = String(snoozeDate.getHours()).padStart(2, "0");
+    const newM = String(snoozeDate.getMinutes()).padStart(2, "0");
+    setAlarmTime(`${newH}:${newM}`);
+    alert(`⏰ Alarme adiado para ${newH}:${newM}`);
+  };
 
   // Formatar segundos -> mm:ss
   const formatTime = (totalSeconds: number) => {
@@ -85,11 +106,11 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
   const playAlarmSound = () => {
     if (audioRef.current) {
       // Reinicia o som para que ele possa ser tocado novamente
-      audioRef.current.currentTime = 0; 
+      audioRef.current.currentTime = 0;
       // Tenta reproduzir. play() retorna uma Promise.
       audioRef.current.play().catch(error => {
         // Captura e loga erros de reprodução (ex: interrupção de um som anterior)
-        console.error("Erro ao tentar reproduzir o áudio:", error); 
+        console.error("Erro ao tentar reproduzir o áudio:", error);
       });
     }
   };
@@ -200,6 +221,28 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
 
       {mode === "alarm" && (
         <div className="text-center">
+
+                   {alarmActive && (
+            <div className="mt-6 flex flex-col items-center gap-3">
+              <p className="text-xl text-red-600 font-bold animate-pulse">
+                🔔 Alarme tocando!
+              </p>
+              <div className="flex gap-3">
+                <button
+                  className="px-4 py-2 rounded bg-gray-700 text-white"
+                  onClick={stopAlarmSound}
+                >
+                  Parar
+                </button>
+                <button
+                  className="px-4 py-2 rounded bg-yellow-500 text-white"
+                  onClick={snoozeAlarm}
+                >
+                  Adiar 5 min
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Hora Agora */}
           <p className="text-[12rem] clock-digital tracking-widest font-bold mb-10">
