@@ -15,7 +15,6 @@ export default function CalendarPage() {
   const { classrooms, loading } = useClassroom()
 
   // UI states
-  const [showSort, setShowSort] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
   const [sortKey, setSortKey] = useState<"title" | "classroom" | "date" | "status">("date")
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "">("")
@@ -112,36 +111,15 @@ export default function CalendarPage() {
             <Filter className="h-5 w-5" />
             Filtros
           </button>
-          <button
-            onClick={() => setShowSort(!showSort)}
-            className="flex items-center gap-1 p-2 border rounded-lg hover:bg-gray-100"
-          >
-            <ArrowDownAZ className="h-5 w-5" />
-            Ordenar
-          </button>
+
         </div>
       </div>
       
       {/* Controles de Filtro (Mantido) */}
-      {(showSort || showFilter) && (
+      {(showFilter) && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 border rounded-lg bg-gray-50 mb-6">
           
-          {showSort && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Ordenar por</label>
-              <select
-                value={sortKey}
-                onChange={(e) => setSortKey(e.target.value as any)}
-                className="border rounded p-1 w-full"
-              >
-                <option value="date">Data</option>
-                <option value="title">Título</option>
-                <option value="classroom">Turma</option>
-                <option value="status">Status</option>
-              </select>
-            </div>
-          )}
-          
+        
           {showFilter && (
             <div>
               <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
