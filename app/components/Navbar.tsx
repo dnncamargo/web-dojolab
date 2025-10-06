@@ -104,18 +104,18 @@ export default function Navbar() {
                   <ul className="flex flex-col gap-2">
                     <li>
                       <Link
-                        href="/activities"
-                        className="hover:text-indigo-600"
-                      >
-                        Nova Atividade
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
                         href="/activities/history"
                         className="hover:text-indigo-600"
                       >
                         Histórico
+                      </Link>
+                    </li>
+                                        <li>
+                      <Link
+                        href="/activities/calendar"
+                        className="hover:text-indigo-600"
+                      >
+                        Calendário
                       </Link>
                     </li>
                   </ul>

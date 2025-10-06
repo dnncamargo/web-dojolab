@@ -8,9 +8,10 @@ import { useActivities } from "../../hooks/useActivities"
 import type { activity, ActivityStatus } from "../../utils/types"
 import { ArrowDownAZ, Filter } from "lucide-react"
 import { getCurrentClassroom, setCurrentClassroom } from "../../utils/currentClassroom";
+import ActivityForm from "../components/ActivityForm"
 
 export default function HistoryPage() {
-  const { activities, updateActivity, removeActivity, duplicateActivity } = useActivities()
+  const { activities, addActivity, updateActivity, removeActivity, duplicateActivity } = useActivities()
   const { classrooms, loading } = useClassroom()
 
 
@@ -19,7 +20,7 @@ export default function HistoryPage() {
   const [showFilter, setShowFilter] = useState(false)
   const [sortKey, setSortKey] = useState<"title" | "classroom" | "date" | "status">("date")
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "">("")
-  const [filterClassroom, setFilterClassroom] = useState<string>(getCurrentClassroom)
+  const [filterClassroom, setFilterClassroom] = useState<string>("")
 
   useEffect(() => {
     setCurrentClassroom(getCurrentClassroom())
@@ -128,9 +129,10 @@ export default function HistoryPage() {
             <select
               value={filterClassroom}
               onChange={(e) => {
-                setFilterClassroom(e.target.value)
-                setCurrentClassroom(filterClassroom)
-              }
+                  const selected = e.target.value;
+                  setFilterClassroom(selected);
+                  setCurrentClassroom(selected);
+                }
               }
               className="border rounded p-1 w-full"
             >
@@ -144,6 +146,10 @@ export default function HistoryPage() {
           </div>
         </div>
       )}
+
+      <ActivityForm
+        onAdd={addActivity}
+      />
 
       <ActivityTable
         activities={filteredActivities}
