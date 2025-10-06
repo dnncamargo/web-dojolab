@@ -59,6 +59,7 @@ export type activity = {
   timed: boolean
   descriptionType: "richtext" | "interactive"
   results?: scoringResult[]
+  tags?: string[]
   date: Date
   podium?: podium
   createdAt: Date

@@ -14,13 +14,13 @@ export default function HistoryPage() {
   const { activities, addActivity, updateActivity, removeActivity, duplicateActivity } = useActivities()
   const { classrooms, loading } = useClassroom()
 
-
   // UI states
   const [showSort, setShowSort] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
   const [sortKey, setSortKey] = useState<"title" | "classroom" | "date" | "status">("date")
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "">("")
   const [filterClassroom, setFilterClassroom] = useState<string>("")
+  const [searchText, setSearchText] = useState<string>("") 
 
   useEffect(() => {
     setCurrentClassroom(getCurrentClassroom())
@@ -40,6 +40,15 @@ export default function HistoryPage() {
       list = list.filter((a) => a.classroomId === filterClassroom)
     }
 
+        // FILTRO DE TEXTO (Título ou Tag)
+    if (searchText) {
+      const searchLower = searchText.toLowerCase();
+      list = list.filter((a) => 
+        a.title.toLowerCase().includes(searchLower) || // Pesquisa por título
+        (a.tags || []).some(tag => tag.toLowerCase().includes(searchLower)) // Pesquisa por tags
+      );
+    }
+
     // sort
     list.sort((a, b) => {
       switch (sortKey) {
@@ -56,7 +65,7 @@ export default function HistoryPage() {
     })
 
     return list
-  }, [activities, sortKey, filterStatus, filterClassroom])
+  }, [activities, sortKey, filterStatus, filterClassroom, searchText])
 
 
   return (
@@ -108,6 +117,19 @@ export default function HistoryPage() {
       {/* Painel de filtros */}
       {showFilter && (
         <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          {/* NOVO CAMPO DE PESQUISA ADICIONADO */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Pesquisar por Título ou Tag</label>
+            <input
+              type="text"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Digite um termo de pesquisa..."
+              className="border rounded p-1 w-full"
+            />
+          </div>
+          
           <div>
             <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
             <select

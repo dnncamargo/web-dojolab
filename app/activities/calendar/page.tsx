@@ -52,8 +52,8 @@ export default function CalendarPage() {
             // não está visível no `activity` ou no contexto, a busca é aplicada primariamente no título.
             // Para ser um filtro mais abrangente, incluímos também a descrição.
             const matchesDescription = a.description?.toLowerCase().includes(lowerCaseSearchTerm);
-
-            return matchesTitle || matchesDescription;
+            const matchTags = (a.tags || []).some(tag => tag.toLowerCase().includes(lowerCaseSearchTerm))
+            return matchesTitle || matchesDescription || matchTags;
         });
     }
 

@@ -30,6 +30,8 @@ export default function ActivityEditExpanded({
   const [timed, setTimed] = useState(activity.timed || false);
   const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">(activity.descriptionType)
   const [criteria, setCriteria] = useState<criteria[]>(activity.assessment || [])
+  const initialTags = (activity.tags || []).join(', ');
+  const [tagString, setTagString] = useState<string>(initialTags);
   const [status, setStatus] = useState<ActivityStatus>(
     activity.status && ["assigned", "in_progress", "completed", "cancelled"].includes(activity.status)
       ? (activity.status as ActivityStatus)
@@ -38,6 +40,7 @@ export default function ActivityEditExpanded({
 
   useEffect(() => {
     setCriteria(activity.assessment || [])
+    setTagString((activity.tags || []).join(', '))
   }, [activity])
 
   const wasCompleted = () => {
@@ -51,6 +54,8 @@ export default function ActivityEditExpanded({
   };
 
   const handleSave = () => {
+
+    const tagsArray = tagString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
     let finalDescription = description;
 
@@ -70,6 +75,7 @@ export default function ActivityEditExpanded({
       descriptionType,
       timed,
       status: resolveStatus(classroomId, status),
+      tags: tagsArray
     });
     onClose();
   };
@@ -194,6 +200,18 @@ export default function ActivityEditExpanded({
           <CriteriaEditor
             criteria={criteria}
             onChange={setCriteria}
+          />
+        </div>
+
+        {/* TAGS */}
+        <div>
+          <label className="block text-sm mb-1">Tags (separadas por vírgula)</label>
+          <input
+            type="text"
+            value={tagString}
+            onChange={(e) => setTagString(e.target.value)}
+            className="border rounded p-2 w-full"
+            placeholder="ex: matemática, lúdico, 5o ano"
           />
         </div>
       </td>

@@ -23,6 +23,7 @@ export default function ActivityFormExpanded({
     const [timed, setTimed] = useState(false)
     const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">("richtext")
     const [criteria, setCriteria] = useState<criteria[]>([])
+    const [tagString, setTagString] = useState<string>("");
     const [selectedClass, setSelectedClass] = useState<string>("")
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const { classrooms } = useClassroom()
@@ -39,7 +40,7 @@ export default function ActivityFormExpanded({
                 finalDescription = decodeHtmlEntities(finalDescription);
             }
         }
-
+        const tagsArray = tagString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
         const newActivity: Omit<activity, "id"> = {
             title,
@@ -48,6 +49,7 @@ export default function ActivityFormExpanded({
             assessment: criteria,
             status: resolveStatus(selectedClass, status),
             timed,
+            tags: tagsArray,
             descriptionType: descriptionType,
             date: selectedDate,
             createdAt: new Date(),
@@ -132,6 +134,18 @@ export default function ActivityFormExpanded({
                 criteria={criteria}
                 onChange={setCriteria}
             />
+
+            {/* TAGS */}
+            <div>
+                <label className="block text-sm mb-1">Tags (separadas por vírgula)</label>
+                <input
+                    type="text"
+                    value={tagString}
+                    onChange={(e) => setTagString(e.target.value)}
+                    className="w-full ml-1 border p-2 rounded-md"
+                    placeholder="ex: matemática, lúdico, 5o ano"
+                />
+            </div>
 
             <div className="flex">
                 <button

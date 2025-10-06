@@ -7,7 +7,7 @@ O projeto está em constante evolução: atualmente na versão **1.9**, com a **
 
 ---
 
-## ✨ Funcionalidades Atuais (v2.2)
+## ✨ Funcionalidades Atuais (v2.3)
 
 - 📋 **Cadastro (CRUD)** de:
   - Alunos
@@ -30,6 +30,8 @@ O projeto está em constante evolução: atualmente na versão **1.9**, com a **
 - 🌟 **Descrição da atividade com HTML/CSS/JS**
 - 🛠️ **Toolbar de edição formatada** (rich text) para descrição de atividades.
 - 🎶 **Alarme sonoro** para atividades cronometradas.  
+- 📅 **Calendário de atividades** integrado.  
+- 🏷️ **Tags** em atividades
 
 ---
 
@@ -43,8 +45,6 @@ O projeto está em constante evolução: atualmente na versão **1.9**, com a **
 
 ## 🚀 Próximas Funcionalidades (v2.3)
 
-
-- 📅 **Calendário de atividades** integrado.  
 - 📈 **KPIs** para avaliação e relatórios de desempenho de alunos.  
 - 📝 **Registros de ocorrências** e observações individuais.  
 
