@@ -54,7 +54,7 @@ export default function ScoringTable({
     if (!onChange) return;
 
     const results: scoringResult[] = [];
-    for (const crit of activity.assessment) {
+    for (const crit of activity.assessment ?? []) {
       const entities = scores[crit.id] || {};
       Object.entries(entities).forEach(([entityId, value]) => {
         if (value !== null) {
@@ -104,7 +104,7 @@ export default function ScoringTable({
         </tr>
       </thead>
       <tbody>
-        {activity.assessment.map((crit) => (
+        {activity.assessment && activity.assessment.map((crit) => (
           <tr key={crit.id} className="border-t border-gray-200">
             <td className="py-2 px-4 text-wrap">{crit.description}</td>
             <td className="py-2 px-4">
