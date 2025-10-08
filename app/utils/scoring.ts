@@ -5,7 +5,7 @@ export function validateAllCriteriaFilled(
   activity: activity,
   results: scoringResult[]
 ): boolean {
-  const expected = activity.assessment.length;
+  const expected = activity.assessment ? activity.assessment.length : 0;
   const byCriteria = new Set(results.map((r) => r.criteriaId));
   return byCriteria.size === expected;
 }
@@ -23,7 +23,7 @@ export function calculatePodium(
   const teamScores: Record<string, number> = {};
 
   for (const r of results) {
-    const c = activity.assessment.find((a) => a.id === r.criteriaId);
+    const c = activity.assessment?.find((a) => a.id === r.criteriaId);
     if (!c) continue;
 
     let value = 0;
