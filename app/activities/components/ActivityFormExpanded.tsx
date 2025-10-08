@@ -21,6 +21,7 @@ export default function ActivityFormExpanded({
     const [title, setTitle] = useState(initialTitle)
     const [description, setDescription] = useState("")
     const [timed, setTimed] = useState(false)
+    const [graded, setGraded] = useState(false)
     const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">("richtext")
     const [criteria, setCriteria] = useState<criteria[]>([])
     const [tagString, setTagString] = useState<string>("");
@@ -49,6 +50,7 @@ export default function ActivityFormExpanded({
             assessment: criteria,
             status: resolveStatus(selectedClass, status),
             timed,
+            graded,
             tags: tagsArray,
             descriptionType: descriptionType,
             date: selectedDate,
@@ -113,6 +115,21 @@ export default function ActivityFormExpanded({
                         />
                     </div>
                 </div>
+
+                <div>
+                    <div className="ml-8 flex flex-col self-center">
+                        <label className="block text-sm mb-1">Pontuação</label>
+                        <button
+                            type="button"
+                            onClick={() => setGraded(!graded)}
+                            className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
+                                graded ? 'bg-blue-600' : 'bg-gray-300')}
+                        >
+                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', graded ? 'translate-x-6' : 'translate-x-0')} />
+                        </button>
+
+                    </div>
+                </div>
                 <div>
                     <div className="ml-8 flex flex-col self-center">
                         <label className="block text-sm mb-1">Temporizador</label>
@@ -122,7 +139,8 @@ export default function ActivityFormExpanded({
                             className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
                                 timed ? 'bg-blue-600' : 'bg-gray-300')}
                         >
-                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', timed ? 'translate-x-6' : 'translate-x-0')} />
+                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', 
+                                timed ? 'translate-x-6' : 'translate-x-0')} />
                         </button>
 
                     </div>
@@ -130,10 +148,14 @@ export default function ActivityFormExpanded({
 
             </div>
 
-            <CriteriaEditor
-                criteria={criteria}
-                onChange={setCriteria}
-            />
+            {/* Avaliação */}
+            {graded && (
+                <CriteriaEditor
+                    criteria={criteria}
+                    onChange={setCriteria}
+                />
+            )}
+
 
             {/* TAGS */}
             <div>

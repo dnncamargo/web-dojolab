@@ -33,12 +33,17 @@ export default function ActivityRowExpanded({
             <RichTextDescription content={activity.description ?? "Sem Descrição"} className="mt-4 mb-6" />
           )}
 
-
         </div>
-        <div className="mt-2">
-          <strong>Critérios de Avaliação:</strong>
-          <CriteriaList criteria={activity.assessment} />
-        </div>
+        {activity.graded ? (
+          <div className="mt-2">
+            <strong>Critérios de Avaliação:</strong>
+            <CriteriaList criteria={activity.assessment ?? []} />
+          </div>
+        ):(
+          <p className="text-red-500">
+            Esta atividade não é avaliativa
+          </p>)
+        }
         <div className="mt-2">
           <strong>Atividade cronometrada:</strong> {activity.timed ? "Sim" : "Não"}
         </div>

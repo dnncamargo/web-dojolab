@@ -68,15 +68,16 @@ function docToActivity(d: QueryDocumentSnapshot<DocumentData>): activity {
     title: data.title ?? "",
     description: data.description ?? "",
     classroomId: data.classroomId ?? "",
-    assessment: (data.assessment ?? []) as activity["assessment"],
     status: (data.status ?? "not_assigned") as ActivityStatus,
-    timed: data.timed ?? false,
     date,
-    tags: (data.tags ?? []) as string[],
+    timed: data.timed ?? false,
+    graded: data.graded ?? false,
+    assessment: (data.assessment ?? []) as activity["assessment"],
     descriptionType: data.descriptionType ?? "",
-    createdAt,
+    tags: (data.tags ?? []) as string[],
     results: data.results ?? null,
-    podium: data.podium ?? undefined
+    podium: data.podium ?? undefined,
+    createdAt,
   } as activity;
 }
 
@@ -159,13 +160,14 @@ export function useActivities() {
     const newData: Omit<activity, "id" | "createdAt"> = {
       title: source.title,
       description: source.description,
-      assessment: source.assessment,
-      timed: source.timed,
-      tags: source.tags, 
-      descriptionType: source.descriptionType,
       classroomId: undefined,
       status: "not_assigned",
       date: new Date(),
+      timed: source.timed,
+      graded: source.graded,
+      assessment: source.assessment,
+      descriptionType: source.descriptionType,
+      tags: source.tags, 
     };
     await addActivity(newData);
   };

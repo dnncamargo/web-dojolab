@@ -28,6 +28,7 @@ export default function ActivityEditExpanded({
   const [classroomId, setClassroomId] = useState(activity.classroomId || "");
   const [date, setDate] = useState(activity.date);
   const [timed, setTimed] = useState(activity.timed || false);
+  const [graded, setGraded] = useState(activity.graded);
   const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">(activity.descriptionType)
   const [criteria, setCriteria] = useState<criteria[]>(activity.assessment || [])
   const initialTags = (activity.tags || []).join(', ');
@@ -74,6 +75,7 @@ export default function ActivityEditExpanded({
       assessment: criteria,
       descriptionType,
       timed,
+      graded,
       status: resolveStatus(classroomId, status),
       tags: tagsArray
     });
@@ -181,6 +183,21 @@ export default function ActivityEditExpanded({
           </div>
           <div>
             <div className="ml-8 flex flex-col self-center">
+              <label className="block text-sm mb-1">Pontuação</label>
+              <button
+                type="button"
+                onClick={() => setGraded(!graded)}
+                className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
+                  graded ? 'bg-blue-600' : 'bg-gray-300')}
+              >
+                <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition',
+                  graded ? 'translate-x-6' : 'translate-x-0')} />
+              </button>
+
+            </div>
+          </div>
+          <div>
+            <div className="ml-8 flex flex-col self-center">
               <label className="block text-sm mb-1">Temporizador</label>
               <button
                 type="button"
@@ -193,15 +210,15 @@ export default function ActivityEditExpanded({
 
             </div>
           </div>
-
         </div>
 
-        <div className="mt-2">
+        {/* Avaliação */}
+        {graded && (
           <CriteriaEditor
             criteria={criteria}
             onChange={setCriteria}
           />
-        </div>
+        )}
 
         {/* TAGS */}
         <div>

@@ -102,19 +102,29 @@ export default function ActivityInProgressPage() {
 
       <form onSubmit={handleSubmit}>
 
-        {activity.assessment.length > 0 ? (
-          <ScoringTable
-            activity={activity}
-            students={students}
-            teams={teams}
-            initialResults={results}
-            onChange={handleResultsChange}
-          />
+        {activity.graded ? (
+          <>
+            {(activity.assessment && activity.assessment.length > 0) ? (
+              <ScoringTable
+                activity={activity}
+                students={students}
+                teams={teams}
+                initialResults={results}
+                onChange={handleResultsChange}
+              />
+            ) : (
+              <p className="text-red-500">
+                Não há critérios avaliativos cadastrados nesta atividade
+              </p>)
+            }
+
+          </>
         ) : (
           <p className="text-red-500">
-            Não há critérios avaliativos cadastrados nesta atividade
-          </p>)
-        }
+            Esta atividade não é avaliativa
+          </p>)}
+
+
 
         <div className="flex justify-end gap-4 mt-6">
 

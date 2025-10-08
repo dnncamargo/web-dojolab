@@ -54,7 +54,8 @@ export type activity = {
   title: string
   description?: string
   classroomId?: string
-  assessment: criteria[]
+  graded: boolean
+  assessment?: criteria[]
   status:   ActivityStatus
   timed: boolean
   descriptionType: "richtext" | "interactive"
