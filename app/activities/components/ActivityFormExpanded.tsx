@@ -27,12 +27,25 @@ export default function ActivityFormExpanded({
     const [tagString, setTagString] = useState<string>("");
     const [selectedClass, setSelectedClass] = useState<string>("")
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { classrooms } = useClassroom()
     const status = "not_assigned"
 
     const handleSave = () => {
-        if (!title.trim()) return
-        //if (!title.trim() || criteria.length === 0) return
+        // 1. Limpa erros anteriores
+        setErrorMessage(null);
+
+        // 2. Validação do Título (title.length === 0)
+        if (!title.trim()) {
+            setErrorMessage("O Título da atividade é obrigatório.");
+            return;
+        }
+
+        // 3. Validação dos Critérios (se graded, criteria.length === 0)
+        if (graded && criteria.length === 0) {
+            setErrorMessage("Atividades avaliadas devem ter ao menos um critério.");
+            return;
+        }
 
         let finalDescription = description;
 
@@ -58,6 +71,14 @@ export default function ActivityFormExpanded({
             createdAt: new Date(),
         }
         onAdd(newActivity)
+        setTitle("")
+        setDescription("")
+        setTimed(false)
+        setGraded(false)
+        setCriteria([])
+        setSelectedClass("")
+        setSelectedDate(new Date())
+        setTagString("");
         onCancel()
     }
 
@@ -140,7 +161,7 @@ export default function ActivityFormExpanded({
                             className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
                                 timed ? 'bg-blue-600' : 'bg-gray-300')}
                         >
-                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', 
+                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition',
                                 timed ? 'translate-x-6' : 'translate-x-0')} />
                         </button>
 
@@ -170,10 +191,19 @@ export default function ActivityFormExpanded({
                 />
             </div>
 
+            {/* NOVO: Exibição de Erro */}
+            {errorMessage && (
+                <div className="mt-4 p-3 bg-red-100 text-red-700 border border-red-400 rounded-md font-medium text-sm">
+                    {errorMessage}
+                </div>
+            )}
+
             <div className="flex">
                 <button
                     onClick={handleSave}
-                    className="px-4 py-2 mr-1 bg-green-500 text-white rounded-md"
+                    className="px-4 py-2 mr-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
+                    // O disabled agora é apenas visual, a validação é feita em handleSave
+                    disabled={!title.trim() || (graded && criteria.length === 0)}
                 >
                     Salvar Atividade
                 </button>

@@ -28,7 +28,7 @@ export function calculatePodium(
 
     let value = 0;
     if (c.evaluationType === "boolean") {
-      value = (r.value ? 1 : 0) * (c.weight ?? 1);
+      value = (r.value ? 1 : 0) * (c.weight ?? 5);
     } else {
       value = (r.value as number) * (c.weight ?? 1);
     }

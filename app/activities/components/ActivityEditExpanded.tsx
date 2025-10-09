@@ -33,6 +33,7 @@ export default function ActivityEditExpanded({
   const [criteria, setCriteria] = useState<criteria[]>(activity.assessment || [])
   const initialTags = (activity.tags || []).join(', ');
   const [tagString, setTagString] = useState<string>(initialTags);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [status, setStatus] = useState<ActivityStatus>(
     activity.status && ["assigned", "in_progress", "completed", "cancelled"].includes(activity.status)
       ? (activity.status as ActivityStatus)
@@ -55,6 +56,21 @@ export default function ActivityEditExpanded({
   };
 
   const handleSave = () => {
+
+    // 1. Limpa erros anteriores
+    setErrorMessage(null);
+
+    // 2. Validação do Título (title.length === 0)
+    if (!title.trim()) {
+      setErrorMessage("O Título da atividade é obrigatório.");
+      return;
+    }
+
+    // 3. Validação dos Critérios (se graded, criteria.length === 0)
+    if (graded && criteria.length === 0) {
+      setErrorMessage("Atividades avaliadas devem ter ao menos um critério.");
+      return;
+    }
 
     const tagsArray = tagString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
@@ -79,6 +95,14 @@ export default function ActivityEditExpanded({
       status: resolveStatus(classroomId, status),
       tags: tagsArray
     });
+    setTitle("")
+        setDescription("")
+        setTimed(false)
+        setGraded(false)
+        setCriteria([])
+        setClassroomId("")
+        setDate(new Date())
+        setTagString("");
     onClose();
   };
 
@@ -98,10 +122,12 @@ export default function ActivityEditExpanded({
             Cancelar
           </button>
           <button
-            className="px-3 py-1 m-1 bg-green-600 text-white rounded"
             onClick={handleSave}
+            className="px-4 py-2 mr-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
+            // O disabled agora é apenas visual, a validação é feita em handleSave
+            disabled={!title.trim() || (graded && criteria.length === 0)}
           >
-            Salvar
+            Salvar Atividade
           </button>
         </div>
         <div>
@@ -231,6 +257,13 @@ export default function ActivityEditExpanded({
             placeholder="ex: matemática, lúdico, 5o ano"
           />
         </div>
+
+        {/* NOVO: Exibição de Erro */}
+        {errorMessage && (
+          <div className="mt-4 p-3 bg-red-100 text-red-700 border border-red-400 rounded-md font-medium text-sm">
+            {errorMessage}
+          </div>
+        )}
       </td>
     </tr>
   );
