@@ -31,7 +31,8 @@ export default function ActivityFormExpanded({
     const status = "not_assigned"
 
     const handleSave = () => {
-        if (!title.trim() || criteria.length === 0) return
+        if (!title.trim()) return
+        //if (!title.trim() || criteria.length === 0) return
 
         let finalDescription = description;
 
