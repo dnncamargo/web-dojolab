@@ -52,7 +52,8 @@ export default function BadgeRow({ badge, expanded, setEditingId, onToggleExpand
                     className="px-3 py-1 m-1 bg-red-500 text-white rounded"
                     onClick={() => {
                         // Exibe um alerta de confirmação
-                        if (window.confirm("Tem certeza que deseja remover esta insígnia?")) {
+                        if (window.confirm(`Tem certeza que deseja remover "${badge.name}"?
+Esta ação não pode ser desfeita.`)) {
                             onRemove(badge.id);
                         }
                     }}

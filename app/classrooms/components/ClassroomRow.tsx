@@ -43,7 +43,8 @@ export default function ClassroomRow({ classroom, expanded, setEditingId, onTogg
           className="px-3 py-1 m-1 bg-red-500 text-white rounded"
           onClick={() => {
             // Exibe um alerta de confirmação
-            if (window.confirm("Tem certeza que deseja remover esta classe?")) {
+            if (window.confirm(`Tem certeza que deseja remover "${classroom.name}"?
+Esta ação não pode ser desfeita.`)) {
               onRemove(classroom.id);
             }
           }}

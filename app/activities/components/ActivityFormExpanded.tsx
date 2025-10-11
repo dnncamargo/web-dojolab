@@ -45,6 +45,14 @@ export default function ActivityFormExpanded({
         if (graded && criteria.length === 0) {
             setErrorMessage("Atividades avaliadas devem ter ao menos um critério.");
             return;
+        } else {
+            let i = 0;
+            for (i; i < criteria.length; i++) {
+                if (criteria[i].description === "") {
+                    setErrorMessage("Um ou mais Critérios de Avaliação não possuem descrição preenchida.");
+                    return;
+                }
+            }
         }
 
         let finalDescription = description;
@@ -200,16 +208,15 @@ export default function ActivityFormExpanded({
 
             <div className="flex">
                 <button
+                    className="px-4 py-1 m-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
                     onClick={handleSave}
-                    className="px-4 py-2 mr-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
-                    // O disabled agora é apenas visual, a validação é feita em handleSave
                     disabled={!title.trim() || (graded && criteria.length === 0)}
                 >
                     Salvar Atividade
                 </button>
                 <button
                     onClick={onCancel}
-                    className="px-4 py-2 ml-1 bg-gray-300 rounded-md"
+                    className="px-3 py-1 m-1 bg-gray-300 rounded-md"
                 >
                     Cancelar
                 </button>

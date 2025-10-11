@@ -70,6 +70,14 @@ export default function ActivityEditExpanded({
     if (graded && criteria.length === 0) {
       setErrorMessage("Atividades avaliadas devem ter ao menos um critério.");
       return;
+    } else {
+      let i = 0;
+      for (i; i < criteria.length; i++) {
+        if (criteria[i].description === "") {
+          setErrorMessage("Um ou mais Critérios de Avaliação não possuem descrição preenchida.");
+          return;
+        }
+      }
     }
 
     const tagsArray = tagString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
@@ -96,13 +104,13 @@ export default function ActivityEditExpanded({
       tags: tagsArray
     });
     setTitle("")
-        setDescription("")
-        setTimed(false)
-        setGraded(false)
-        setCriteria([])
-        setClassroomId("")
-        setDate(new Date())
-        setTagString("");
+    setDescription("")
+    setTimed(false)
+    setGraded(false)
+    setCriteria([])
+    setClassroomId("")
+    setDate(new Date())
+    setTagString("");
     onClose();
   };
 
@@ -116,15 +124,14 @@ export default function ActivityEditExpanded({
 
         <div className="flex justify-end">
           <button
-            className="px-3 py-1 m-1 bg-gray-500 text-white rounded"
+            className="px-3 py-1 m-1 bg-gray-500 text-white rounded-md"
             onClick={onCancel}
           >
             Cancelar
           </button>
           <button
+            className="px-6 py-1 m-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
             onClick={handleSave}
-            className="px-4 py-2 mr-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
-            // O disabled agora é apenas visual, a validação é feita em handleSave
             disabled={!title.trim() || (graded && criteria.length === 0)}
           >
             Salvar Atividade

@@ -53,7 +53,8 @@ const ActivityRow = ({ activity, classrooms, onRemove, onExpand, onEdit, expande
           className="px-3 py-1 ml-2 bg-red-500 text-white rounded"
           onClick={() => {
             // Exibe um alerta de confirmação
-            if (window.confirm("Tem certeza que deseja remover esta atividade?")) {
+            if (window.confirm(`Tem certeza que deseja remover "${activity.title}"?
+Esta ação não pode ser desfeita.`)) {
               onRemove(activity.id);
             }
           }}
