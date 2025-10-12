@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwindcss/typography
 
 :root {
   --background: #ffffff;
@@ -64,3 +65,63 @@ body {
   display: inline-block;
   /* margin-right: 10px;  Opcional: para dar um espaçamento entre eles */
 }
+
+/* ======== Listas globais (Editor e visualização) ======== */
+ul {
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+
+ol {
+  padding-left: 1.25rem;
+  list-style-type: decimal;
+}
+
+/* Segundo nível (ul dentro de ul → quadrado; ol dentro de ol → letras) */
+ul ul {
+  list-style-type: square;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+ol ol {
+  list-style-type: lower-alpha;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Terceiro nível (ul dentro de ul dentro de ul → círculo; ol dentro de ol dentro de ol → algarismos romanos) */
+ul ul ul {
+  list-style-type: circle;
+}
+
+ol ol ol {
+  list-style-type: lower-roman;
+}
+
+/* Opcional: melhora o espaçamento entre itens */
+li {
+  margin-bottom: 0.3rem;
+  line-height: 1.5;
+}
+
+/* Blockquote */
+.prose blockquote,
+.blockquote {
+  border-left: 4px solid rgba(59,130,246,0.6); /* azul suave */
+  background: rgba(59,130,246,0.04);
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  color: #0f172a;
+  border-radius: 6px;
+}
+
+/* Ajustes para listas (já conversamos sobre isso) */
+.prose ul { padding-left: 1.25rem; list-style-type: disc; }
+.prose ol { padding-left: 1.25rem; list-style-type: decimal; }
+
+.prose ul ul { list-style-type: square; }
+.prose ol ol { list-style-type: lower-alpha; }
+
+/* pequenas melhorias visuais no editor */
+.prose img { max-width: 100%; border-radius: 6px; }
