@@ -57,7 +57,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, y: -5 }}
                   className="absolute left-0 mt-2 bg-white shadow-lg rounded-lg p-3 w-64"
                 >
-                  <ul className="flex flex-col gap-2">
+                  <ul className="flex flex-col gap-2 list-style-type: none;">
                     <li>
                       <Link href="/students" className="hover:text-indigo-600">
                         Alunos
@@ -101,7 +101,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, y: -5 }}
                   className="absolute left-0 mt-2 bg-white shadow-lg rounded-lg p-3 w-64"
                 >
-                  <ul className="flex flex-col gap-2">
+                  <ul className="flex flex-col gap-2 list-style-type: none;">
                     <li>
                       <Link
                         href="/activities/history"
