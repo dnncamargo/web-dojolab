@@ -123,7 +123,7 @@ Antes de começar, você precisa ter:
 1. Acesse [Vercel]https://vercel.com/dashboard
 2. Clique em “Add New Project” → selecione o seu fork web-dojolab.
 3. Antes do deploy, clique em “Environment Variables” e adicione as chaves abaixo (com os valores do Firebase):
-
+```
 +------------------------------------------+-----------------------+
 | Nome da Variável (Next.js)               | Valor (Copiado do F.C.) |
 +------------------------------------------+-----------------------+
@@ -134,6 +134,7 @@ Antes de começar, você precisa ter:
 | NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | messagingSenderId     |
 | NEXT_PUBLIC_FIREBASE_APP_ID              | appId                 |
 +------------------------------------------+-----------------------+
+```
 4. Clique em Deploy 🎉
 💡 Após o primeiro deploy, o Vercel cria um link como https://seu-nome.vercel.app/.
 
