@@ -17,7 +17,6 @@ import Underline from '@tiptap/extension-underline'
 import HardBreak from "@tiptap/extension-hard-break";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Heading from '@tiptap/extension-heading'
-import History from '@tiptap/extension-history';
 
 import clsx from 'clsx'
 
@@ -79,7 +78,6 @@ export default function DescriptionEditor({
   const extensions = useMemo(() => [
     Document,
     StarterKit,
-    History,
     Paragraph,
     Text,
     Heading.configure({ levels: [1, 2, 3] }),
@@ -144,7 +142,7 @@ export default function DescriptionEditor({
     }
   }
 
-    const toggleHeadingLevel = () => {
+  const toggleHeadingLevel = () => {
     if (!editor) return
 
     if (editor.isActive('heading', { level: 1 })) {
@@ -262,8 +260,8 @@ export default function DescriptionEditor({
               className={clsx(
                 'p-2 rounded hover:bg-gray-200',
                 (editor.isActive('heading', { level: 1 }) ||
-                 editor.isActive('heading', { level: 2 }) ||
-                 editor.isActive('heading', { level: 3 })) && 'bg-gray-300' // Destaca se qualquer um dos níveis H1-H3 estiver ativo
+                  editor.isActive('heading', { level: 2 }) ||
+                  editor.isActive('heading', { level: 3 })) && 'bg-gray-300' // Destaca se qualquer um dos níveis H1-H3 estiver ativo
               )}
             >
               <Type size={16} /> {/* Usando o ícone Type */}
