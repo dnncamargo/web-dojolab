@@ -24,7 +24,7 @@ const ActivityRow = ({ activity, classrooms, onRemove, onExpand, onEdit, expande
       </td>
 
       <td className="px-4 py-2">
-        {activity.date.toLocaleDateString("pt-BR")}
+        {activity.date.toLocaleDateString("pt-BR", { timeZone: 'UTC' })}
       </td>
 
       <td className="px-4 py-2">{getStatusLabel(Array.isArray(activity.status) ? activity.status[0] : activity.status)}</td>

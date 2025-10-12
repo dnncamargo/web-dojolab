@@ -207,11 +207,11 @@ export default function ActivityEditExpanded({
             <div className=" ml-4">
               <label className="block text-sm font-medium">Data</label>
               <input
-                type="date"
-                value={date.toISOString().split("T")[0]}
-                onChange={(e) => setDate(new Date(e.target.value))}
-                className="border rounded p-1"
-              />
+                  type="date"
+                  value={date.toISOString().split("T")[0]} // Usa a string de data corrigida
+                  onChange={(e) => setDate(new Date(e.target.value + 'T00:00:00'))} // Cria a nova data no fuso horário local/UTC do input
+                  className="border rounded p-1"
+                />
             </div>
           </div>
           <div>
