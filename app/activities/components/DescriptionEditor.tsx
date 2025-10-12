@@ -14,6 +14,11 @@ import Image from '@tiptap/extension-image'
 import TextAlign from '@tiptap/extension-text-align'
 import Highlight from '@tiptap/extension-highlight'
 import Underline from '@tiptap/extension-underline'
+import HardBreak from "@tiptap/extension-hard-break";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import Heading from '@tiptap/extension-heading'
+import History from '@tiptap/extension-history';
+
 import clsx from 'clsx'
 
 import {
@@ -32,7 +37,7 @@ import {
   AlignLeft,
   AlignCenter,
   AlignRight,
-  Palette,
+  Type
 } from 'lucide-react'
 
 type DescriptionEditorProps = {
@@ -72,7 +77,13 @@ export default function DescriptionEditor({
   // IMPORTANT: StarterKit already provides list-related extensions (bulletList, orderedList, listItem).
   // Do NOT include BulletList / OrderedList / ListItem again — duplication causa falha no comportamento das listas.
   const extensions = useMemo(() => [
-    StarterKit, // inclui listas, headings, paragraphs, code, blockquote, etc.
+    Document,
+    StarterKit,
+    History,
+    Paragraph,
+    Text,
+    Heading.configure({ levels: [1, 2, 3] }),
+
     Underline,
     Highlight.configure({ multicolor: true }),
     Link.configure({
@@ -86,6 +97,10 @@ export default function DescriptionEditor({
     TextStyle,
     Color,
     Blockquote,
+    HardBreak.configure({
+      keepMarks: true,
+    }),
+    HorizontalRule,
   ], [])
 
   const editor = useEditor({
@@ -126,6 +141,20 @@ export default function DescriptionEditor({
       alert('Modo interativo (HTML/CSS/JS) ativado. Insira seu código manualmente.')
     } else {
       onSetDescriptionType('richtext')
+    }
+  }
+
+    const toggleHeadingLevel = () => {
+    if (!editor) return
+
+    if (editor.isActive('heading', { level: 1 })) {
+      editor.chain().focus().toggleHeading({ level: 2 }).run() // H1 -> H2
+    } else if (editor.isActive('heading', { level: 2 })) {
+      editor.chain().focus().toggleHeading({ level: 3 }).run() // H2 -> H3
+    } else if (editor.isActive('heading', { level: 3 })) {
+      editor.chain().focus().setParagraph().run()             // H3 -> P (Texto Normal)
+    } else {
+      editor.chain().focus().toggleHeading({ level: 1 }).run() // P -> H1
     }
   }
 
@@ -225,6 +254,21 @@ export default function DescriptionEditor({
               <Strikethrough size={16} />
             </button>
 
+            {/* Heading (H1, H2, H3, P)*/}
+            <button
+              type="button"
+              title="Título (H1, H2, H3)"
+              onClick={toggleHeadingLevel} // Usa a nova função de ciclo
+              className={clsx(
+                'p-2 rounded hover:bg-gray-200',
+                (editor.isActive('heading', { level: 1 }) ||
+                 editor.isActive('heading', { level: 2 }) ||
+                 editor.isActive('heading', { level: 3 })) && 'bg-gray-300' // Destaca se qualquer um dos níveis H1-H3 estiver ativo
+              )}
+            >
+              <Type size={16} /> {/* Usando o ícone Type */}
+            </button>
+
             <button
               type="button"
               title="Lista com marcadores"
@@ -261,6 +305,25 @@ export default function DescriptionEditor({
               <Code size={16} />
             </button>
 
+            {/* Linha horizontal */}
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().setHorizontalRule().run()}
+              className="px-2 py-1 border rounded"
+              title="Linha horizontal"
+            >
+              ―
+            </button>
+
+            {/* Quebra de linha */}
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().setHardBreak().run()}
+              className="px-2 py-1 border rounded"
+              title="Quebra de linha (Shift+Enter)"
+            >
+              ⏎
+            </button>
 
             {/* ---------------- Text Color Dropdown ---------------- */}
             <div className="relative">
@@ -309,6 +372,26 @@ export default function DescriptionEditor({
                 </div>
               )}
             </div>
+
+            {/* Linha horizontal */}
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().setHorizontalRule().run()}
+              className="px-2 py-1 border rounded"
+              title="Linha horizontal"
+            >
+              ―
+            </button>
+
+            {/* Quebra de linha */}
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().setHardBreak().run()}
+              className="px-2 py-1 border rounded"
+              title="Quebra de linha (Shift+Enter)"
+            >
+              ⏎
+            </button>
 
             <button type="button" title="Alinhar à esquerda" onClick={() => editor.chain().focus().setTextAlign('left').run()} className="p-2 rounded hover:bg-gray-200">
               <AlignLeft size={16} />
@@ -364,14 +447,14 @@ export default function DescriptionEditor({
           editor={editor}
           className="prose max-w-none min-h-[240px] border border-gray-300 rounded-md p-3
                      prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6"
-          // adicione classes utilitárias para garantir recuo e estilo mesmo sem plugin typography
-          /* style={{
-            // fallback CSS caso o projeto não tenha o plugin typography ativo
-            // garante que listas tenham recuo e marcadores
-            // (pode ser removido se preferir usar suas classes globais)
-            // eslint-disable-next-line react/no-unknown-property
-            ['--tw-prose-body' as any]: undefined,
-          }} */
+        // adicione classes utilitárias para garantir recuo e estilo mesmo sem plugin typography
+        /* style={{
+          // fallback CSS caso o projeto não tenha o plugin typography ativo
+          // garante que listas tenham recuo e marcadores
+          // (pode ser removido se preferir usar suas classes globais)
+          // eslint-disable-next-line react/no-unknown-property
+          ['--tw-prose-body' as any]: undefined,
+        }} */
         />
       ) : (
         <textarea
