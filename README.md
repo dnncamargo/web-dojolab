@@ -117,7 +117,87 @@ Antes de começar, você precisa ter:
      messagingSenderId: "123456789",
      appId: "1:123456789:web:abc123def456"
    };
+5. Guarde esse código — você vai precisar no próximo passo.
 
+### 3️⃣ Configure as variáveis de ambiente no Vercel
+1. Acesse [Vercel]https://vercel.com/dashboard
+2. Clique em “Add New Project” → selecione o seu fork web-dojolab.
+3. Antes do deploy, clique em “Environment Variables” e adicione as chaves abaixo (com os valores do Firebase):
+
++------------------------------------------+-------------------------+
+| Nome da Variável (Next.js)               | Valor (Copiado do F.C.) |
++------------------------------------------+-------------------------+
+| NEXT_PUBLIC_FIREBASE_API_KEY             | apiKey                  |
+| NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN         | authDomain              |
+| NEXT_PUBLIC_FIREBASE_PROJECT_ID          | projectId               |
+| NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET      | storageBucket           |
+| NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | messagingSenderId       |
+| NEXT_PUBLIC_FIREBASE_APP_ID              | appId                   |
++------------------------------------------+-------------------------+
+4. Clique em Deploy 🎉
+💡 Após o primeiro deploy, o Vercel cria um link como https://seu-nome.vercel.app/.
+
+### 4️⃣ Teste o sistema localmente (opcional)
+Se quiser rodar localmente antes de publicar:
+Para isto, você precisará ter instalado o [Git](https://git-scm.com/)
+
+```
+
+# No terminal, clone o seu fork
+git clone https://github.com/SEU_USUARIO/web-dojolab.git
+
+cd web-dojolab
+
+# Instale as dependências
+npm install
+
+# Crie um arquivo .env.local e adicione as variáveis do Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+NEXT_PUBLIC_FIREBASE_APP_ID=...
+
+# Rode o servidor local
+npm run dev
+
+```
+
+5️⃣ **Personalize seu Dojo Lab ✨**
+Você pode editar os seguintes diretórios:
++------------------------------+-------------------------------------------------------------+
+| Pasta/Arquivo                | Descrição                                                   |
++------------------------------+-------------------------------------------------------------+
+| /app/components/             | Componentes reutilizáveis do sistema (ex: editor, timer,    |
+|                              | modais)                                                     |
+| /app/pages/                  | Páginas principais do app (home, atividades, etc.)          |
+| /public/backgrounds/         | Imagens usadas como planos de fundo das fases               |
+| /public/fonts/               | Fontes personalizadas (TTF, OTF)                            |
+| /app/lib/firebase.ts         | Inicialização e configuração do Firebase                    |
++------------------------------+-------------------------------------------------------------+
+
+🎨 **Recursos visuais**
+
+Fontes Google e locais (TTF/OTF)
+Páginas interativas com HTML + JS (modo “interactive”)
+Animações suaves com Framer Motion
+Ícones com Lucide e Heroicons
+Estilos com TailwindCSS
+
+🧑‍💻 **Stack técnica**
+
++---------------------------+---------------------------------------+
+| Recurso                   | Tecnologia                            |
++---------------------------+---------------------------------------+
+| Front-end                 | Next.js 15 + React 19                 |
+| Estilização               | Tailwind CSS 3                        |
+| Animações                 | Framer Motion                         |
+| Editor de texto           | Tiptap (com suporte a HTML interativo)|
+| Banco de dados            | Firebase Firestore                    |
+| Deploy                    | Vercel                                |
+| Versionamento             | GitHub                                |
++---------------------------+---------------------------------------+
 
 ---
 
