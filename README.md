@@ -123,7 +123,7 @@ Antes de começar, você precisa ter:
 1. Acesse [Vercel]https://vercel.com/dashboard
 2. Clique em “Add New Project” → selecione o seu fork web-dojolab.
 3. Antes do deploy, clique em “Environment Variables” e adicione as chaves abaixo (com os valores do Firebase):
-
+```
 +------------------------------------------+-------------------------+
 | Nome da Variável (Next.js)               | Valor (Copiado do F.C.) |
 +------------------------------------------+-------------------------+
@@ -134,6 +134,7 @@ Antes de começar, você precisa ter:
 | NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | messagingSenderId       |
 | NEXT_PUBLIC_FIREBASE_APP_ID              | appId                   |
 +------------------------------------------+-------------------------+
+```
 4. Clique em Deploy 🎉
 💡 Após o primeiro deploy, o Vercel cria um link como https://seu-nome.vercel.app/.
 
@@ -166,17 +167,18 @@ npm run dev
 
 5️⃣ **Personalize seu Dojo Lab ✨**
 Você pode editar os seguintes diretórios:
-+------------------------------+-------------------------------------------------------------+
-| Pasta/Arquivo                | Descrição                                                   |
-+------------------------------+-------------------------------------------------------------+
-| /app/components/             | Componentes reutilizáveis do sistema (ex: editor, timer,    |
-|                              | modais)                                                     |
-| /app/pages/                  | Páginas principais do app (home, atividades, etc.)          |
-| /public/backgrounds/         | Imagens usadas como planos de fundo das fases               |
-| /public/fonts/               | Fontes personalizadas (TTF, OTF)                            |
-| /app/lib/firebase.ts         | Inicialização e configuração do Firebase                    |
-+------------------------------+-------------------------------------------------------------+
-
+```
++------------------------------+----------------------------------------------------------+
+| Pasta/Arquivo             | Descrição                                                   |
++------------------------------+----------------------------------------------------------+
+| /app/components/          | Componentes reutilizáveis do sistema (ex: editor, timer,    |
+|                           | modais)                                                     |
+| /app/pages/               | Páginas principais do app (home, atividades, etc.)          |
+| /public/backgrounds/      | Imagens usadas como planos de fundo das fases               |
+| /public/fonts/            | Fontes personalizadas (TTF, OTF)                            |
+| /app/lib/firebase.ts      | Inicialização e configuração do Firebase                    |
++---------------------------+-------------------------------------------------------------+
+```
 🎨 **Recursos visuais**
 
 Fontes Google e locais (TTF/OTF)
@@ -186,7 +188,7 @@ Animações suaves com Framer Motion
 Estilos com TailwindCSS
 
 🧑‍💻 **Stack técnica**
-
+```
 +---------------------------+---------------------------------------+
 | Recurso                   | Tecnologia                            |
 +---------------------------+---------------------------------------+
@@ -198,7 +200,7 @@ Estilos com TailwindCSS
 | Deploy                    | Vercel                                |
 | Versionamento             | GitHub                                |
 +---------------------------+---------------------------------------+
-
+```
 ---
 
 ## 📌 Status do Projeto
