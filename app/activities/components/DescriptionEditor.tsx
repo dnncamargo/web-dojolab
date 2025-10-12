@@ -365,13 +365,13 @@ export default function DescriptionEditor({
           className="prose max-w-none min-h-[240px] border border-gray-300 rounded-md p-3
                      prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6"
           // adicione classes utilitárias para garantir recuo e estilo mesmo sem plugin typography
-          style={{
+          /* style={{
             // fallback CSS caso o projeto não tenha o plugin typography ativo
             // garante que listas tenham recuo e marcadores
             // (pode ser removido se preferir usar suas classes globais)
             // eslint-disable-next-line react/no-unknown-property
             ['--tw-prose-body' as any]: undefined,
-          }}
+          }} */
         />
       ) : (
         <textarea
