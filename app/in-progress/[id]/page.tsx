@@ -11,12 +11,13 @@ import { useStudents } from "@/app/hooks/useStudents";
 import { useTeams } from "@/app/hooks/useTeams";
 import type { scoringResult } from "@/app/utils/types";
 import InteractiveDescription from "@/app/activities/components/InteractiveDescription";
+import KanbanBoard from "@/app/components/KanbanBoard";
 
 export default function ActivityInProgressPage() {
   const params = useParams();
   const router = useRouter();
 
-  const { activities, loading: activitiesLoading, handleFinalize } = useActivities();
+  const { activities, loading: activitiesLoading, updateTaskStatus, handleFinalize } = useActivities();
   const { students } = useStudents();
   const { teams } = useTeams();
 
@@ -62,6 +63,19 @@ export default function ActivityInProgressPage() {
     return <div className="p-6 text-red-600">Atividade não encontrada</div>;
   }
 
+  // Filtrar apenas alunos e equipes da turma da atividade
+
+  const activeStudents = students
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))
+    .filter(
+      (s) => s.isActive && s.classroomId === activity.classroomId
+    );
+  const activeTeams = teams
+    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))
+    .filter(
+      (t) => t.isActive && t.classroomId === activity.classroomId
+    );
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!confirm("Finalizar a atividade?")) return;
@@ -98,6 +112,18 @@ export default function ActivityInProgressPage() {
         </div>
       )}
 
+      {/* Kanban */}
+      {activity.kanban && (
+        <KanbanBoard
+          activity={activity}
+          teams={activeTeams} // Passa o array de todas as equipes
+          onStatusChange={(activityId, teamId, taskId, newStatus) => {
+            // Chama a função do hook que persiste a alteração no banco de dados.
+            updateTaskStatus(activityId, teamId, taskId, newStatus);
+          }}
+        />
+      )}
+
       {/* Formulário de critérios */}
 
       <form onSubmit={handleSubmit}>
@@ -107,8 +133,8 @@ export default function ActivityInProgressPage() {
             {(activity.assessment && activity.assessment.length > 0) ? (
               <ScoringTable
                 activity={activity}
-                students={students}
-                teams={teams}
+                students={activeStudents}
+                teams={activeTeams}
                 initialResults={results}
                 onChange={handleResultsChange}
               />

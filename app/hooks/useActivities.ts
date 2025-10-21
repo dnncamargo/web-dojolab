@@ -1,7 +1,7 @@
 // hooks/useActivities.ts
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { db } from "../lib/firebase";
 import {
   collection,
@@ -16,9 +16,11 @@ import {
   orderBy,
   DocumentData,
   QueryDocumentSnapshot,
-  deleteField
+  deleteField,
+  runTransaction,
+  DocumentReference
 } from "firebase/firestore";
-import { activity, ActivityStatus, scoringResult } from "../utils/types";
+import { activity, ActivityStatus, scoringResult, task, board } from "../utils/types";
 import { calculatePodium, validateAllCriteriaFilled } from "../utils/scoring";
 
 /**
@@ -233,6 +235,96 @@ export function useActivities() {
     }
   }
 
+  /**
+ * Atualiza o status de uma tarefa para uma equipe específica dentro do workflow da atividade.
+ */
+
+/**
+ * Atualiza o status de uma tarefa para uma equipe específica dentro do workflow da atividade.
+ * Utiliza uma transação para garantir que a leitura, modificação e escrita sejam atômicas.
+ */
+const updateTaskStatus = useCallback(async (activityId: string, teamId: string, taskId: string, newStatus: task["status"]) => {
+    // Tipagem DocumentReference<activity> para maior segurança
+    const activityRef = doc(db, "activities", activityId) as DocumentReference<activity>;
+
+    try {
+        await runTransaction(db, async (transaction) => {
+            // 1. READ: Obtém a atividade dentro da transação para garantir dados mais recentes
+            const activityDoc = await transaction.get(activityRef);
+
+            if (!activityDoc.exists()) {
+                throw new Error(`Activity ID ${activityId} not found.`);
+            }
+
+            // Garante que os dados sejam tipados corretamente para manipulação
+            const activityData = activityDoc.data() as activity;
+            
+            // taskBoard é a lista de templates (original)
+            const taskTemplates: task[] = activityData.taskBoard || [];
+            // workflow é a lista de boards por equipe
+            const currentWorkflow: board[] = activityData.workflow || [];
+
+            let teamBoardFound = false;
+            let updatedWorkflow: board[] = [];
+            
+            // A) Tenta atualizar um board existente
+            updatedWorkflow = currentWorkflow.map(b => {
+                if (b.teamId === teamId) {
+                    teamBoardFound = true;
+                    
+                    // Mapeia as tasks dentro do board para encontrar e atualizar
+                    const updatedTasks = b.tasks.map(t => {
+                        if (t.id === taskId) {
+                          return { ...t, status: newStatus }; // Atualiza apenas o status
+                        }
+                        return t;
+                    });
+
+                    // Retorna o board da equipe com a task atualizada
+                    return { ...b, tasks: updatedTasks }; 
+                }
+                return b;
+            });
+
+            // B) INICIALIZAÇÃO: Se o board da equipe não foi encontrado, cria um novo
+            if (!teamBoardFound) {
+                if (taskTemplates.length === 0) {
+                    console.error(`Task templates (taskBoard) not found for activity ${activityId}. Cannot create board for team ${teamId}.`);
+                    return; // Não prossegue se não há templates
+                }
+                
+                // Cria o novo board a partir das templates
+                const newBoard: board = {
+                    id: activityId, // O ID do board é o ID da atividade
+                    teamId: teamId,
+                    tasks: taskTemplates.map((template) => ({ 
+                        // Copia a template e aplica o novo status à tarefa que foi movida
+                        ...template, 
+                        status: template.id === taskId ? newStatus : template.status
+                    }))
+                };
+
+                // Adiciona o novo board ao array
+                updatedWorkflow.push(newBoard);
+                console.log(`[INIT] Board criado para Team ID ${teamId} com status da task ${taskId} atualizado.`);
+            }
+            
+            // 3. WRITE: Salva o array de boards atualizado ou inicializado
+            // A função clean garante que apenas o campo `workflow` será atualizado, sem `undefined`
+            transaction.update(activityRef, clean({ workflow: updatedWorkflow }));
+
+        }); // Fim da transação
+
+        console.log(`Task status for Task ID ${taskId} in Team ID ${teamId} updated successfully.`);
+
+    } catch (error) {
+        console.error("Error updating task status (Transaction failed):", error);
+        // Considere adicionar um alerta para o usuário em caso de falha.
+    }
+},
+[db] // Dependência do Firebase
+);
+
   return {
     activities,
     loading,
@@ -240,6 +332,7 @@ export function useActivities() {
     updateActivity,
     removeActivity,
     duplicateActivity,
+    updateTaskStatus,
     handleFinalize,
     handleCancel
   };

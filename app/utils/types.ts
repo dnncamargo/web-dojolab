@@ -46,6 +46,7 @@ export type task = {
   id: string;
   briefDescription: string;
   status: "not_started" | "doing" | "done";
+  observations?: string
 };
 
 export type board = {

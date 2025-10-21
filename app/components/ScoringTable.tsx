@@ -84,17 +84,6 @@ export default function ScoringTable({
     }));
   };
 
-  // Filtrar apenas alunos e equipes da turma da atividade
-
-  const activeStudents = students
-    .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))
-    .filter(
-      (s) => s.isActive && s.classroomId === activity.classroomId
-    );
-  const activeTeams = teams.filter(
-    (t) => t.isActive && t.classroomId === activity.classroomId
-  );
-
   return (
     <table className="min-w-full bg-white shadow rounded-lg overflow-hidden">
       <thead>
@@ -109,7 +98,7 @@ export default function ScoringTable({
             <td className="py-2 px-4 text-wrap">{crit.description}</td>
             <td className="py-2 px-4">
               {crit.scoringType === "individual" &&
-                activeStudents.map((st) => (
+                students.map((st) => (
                   <div key={st.id} className="mb-2 flex items-center gap-2">
                     <span className="w-96">{st.name}</span>
                     {crit.evaluationType === "integer" ? (
@@ -127,7 +116,7 @@ export default function ScoringTable({
                 ))}
 
               {crit.scoringType === "team" &&
-                activeTeams.map((tm) => (
+                teams.map((tm) => (
                   <div key={tm.id} className="mb-2 flex items-center gap-2">
                     <span className="w-96">{tm.name}</span>
                     {crit.evaluationType === "integer" ? (
