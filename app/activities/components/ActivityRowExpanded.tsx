@@ -2,6 +2,7 @@ import { activity } from "../../utils/types";
 import CriteriaList from "./CriteriaList";
 import InteractiveDescription from "./InteractiveDescription";
 import RichTextDescription from "./RichTextDescription";
+import TaskViewer from "./TaskViewer";
 
 type ActivityRowExpandedProps = {
   activity: activity;
@@ -42,6 +43,17 @@ export default function ActivityRowExpanded({
         ):(
           <p className="text-red-500">
             Esta atividade não é avaliativa
+          </p>)
+        }
+
+        {activity.kanban ? (
+          <div className="mt-2">
+            <strong>Tarefas:</strong>
+            <TaskViewer tasks={activity.taskBoard ?? []} />
+          </div>
+        ):(
+          <p className="text-red-500">
+            Esta atividade não possui tarefas
           </p>)
         }
         <div className="mt-2">

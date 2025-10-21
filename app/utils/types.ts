@@ -42,6 +42,18 @@ export type criteria = {
   observations?: string
 }
 
+export type task = {
+  id: string;
+  briefDescription: string;
+  status: "not_started" | "doing" | "done";
+};
+
+export type board = {
+  id: string;
+  teamId: string;
+  tasks: task[];
+};
+
 export type ActivityStatus =
   | "not_assigned"
   | "assigned"
@@ -58,6 +70,9 @@ export type activity = {
   assessment?: criteria[]
   status:   ActivityStatus
   timed: boolean
+  kanban: boolean
+  workflow?: board[]
+  taskBoard?: task[]
   descriptionType: "richtext" | "interactive"
   results?: scoringResult[]
   tags?: string[]

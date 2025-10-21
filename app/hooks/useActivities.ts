@@ -16,7 +16,7 @@ import {
   orderBy,
   DocumentData,
   QueryDocumentSnapshot,
-  deleteField 
+  deleteField
 } from "firebase/firestore";
 import { activity, ActivityStatus, scoringResult } from "../utils/types";
 import { calculatePodium, validateAllCriteriaFilled } from "../utils/scoring";
@@ -70,6 +70,8 @@ function docToActivity(d: QueryDocumentSnapshot<DocumentData>): activity {
     classroomId: data.classroomId ?? "",
     status: (data.status ?? "not_assigned") as ActivityStatus,
     date,
+    kanban: data.kanban ?? false,
+    taskBoard: (data.taskBoard ?? []) as activity["taskBoard"],
     timed: data.timed ?? false,
     graded: data.graded ?? false,
     assessment: (data.assessment ?? []) as activity["assessment"],
@@ -128,8 +130,8 @@ export function useActivities() {
    * Atualiza parcialmente uma activity.
    * Converte `date: Date` para Timestamp quando necessário.
    */
-  const updateActivity = async (id: string, dataToUpdate: Partial<activity>) => {
-    const sanitized = clean(dataToUpdate as Record<string, unknown>);
+  const updateActivity = async (id: string, data: Partial<activity>) => {
+    const sanitized = clean(data as Record<string, unknown>);
 
     const payload: DocumentData = { ...sanitized };
 
@@ -165,9 +167,11 @@ export function useActivities() {
       date: new Date(),
       timed: source.timed,
       graded: source.graded,
+      kanban: source.kanban,
+      taskBoard: source.taskBoard,
       assessment: source.assessment,
       descriptionType: source.descriptionType,
-      tags: source.tags, 
+      tags: source.tags,
     };
     await addActivity(newData);
   };
@@ -191,43 +195,43 @@ export function useActivities() {
     }
   }
 
-async function handleCancel(activity: activity) {
-  // 1. Exibir Alerta de Confirmação
-  const confirmCancel = window.confirm(
-    "ATENÇÃO: Ao cancelar esta atividade, o status será alterado para 'cancelled' e todos os dados de resultados (results, podium e finalizedAt) serão apagados permanentemente, caso existam. Deseja continuar?"
-  );
+  async function handleCancel(activity: activity) {
+    // 1. Exibir Alerta de Confirmação
+    const confirmCancel = window.confirm(
+      "ATENÇÃO: Ao cancelar esta atividade, o status será alterado para 'cancelled' e todos os dados de resultados (results, podium e finalizedAt) serão apagados permanentemente, caso existam. Deseja continuar?"
+    );
 
-  if (!confirmCancel) {
-    // Se o usuário clicar em "Cancelar" no alerta, interrompe a função
-    setLoading(false); // Garante que o loading seja desligado, se estiver ligado
-    return;
+    if (!confirmCancel) {
+      // Se o usuário clicar em "Cancelar" no alerta, interrompe a função
+      setLoading(false); // Garante que o loading seja desligado, se estiver ligado
+      return;
+    }
+
+    try {
+      // 2. Definir os campos a serem removidos
+      // O 'deleteField()' é usado para remover campos de um documento
+      await updateDoc(doc(db, "activities", activity.id), {
+        status: "cancelled", // Define o novo status
+        results: deleteField(),
+        podium: deleteField(),
+        finalizedAt: deleteField(),
+      });
+
+      // O restante do seu hook pode ter a lógica para atualizar o estado local,
+      // como re-fetch das atividades ou atualização otimista.
+
+      console.log(`Atividade ${activity.id} cancelada e dados de resultado removidos.`);
+
+    } catch (error) {
+      console.error("Erro ao cancelar a atividade:", error);
+      // Adicionar um tratamento de erro ou alerta para o usuário, se necessário
+      alert("Ocorreu um erro ao cancelar a atividade. Tente novamente.");
+
+    } finally {
+      // 3. Desativar o estado de carregamento
+      setLoading(false);
+    }
   }
-
-  try {
-    // 2. Definir os campos a serem removidos
-    // O 'deleteField()' é usado para remover campos de um documento
-    await updateDoc(doc(db, "activities", activity.id), {
-      status: "cancelled", // Define o novo status
-      results: deleteField(),
-      podium: deleteField(),
-      finalizedAt: deleteField(),
-    });
-
-    // O restante do seu hook pode ter a lógica para atualizar o estado local,
-    // como re-fetch das atividades ou atualização otimista.
-
-    console.log(`Atividade ${activity.id} cancelada e dados de resultado removidos.`);
-
-  } catch (error) {
-    console.error("Erro ao cancelar a atividade:", error);
-    // Adicionar um tratamento de erro ou alerta para o usuário, se necessário
-    alert("Ocorreu um erro ao cancelar a atividade. Tente novamente.");
-
-  } finally {
-    // 3. Desativar o estado de carregamento
-    setLoading(false);
-  }
-}
 
   return {
     activities,
