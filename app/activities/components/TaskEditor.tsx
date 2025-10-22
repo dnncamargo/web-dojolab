@@ -31,8 +31,8 @@ export default function TaskEditor({ tasks, onChange }: TaskEditorProps) {
   };
 
   return (
-    <div className="bg-white border rounded-lg p-4 shadow-sm mt-4">
-      <h3 className="text-lg font-semibold mb-3">Tarefas</h3>
+    <div className="bg-white border rounded-md p-4 mt-4">
+      <h3 className="mb-3">Tarefas</h3>
 
       <div className="flex gap-2 mb-4">
         <input
@@ -40,11 +40,11 @@ export default function TaskEditor({ tasks, onChange }: TaskEditorProps) {
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           placeholder="Descrição da tarefa..."
-          className="border rounded p-2 flex-1"
+          className="border rounded-l-lg p-2 flex-1"
         />
         <button
           onClick={addTask}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className="bg-green-600 text-white px-3 py-2 rounded-r-lg hover:bg-green-700"
         >
           Adicionar
         </button>

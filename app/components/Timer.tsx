@@ -227,7 +227,7 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
               <p className="text-xl text-red-600 font-bold animate-pulse">
                 🔔 Alarme tocando!
               </p>
-              <div className="flex gap-3">
+              <div className="flex gap-3 mb-1">
                 <button
                   className="px-4 py-2 rounded bg-gray-700 text-white"
                   onClick={stopAlarmSound}
