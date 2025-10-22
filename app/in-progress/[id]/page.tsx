@@ -11,7 +11,7 @@ import { useStudents } from "@/app/hooks/useStudents";
 import { useTeams } from "@/app/hooks/useTeams";
 import type { scoringResult } from "@/app/utils/types";
 import InteractiveDescription from "@/app/activities/components/InteractiveDescription";
-import KanbanBoard from "@/app/components/KanbanBoard";
+import KanbanBoard from "../../components/KanbanBoard";
 
 export default function ActivityInProgressPage() {
   const params = useParams();

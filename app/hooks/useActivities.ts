@@ -41,7 +41,7 @@ function clean<T extends Record<string, unknown>>(obj: T): Partial<T> {
  * Normaliza um QueryDocumentSnapshot do Firestore para o type `activity`,
  * garantindo que `date` e `createdAt` sejam objetos `Date`.
  */
-function docToActivity(d: QueryDocumentSnapshot<DocumentData>): activity {
+function fetchActivity(d: QueryDocumentSnapshot<DocumentData>): activity {
   const data = d.data();
 
   // date pode ser Timestamp (do Firestore) ou já um string/Date
@@ -93,7 +93,7 @@ export function useActivities() {
     // ordena por createdAt desc para ter as mais recentes primeiro
     const q = query(collection(db, "activities"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs.map((d) => docToActivity(d));
+      const list = snapshot.docs.map((d) => fetchActivity(d));
       setActivities(list);
       setLoading(false);
     });
