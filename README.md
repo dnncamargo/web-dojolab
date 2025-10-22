@@ -20,7 +20,7 @@ O projeto está em constante evolução: atualmente na versão **2.3**, com a **
 
 ---
 
-## ✨ Funcionalidades Atuais (v2.3)
+## ✨ Funcionalidades Atuais (v2.5)
 
 - 📋 **Cadastro (CRUD)** de:
   - Alunos
@@ -45,10 +45,11 @@ O projeto está em constante evolução: atualmente na versão **2.3**, com a **
 - 🎶 **Alarme sonoro** para atividades cronometradas.  
 - 📅 **Calendário de atividades** integrado.  
 - 🏷️ **Tags** em atividades
+- ✅ **Kanban** para organizar o fluxo de tarefas
 
 ---
 
-## 🚀 Próximas Funcionalidades (v2.3)
+## 🚀 Próximas Funcionalidades (v2.6)
 
 - 📈 **KPIs** para avaliação e relatórios de desempenho de alunos.  
 - 📝 **Registros de ocorrências** e observações individuais.  
@@ -199,8 +200,8 @@ Estilos com TailwindCSS
 
 ## 📌 Status do Projeto
 
-- Versão atual: **2.3**  
-- Próxima milestone: **2.4** (em desenvolvimento)
+- Versão atual: **2.5**  
+- Próxima milestone: **2.6** (em desenvolvimento)
 
 ---
 

@@ -1,11 +1,12 @@
 import { useState } from "react"
-import { activity, criteria } from "@/app/utils/types"
+import { activity, criteria, task } from "@/app/utils/types"
 import { useClassroom } from "../../hooks/useClassroom"
 import CriteriaEditor from "./CriteriaEditor"
 import DescriptionEditor from "./DescriptionEditor"
 import { resolveStatus } from "@/app/utils/status"
 import { decodeHtmlEntities } from "@/app/utils/htmlUtils"
 import clsx from "clsx"
+import TaskEditor from "./TaskEditor"
 
 type ActivityFormExpandedProps = {
     initialTitle: string
@@ -24,6 +25,8 @@ export default function ActivityFormExpanded({
     const [graded, setGraded] = useState(false)
     const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">("richtext")
     const [criteria, setCriteria] = useState<criteria[]>([])
+    const [kanban, setKanban] = useState(false)
+    const [taskBoard, setTaskBoard] = useState<task[]>([])
     const [tagString, setTagString] = useState<string>("");
     const [selectedClass, setSelectedClass] = useState<string>("")
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -72,6 +75,7 @@ export default function ActivityFormExpanded({
             assessment: criteria,
             status: resolveStatus(selectedClass, status),
             timed,
+            kanban,
             graded,
             tags: tagsArray,
             descriptionType: descriptionType,
@@ -145,7 +149,21 @@ export default function ActivityFormExpanded({
                         />
                     </div>
                 </div>
+                <div>
+                    <div className="ml-8 flex flex-col self-center">
+                        <label className="block text-sm mb-1">Kanban</label>
+                        <button
+                            type="button"
+                            onClick={() => setKanban(!kanban)}
+                            className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
+                                kanban ? 'bg-blue-600' : 'bg-gray-300')}
+                        >
+                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition',
+                                kanban ? 'translate-x-6' : 'translate-x-0')} />
+                        </button>
 
+                    </div>
+                </div>
                 <div>
                     <div className="ml-8 flex flex-col self-center">
                         <label className="block text-sm mb-1">Pontuação</label>
@@ -155,7 +173,8 @@ export default function ActivityFormExpanded({
                             className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
                                 graded ? 'bg-blue-600' : 'bg-gray-300')}
                         >
-                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', graded ? 'translate-x-6' : 'translate-x-0')} />
+                            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition',
+                                graded ? 'translate-x-6' : 'translate-x-0')} />
                         </button>
 
                     </div>
@@ -175,8 +194,15 @@ export default function ActivityFormExpanded({
 
                     </div>
                 </div>
-
             </div>
+
+            {/* Kanban */}
+            {kanban && (
+                <TaskEditor
+                    tasks={taskBoard}
+                    onChange={setTaskBoard}
+                />
+            )}
 
             {/* Avaliação */}
             {graded && (
@@ -185,7 +211,6 @@ export default function ActivityFormExpanded({
                     onChange={setCriteria}
                 />
             )}
-
 
             {/* TAGS */}
             <div>

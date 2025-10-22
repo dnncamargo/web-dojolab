@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { activity, classroom, criteria } from "../../utils/types";
+import { activity, classroom, criteria, task } from "../../utils/types";
 import { resolveStatus, getStatusLabel } from "../../utils/status";
 import { ActivityStatus } from "@/app/utils/types";
 import CriteriaEditor from "./CriteriaEditor";
 import clsx from "clsx";
 import DescriptionEditor from "./DescriptionEditor";
 import { decodeHtmlEntities } from "@/app/utils/htmlUtils";
+import TaskEditor from "./TaskEditor";
 
 type ActivityEditExpandedProps = {
   activity: activity;
@@ -25,11 +26,13 @@ export default function ActivityEditExpanded({
 }: ActivityEditExpandedProps) {
   const [title, setTitle] = useState(activity.title);
   const [description, setDescription] = useState(activity.description || "");
+  const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">(activity.descriptionType)
   const [classroomId, setClassroomId] = useState(activity.classroomId || "");
   const [date, setDate] = useState(activity.date);
+  const [kanban, setKanban] = useState(activity.kanban)
+  const [taskBoard, setTaskBoard] = useState<task[]>(activity.taskBoard || [])
   const [timed, setTimed] = useState(activity.timed || false);
   const [graded, setGraded] = useState(activity.graded);
-  const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">(activity.descriptionType)
   const [criteria, setCriteria] = useState<criteria[]>(activity.assessment || [])
   const initialTags = (activity.tags || []).join(', ');
   const [tagString, setTagString] = useState<string>(initialTags);
@@ -41,6 +44,7 @@ export default function ActivityEditExpanded({
   );
 
   useEffect(() => {
+    setTaskBoard(activity.taskBoard || [])
     setCriteria(activity.assessment || [])
     setTagString((activity.tags || []).join(', '))
   }, [activity])
@@ -99,6 +103,8 @@ export default function ActivityEditExpanded({
       assessment: criteria,
       descriptionType,
       timed,
+      kanban,
+      taskBoard,
       graded,
       status: resolveStatus(classroomId, status),
       tags: tagsArray
@@ -108,7 +114,9 @@ export default function ActivityEditExpanded({
     setTimed(false)
     setGraded(false)
     setCriteria([])
+    setTaskBoard([])
     setClassroomId("")
+    setKanban(false)
     setDate(new Date())
     setTagString("");
     onClose();
@@ -207,11 +215,26 @@ export default function ActivityEditExpanded({
             <div className=" ml-4">
               <label className="block text-sm font-medium">Data</label>
               <input
-                  type="date"
-                  value={date.toISOString().split("T")[0]} // Usa a string de data corrigida
-                  onChange={(e) => setDate(new Date(e.target.value + 'T00:00:00'))} // Cria a nova data no fuso horário local/UTC do input
-                  className="border rounded p-1"
-                />
+                type="date"
+                value={date.toISOString().split("T")[0]} // Usa a string de data corrigida
+                onChange={(e) => setDate(new Date(e.target.value + 'T00:00:00'))} // Cria a nova data no fuso horário local/UTC do input
+                className="border rounded p-1"
+              />
+            </div>
+          </div>
+          <div>
+            <div className="ml-8 flex flex-col self-center">
+              <label className="block text-sm mb-1">Kanban</label>
+              <button
+                type="button"
+                onClick={() => setKanban(!kanban)}
+                className={clsx('w-12 h-6 rounded-full transition flex self-center p-1',
+                  kanban ? 'bg-blue-600' : 'bg-gray-300')}
+              >
+                <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition',
+                  kanban ? 'translate-x-6' : 'translate-x-0')} />
+              </button>
+
             </div>
           </div>
           <div>
@@ -244,6 +267,14 @@ export default function ActivityEditExpanded({
             </div>
           </div>
         </div>
+
+        {/* Kanban */}
+        {kanban && (
+          <TaskEditor
+            tasks={taskBoard}
+            onChange={setTaskBoard}
+          />
+        )}
 
         {/* Avaliação */}
         {graded && (

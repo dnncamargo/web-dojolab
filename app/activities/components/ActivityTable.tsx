@@ -33,6 +33,7 @@ export default function ActivityTable({
 
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
+    console.log(JSON.stringify(id, undefined, 4));
   };
 
   const handleViewResults = (id: string) => {
