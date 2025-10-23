@@ -28,6 +28,7 @@ export default function KanbanBoard({
   onStatusChange,
 }: KanbanBoardProps) {
   const [draggingTask, setDraggingTask] = useState<string | null>(null);
+  const [expandedTask, setExpandedTask] = useState<string | null>(null); // 🔹 controla o toque
 
   /**
    * 🛠️ Inicializa ou retorna o Workflow (board[]) com o status de cada equipe.
@@ -89,6 +90,31 @@ export default function KanbanBoard({
   }, [activity.workflow]);
 
 
+  /** 
+  * Atualiza o status de uma tarefa no estado local e persiste no Firebase.
+  */
+  const updateTaskStatusLocalAndRemote = useCallback(
+    (teamId: string, taskId: string, newStatus: task["status"]) => {
+      // Atualiza localmente
+      setLocalWorkflow(prevWorkflow =>
+        prevWorkflow.map(board => {
+          if (board.teamId !== teamId) return board;
+          return {
+            ...board,
+            tasks: board.tasks.map(t =>
+              t.id === taskId ? { ...t, status: newStatus } : t
+            ),
+          };
+        })
+      );
+
+      // Persiste no Firestore via callback externo
+      onStatusChange(activity.id, teamId, taskId, newStatus);
+    },
+    [activity.id, onStatusChange]
+  );
+
+
   /** Lógica de Drag and Drop */
   /**
      * Função para processar o drop de uma tarefa em uma nova coluna.
@@ -97,30 +123,43 @@ export default function KanbanBoard({
      */
   const handleDrop = useCallback(
     (teamId: string, newStatus: task["status"]) => {
-      if (!draggingTask) return;
-
-      // Atualiza visualmente o estado local
-      setLocalWorkflow((prevWorkflow) =>
-        prevWorkflow.map((board) =>
-          board.teamId === teamId
-            ? {
-              ...board,
-              tasks: board.tasks.map((t) =>
-                t.id === draggingTask ? { ...t, status: newStatus } : t
-              ),
-            }
-            : board
-        )
-      );
-
-      // Persiste no Firebase
-      onStatusChange(activity.id, teamId, draggingTask, newStatus);
-
+      if (!draggingTask)
+        return;
+      updateTaskStatusLocalAndRemote(teamId, draggingTask, newStatus);
       setDraggingTask(null);
     },
-    [activity.id, draggingTask, onStatusChange]
+    [draggingTask, updateTaskStatusLocalAndRemote]
   );
 
+  const getButtonsForStatus = (status: task["status"]) => {
+    switch (status) {
+      case "not_started":
+        return [
+          { label: "Em Progresso", next: "doing" },
+          { label: "Concluído", next: "done" },
+        ];
+      case "doing":
+        return [
+          { label: "A Fazer", next: "not_started" },
+          { label: "Concluído", next: "done" },
+        ];
+      case "done":
+        return [
+          { label: "A Fazer", next: "not_started" },
+          { label: "Em Progresso", next: "doing" },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const handleStatusButton = useCallback(
+    (teamId: string, taskId: string, newStatus: task["status"]) => {
+      updateTaskStatusLocalAndRemote(teamId, taskId, newStatus);
+      setExpandedTask(null);
+    },
+    [updateTaskStatusLocalAndRemote]
+  );
 
   if (!activity.kanban || !activity.taskBoard?.length) {
     return <p className="text-red-500">Não há tarefas cadastradas nesta atividade.</p>;
@@ -135,14 +174,14 @@ export default function KanbanBoard({
     <div className="space-y-8 mt-6 mb-6">
 
       {localWorkflow.map((board) => {
-        console.log(JSON.stringify(localWorkflow, undefined, 4))
+        //console.log(JSON.stringify(localWorkflow, undefined, 4))
         const team = teams.find(t => t.id === board.teamId);
         // Não deveria ocorrer, mas é uma proteção
         if (!team) return null;
 
         // O teamTasks é o array de tasks para renderizar no board da equipe
         const teamTasks = board.tasks;
-        console.log(JSON.stringify(board, undefined, 4))
+        //console.log(JSON.stringify(board, undefined, 4))
 
         return (
           <section key={team.id} className="border rounded-lg p-4 shadow bg-white">
@@ -157,9 +196,11 @@ export default function KanbanBoard({
                   className={clsx(
                     "rounded-lg min-h-[150px] p-3 border border-gray-200",
                     // Adiciona uma cor de fundo sutil para as colunas
-                    key === 'not_started' ? 'bg-red-50' :
-                      key === 'doing' ? 'bg-yellow-50' :
-                        'bg-green-50'
+                    key === 'not_started'
+                      ? 'bg-red-50'
+                      : key === 'doing'
+                        ? 'bg-yellow-50'
+                        : 'bg-green-50'
                   )}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => handleDrop(team.id, key)}
@@ -167,27 +208,59 @@ export default function KanbanBoard({
                   <h3 className="font-semibold text-gray-700 mb-2 border-b pb-1">{label}</h3>
                   <div className="space-y-3">
                     {teamTasks
-                      .filter((t) => t.status === key)
-                      .map((t) => (
-                        <motion.div
-                          // CHAVE COMPOSTA para ser única na tela
-                          key={`${t.id}-${team.id}`}
-                          draggable
-                          // No drag, salvamos o ID da TAREFA (template)
-                          onDragStart={() => setDraggingTask(t.id)}
-                          whileHover={{ scale: 1.02 }}
-                          className="p-3 bg-white rounded shadow cursor-grab border-l-4 border-blue-400 hover:border-blue-600 transition"
-                        >
-                          <p className="font-medium text-gray-800">
-                            {t.briefDescription}
-                          </p>
-                          {t.observations && (
-                            <p className="text-xs text-gray-500 mt-1">
-                              {t.observations}
-                            </p>
-                          )}
-                        </motion.div>
-                      ))}
+                      .filter(t => t.status === key)
+                      .map(t => {
+                        const isExpanded = expandedTask === `${t.id}-${team.id}`;
+                        const buttons = getButtonsForStatus(t.status);
+                        return (
+                          <div
+                            key={`${t.id}-${team.id}`}
+                            className="relative bg-transparent rounded shadow"
+                          >
+                            {/* 🔹 Camada de botões escondidos */}
+                            <div
+                              className={clsx(
+                                "absolute inset-0 flex justify-start items-center gap-2 ml-1 pr-3 transition-opacity duration-200",
+                                isExpanded ? "opacity-100" : "opacity-0 pointer-events-none"
+                              )}
+                            >
+                              {buttons.map(b => (
+                                <button
+                                  key={b.next}
+                                  onClick={() => handleStatusButton(team.id, t.id, b.next as task["status"])}
+                                  className="px-2 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
+                                >
+                                  {b.label}
+                                </button>
+                              ))}
+                            </div>
+
+                            {/* 🔹 Cartão da tarefa (deslizante) */}
+                            <motion.div
+                              draggable
+                              onDragStart={() => setDraggingTask(t.id)}
+                              onTouchStart={() =>
+                                setExpandedTask(prev =>
+                                  prev === `${t.id}-${team.id}` ? null : `${t.id}-${team.id}`
+                                )
+                              }
+                              onClick={() =>
+                                setExpandedTask(prev =>
+                                  prev === `${t.id}-${team.id}` ? null : `${t.id}-${team.id}`
+                                )
+                              }
+                              animate={{ x: isExpanded ? 180 : 0 }}
+                              transition={{ type: "spring", stiffness: 250, damping: 22 }}
+                              className="relative z-10 p-3 bg-white rounded border-l-4 border-blue-400 cursor-grab"
+                            >
+                              <p className="font-medium text-gray-800">{t.briefDescription}</p>
+                              {t.observations && (
+                                <p className="text-xs text-gray-500 mt-1">{t.observations}</p>
+                              )}
+                            </motion.div>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               ))}

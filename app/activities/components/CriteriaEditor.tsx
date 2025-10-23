@@ -1,9 +1,8 @@
-// app/components/CriteriaEditor.tsx
 "use client";
 
 import { criteria } from "@/app/utils/types";
-import React from "react";
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type CriteriaEditorProps = {
   criteria: criteria[];
@@ -11,17 +10,50 @@ type CriteriaEditorProps = {
 };
 
 export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorProps) {
-  // Normaliza um weight possivelmente indefinido -> número válido (1..5)
+  const [newCriteria, setNewCriteria] = useState("");
+
   const normalizeWeight = (w: unknown) => {
     const n = typeof w === "number" && !Number.isNaN(w) ? Math.floor(w) : NaN;
     if (Number.isFinite(n) && n >= 1 && n <= 5) return n;
     return 1;
   };
 
+  const addCriteria = () => {
+    if (!newCriteria.trim()) {
+      alert("A descrição do critério não pode estar vazia.");
+      return;
+    }
+
+    const newC: criteria = {
+      id: uuidv4(),
+      description: newCriteria.trim(),
+      evaluationType: "integer",
+      scoringType: "individual",
+      weight: 1,
+    };
+
+    onChange([...criteria, newC]);
+    setNewCriteria("");
+  };
+
+  const updateDescription = (id: string, desc: string) => {
+    onChange(criteria.map((c) => (c.id === id ? { ...c, description: desc } : c)));
+  };
+
+  const removeCriteria = (id: string) => {
+    if (criteria.length <= 1) {
+      alert("A atividade precisa ter pelo menos 1 critério.");
+      return;
+    }
+    onChange(criteria.filter((c) => c.id !== id));
+  };
+
   const toggleEvaluation = (id: string) => {
     onChange(
       criteria.map((c) =>
-        c.id === id ? { ...c, evaluationType: c.evaluationType === "integer" ? "boolean" : "integer" } : c
+        c.id === id
+          ? { ...c, evaluationType: c.evaluationType === "integer" ? "boolean" : "integer" }
+          : c
       )
     );
   };
@@ -29,7 +61,9 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
   const toggleScoring = (id: string) => {
     onChange(
       criteria.map((c) =>
-        c.id === id ? { ...c, scoringType: c.scoringType === "individual" ? "team" : "individual" } : c
+        c.id === id
+          ? { ...c, scoringType: c.scoringType === "individual" ? "team" : "individual" }
+          : c
       )
     );
   };
@@ -38,99 +72,80 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
     onChange(
       criteria.map((c) => {
         if (c.id !== id) return c;
-        const current = normalizeWeight((c as criteria).weight as number); // garante número
+        const current = normalizeWeight(c.weight);
         const next = current >= 5 ? 1 : current + 1;
         return { ...c, weight: next };
       })
     );
   };
 
-  const handleRemove = (id: string) => {
-    if (criteria.length <= 1) {
-      alert("A atividade precisa ter pelo menos 1 critério.");
-      return;
-    }
-    onChange(criteria.filter((c) => c.id !== id));
-  };
-
-  const addCriteria = () => {
-    const newC: criteria = {
-      id: uuidv4(),
-      description: "",
-      evaluationType: "integer",
-      scoringType: "individual",
-      weight: 1, // atenção: default obrigatório
-      // observations?: undefined
-    };
-    onChange([...criteria, newC]);
-  };
-
-  const handleDescriptionChange = (id: string, value: string) => {
-    onChange(criteria.map((c) => (c.id === id ? { ...c, description: value } : c)));
-  };
-
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium">Critérios de Avaliação</label>
+    <div className="bg-white border rounded-md p-4 mt-4 shadow-sm">
+      <h3 className="mb-3">Critérios Avaliativos</h3>
 
-      {criteria.map((c) => {
-        const weight = normalizeWeight((c as criteria).weight);
-        return (
-          <div key={c.id} className="flex items-center justify-between gap-2">
+      {/* Campo para adicionar novo critério */}
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          value={newCriteria}
+          onChange={(e) => setNewCriteria(e.target.value)}
+          placeholder="Descrição do critério, tipo de pontuação, tipo de avaliação e peso ..."
+          className="border rounded-l-lg p-2 flex-1"
+        />
+        <button
+          onClick={addCriteria}
+          className="bg-green-600 text-white px-3 py-2 rounded-r-lg hover:bg-green-700"
+        >
+          Adicionar
+        </button>
+      </div>
+
+      {/* Lista de critérios */}
+      <ul className="space-y-2">
+        {criteria.map((c) => (
+          <li
+            key={c.id}
+            className="flex items-center justify-between border-b pb-1"
+          >
             <input
               type="text"
-              placeholder="Nome do critério"
               value={c.description}
-              onChange={(e) => handleDescriptionChange(c.id, e.target.value)}
-              className="w-10/12 border p-2 justify-start rounded-md"
+              onChange={(e) => updateDescription(c.id, e.target.value)}
+              className="flex-1 p-1 border-none focus:outline-none bg-transparent"
             />
-            <div className="flex justify-end">
 
+            <div className="flex gap-2 mt-2 md:mt-0">
               <button
-                type="button"
                 onClick={() => toggleEvaluation(c.id)}
-                className="px-2 py-2 ml-2 bg-blue-200 rounded-md"
+                className="px-2 py-1 bg-blue-100 hover:bg-blue-200 rounded-md text-sm"
               >
                 {c.evaluationType === "integer" ? "Inteiro" : "Booleano"}
               </button>
 
               <button
-                type="button"
                 onClick={() => toggleScoring(c.id)}
-                className="px-2 py-2 ml-2 bg-purple-200 rounded-md"
+                className="px-2 py-1 bg-purple-100 hover:bg-purple-200 rounded-md text-sm"
               >
                 {c.scoringType === "individual" ? "Individual" : "Equipe"}
               </button>
 
               <button
-                type="button"
                 onClick={() => toggleWeight(c.id)}
-                className="py-2 px-3 ml-2 bg-yellow-200 rounded-md font-semibold text-center"
-                title="Peso (clicar para aumentar 1..5)"
+                className="px-2 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-md text-sm font-semibold"
               >
-                {weight}
+                {normalizeWeight(c.weight)}
               </button>
 
               <button
-                type="button"
-                onClick={() => handleRemove(c.id)}
-                className="px-2 py-2 ml-2 bg-red-300 rounded-md"
-                title="Remover critério"
+                onClick={() => removeCriteria(c.id)}
+                className="text-red-500 hover:text-red-700 ml-2"
               >
                 ✕
               </button>
             </div>
-          </div>
-        );
-      })}
-
-      <button
-        type="button"
-        onClick={addCriteria}
-        className="mt-2 px-3 py-1 bg-green-200 rounded-md"
-      >
-        + Adicionar Critério
-      </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
