@@ -108,7 +108,7 @@ export default function ActivityFormExpanded({
             />
 
             <div>
-                <label className="block text-sm font-medium">Descrição</label>
+                <label className="block text-sm font-medium ml-2">Descrição</label>
                 <DescriptionEditor
                     value={description}
                     onChange={setDescription}
@@ -121,11 +121,11 @@ export default function ActivityFormExpanded({
                 <div className="flex flex-row w-10/12">
 
                     <div className="flex-1 ml-1">
-                        <label className="block text-sm font-medium">Turma</label>
+                        <label className="block text-sm font-medium ml-2">Turma</label>
                         <select
                             value={selectedClass}
                             onChange={(e) => setSelectedClass(e.target.value)}
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded-md"
                         >
                             <option value="">-- Nenhuma turma --</option>
                             {classrooms.map((classroom) => (
@@ -137,14 +137,14 @@ export default function ActivityFormExpanded({
                     </div>
 
                     <div className=" ml-4">
-                        <label className="block text-sm font-medium">Data</label>
+                        <label className="block text-sm font-medium ml-2">Data</label>
                         <input
                             type="date"
                             // conversão só para exibir no input
                             value={selectedDate.toISOString().split("T")[0]}
                             // conversão só na leitura do input → volta para Date
                             onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                            className="border p-1 rounded"
+                            className="border p-1 rounded-md"
                             required
                         />
                     </div>
@@ -166,7 +166,7 @@ export default function ActivityFormExpanded({
                 </div>
                 <div>
                     <div className="ml-8 flex flex-col self-center">
-                        <label className="block text-sm mb-1">Pontuação</label>
+                        <label className="block text-sm mb-1">Avaliação</label>
                         <button
                             type="button"
                             onClick={() => setGraded(!graded)}
@@ -214,7 +214,7 @@ export default function ActivityFormExpanded({
 
             {/* TAGS */}
             <div>
-                <label className="block text-sm mb-1">Tags (separadas por vírgula)</label>
+                <label className="block text-sm mb-1 ml-2">Tags (separadas por vírgula)</label>
                 <input
                     type="text"
                     value={tagString}

@@ -80,7 +80,7 @@ export default function CriteriaEditor({ criteria, onChange }: CriteriaEditorPro
   };
 
   return (
-    <div className="bg-white border rounded-md p-4 mt-4 shadow-sm">
+    <div className="bg-white border rounded-md p-4 mt-4">
       <h3 className="mb-3">Critérios Avaliativos</h3>
 
       {/* Campo para adicionar novo critério */}

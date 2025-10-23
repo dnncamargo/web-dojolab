@@ -211,7 +211,7 @@ export default function DescriptionEditor({
   if (isRichText && !editor) return null
 
   return (
-    <div className="border rounded-lg p-3 bg-white shadow-sm">
+    <div className="border rounded-md p-3 bg-white">
       {/* Toolbar */}
       <div className="flex flex-wrap gap-1 mb-3 items-center">
         {isRichText && editor && (

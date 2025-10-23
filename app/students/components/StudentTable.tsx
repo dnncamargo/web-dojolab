@@ -49,7 +49,7 @@ export default function StudentTable({
       <table className="min-w-full bg-white shadow p-4 mb-6 rounded-lg overflow-hidden">
         <thead className="bg-gray-200 text-gray-700">
           <tr>
-            <th className="px-4 py-2 text-left">Nome</th>
+            <th className="px-4 py-2 text-left">Nome Social</th>
             <th className="px-4 py-2 text-left">Turma</th>
 
             {/* NOVO: Coluna para 'Ativo'. Visível apenas em edição, mas o <th> deve existir para manter a largura. */}

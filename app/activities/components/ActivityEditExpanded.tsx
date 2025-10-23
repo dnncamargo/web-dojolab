@@ -146,17 +146,17 @@ export default function ActivityEditExpanded({
           </button>
         </div>
         <div>
-          <label className="block text-sm font-medium">Título</label>
+          <label className="block text-sm font-medium ml-2">Título</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border rounded p-2 w-full"
+            className="border rounded-md p-2 w-full"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Descrição</label>
+          <label className="block text-sm font-medium ml-2">Descrição</label>
           <DescriptionEditor
             value={description}
             onChange={setDescription}
@@ -169,19 +169,19 @@ export default function ActivityEditExpanded({
           <div className="flex flex-row w-10/12">
 
             <div className="flex-1">
-              <label className="block text-sm font-medium">Status</label>
+              <label className="block text-sm ml-2">Status</label>
               {!classroomId ? (
                 <input
                   type="text"
                   value={getStatusLabel("not_assigned")}
                   disabled
-                  className="border rounded p-2 w-full bg-gray-100 text-gray-500"
+                  className="border rounded-md p-2 w-full bg-gray-100 text-gray-500"
                 />
               ) : (
                 <select
                   value={status || "assigned"} // nunca undefined
                   onChange={(e) => setStatus(e.target.value as ActivityStatus)}
-                  className="border rounded p-2 w-full"
+                  className="border rounded-md p-2 w-full"
                 >
                   <option value="assigned">{getStatusLabel("assigned")}</option>
                   <option value="in_progress">{getStatusLabel("in_progress")}</option>
@@ -197,11 +197,11 @@ export default function ActivityEditExpanded({
             </div>
 
             <div className="flex-1 ml-4">
-              <label className="block text-sm font-medium">Turma</label>
+              <label className="block text-sm font-medium ml-2">Turma</label>
               <select
                 value={classroomId}
                 onChange={(e) => setClassroomId(e.target.value)}
-                className="border rounded p-2 w-full"
+                className="border rounded-md p-2 w-full"
               >
                 <option value="">— Nenhuma turma —</option>
                 {classrooms.map((c) => (
@@ -213,12 +213,12 @@ export default function ActivityEditExpanded({
             </div>
 
             <div className=" ml-4">
-              <label className="block text-sm font-medium">Data</label>
+              <label className="block text-sm font-medium ml-2">Data</label>
               <input
                 type="date"
                 value={date.toISOString().split("T")[0]} // Usa a string de data corrigida
                 onChange={(e) => setDate(new Date(e.target.value + 'T00:00:00'))} // Cria a nova data no fuso horário local/UTC do input
-                className="border rounded p-1"
+                className="border rounded-md p-1"
               />
             </div>
           </div>
@@ -239,7 +239,7 @@ export default function ActivityEditExpanded({
           </div>
           <div>
             <div className="ml-8 flex flex-col self-center">
-              <label className="block text-sm mb-1">Pontuação</label>
+              <label className="block text-sm mb-1">Avaliação</label>
               <button
                 type="button"
                 onClick={() => setGraded(!graded)}
@@ -286,12 +286,12 @@ export default function ActivityEditExpanded({
 
         {/* TAGS */}
         <div>
-          <label className="block text-sm mb-1">Tags (separadas por vírgula)</label>
+          <label className="block text-sm mb-1 ml-2">Tags (separadas por vírgula)</label>
           <input
             type="text"
             value={tagString}
             onChange={(e) => setTagString(e.target.value)}
-            className="border rounded p-2 w-full"
+            className="border rounded-md p-2 w-full"
             placeholder="ex: matemática, lúdico, 5o ano"
           />
         </div>

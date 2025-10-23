@@ -19,7 +19,7 @@ export default function StudentPage() {
   const { badges } = useBadges();
 
   // UI states
-  const [showSort, setShowSort] = useState(false)
+  //const [showSort, setShowSort] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
 
   const [sortKey, setSortKey] = useState<"name" | "classroom">("name")
@@ -79,6 +79,7 @@ export default function StudentPage() {
 
     return list
   }, [students, sortKey, filterActive, filterClassroom, filterBadge, filterTeam, teams])
+  //
 
   return (
     <div className="bg-gray-100 pl-6 pr-6">
@@ -88,13 +89,13 @@ export default function StudentPage() {
         <h1 className="title-section">Cadastro de Alunos</h1>
         <div className="flex">
           {/* Botão Ordenar */}
-          <button
+{/*           <button
             onClick={() => setShowSort((s) => !s)}
             className={`p-2 ml-2 rounded transition ${showSort ? "bg-yellow-400 text-white" : "bg-gray-200 text-gray-700"}`}
             title="Ordenar"
           >
             <ArrowDownAZ className="w-5 h-5" />
-          </button>
+          </button> */}
 
           {/* Botão Filtrar */}
           <button
@@ -108,7 +109,7 @@ export default function StudentPage() {
       </div>
 
       {/* Painel de ordenação */}
-      {showSort && (
+{/*       {showSort && (
         <div className="mb-4 p-3 bg-gray-100 rounded">
           <label className="block  text-sm font-medium mb-1">Ordenar por:</label>
           <select
@@ -120,7 +121,7 @@ export default function StudentPage() {
             <option value="classroom">Turma</option>
           </select>
         </div>
-      )}
+      )} */}
 
       {/* Painel de filtros */}
       {showFilter && (
