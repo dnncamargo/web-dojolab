@@ -120,12 +120,12 @@ export default function ActivityFormExpanded({
             <div className="flex justify-between">
                 <div className="flex flex-row w-10/12">
 
-                    <div className="flex-1 ml-4">
+                    <div className="flex-1 ml-1">
                         <label className="block text-sm font-medium">Turma</label>
                         <select
                             value={selectedClass}
                             onChange={(e) => setSelectedClass(e.target.value)}
-                            className="w-full border p-2 rounded-md"
+                            className="w-full border p-2 rounded"
                         >
                             <option value="">-- Nenhuma turma --</option>
                             {classrooms.map((classroom) => (
@@ -144,14 +144,14 @@ export default function ActivityFormExpanded({
                             value={selectedDate.toISOString().split("T")[0]}
                             // conversão só na leitura do input → volta para Date
                             onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                            className="border p-2 rounded-md w-full"
+                            className="border p-1 rounded"
                             required
                         />
                     </div>
                 </div>
                 <div>
                     <div className="ml-8 flex flex-col self-center">
-                        <label className="block text-sm mb-1">Kanban</label>
+                        <label className="block text-sm mb-1">Tarefas</label>
                         <button
                             type="button"
                             onClick={() => setKanban(!kanban)}
@@ -181,7 +181,7 @@ export default function ActivityFormExpanded({
                 </div>
                 <div>
                     <div className="ml-8 flex flex-col self-center">
-                        <label className="block text-sm mb-1">Temporizador</label>
+                        <label className="block text-sm mb-1">Tempo</label>
                         <button
                             type="button"
                             onClick={() => setTimed(!timed)}

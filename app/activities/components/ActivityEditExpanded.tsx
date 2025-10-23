@@ -224,7 +224,7 @@ export default function ActivityEditExpanded({
           </div>
           <div>
             <div className="ml-8 flex flex-col self-center">
-              <label className="block text-sm mb-1">Kanban</label>
+              <label className="block text-sm mb-1">Tarefas</label>
               <button
                 type="button"
                 onClick={() => setKanban(!kanban)}
@@ -254,7 +254,7 @@ export default function ActivityEditExpanded({
           </div>
           <div>
             <div className="ml-8 flex flex-col self-center">
-              <label className="block text-sm mb-1">Temporizador</label>
+              <label className="block text-sm mb-1">Tempo</label>
               <button
                 type="button"
                 onClick={() => setTimed(!timed)}
