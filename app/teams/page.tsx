@@ -223,6 +223,7 @@ rounded-l-md
       )}
 
       {studentsLoading && <p className="body-text">Carregando alunos...</p>}
+      <div className="ml-2 mt-4">Total: {filteredTeams.length} equipes</div>
     </div>
   );
 }

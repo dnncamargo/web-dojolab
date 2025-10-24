@@ -28,6 +28,7 @@ export default function BadgesPage() {
           onRemove={removeBadge} 
           onUpdate={updateBadge} />
       )}
+      <div className="ml-2 mt-4">Total: {badges.length} insígnias</div>
     </div>
   );
 }

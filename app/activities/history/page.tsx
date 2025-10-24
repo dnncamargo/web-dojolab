@@ -181,6 +181,7 @@ export default function HistoryPage() {
         onDelete={removeActivity}
         onCopy={duplicateActivity}
       />
+      <div className="ml-2 mt-4">Total: {filteredActivities.length} atividades</div>
     </div>
   )
 }

@@ -293,6 +293,7 @@ rounded-l-md
           onToggleBadge={async (studentId, badgeId) => await toggleBadge(studentId, badgeId)}
         />
       )}
+      <div className="ml-2 mt-4">Total: {filteredStudents.length} alunos</div>
     </div>
   );
 }

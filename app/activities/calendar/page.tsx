@@ -168,7 +168,7 @@ export default function CalendarPage() {
       <ActivityCalendar
         activities={filteredActivities}
       />
-      
+      <div className="ml-2 mt-4">Total: {filteredActivities.length} atividades</div>
     </div>
   )
 }
