@@ -74,7 +74,7 @@ export type activity = {
   kanban: boolean
   workflow?: board[]
   taskBoard?: task[]
-  descriptionType: "richtext" | "interactive"
+  descriptionType: "richtext" | "interactive" | "externalpdf"
   results?: scoringResult[]
   tags?: string[]
   date: Date

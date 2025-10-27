@@ -4,14 +4,14 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useActivities } from "@/app/hooks/useActivities";
-import RichTextDescription from "@/app/components/RichTextDescription_legacy";
-import Timer from "@/app/components/Timer";
-import ScoringTable from "@/app/components/ScoringTable";
 import { useStudents } from "@/app/hooks/useStudents";
 import { useTeams } from "@/app/hooks/useTeams";
 import type { scoringResult } from "@/app/utils/types";
+import RichTextDescription from "@/app/activities/components/RichTextDescription";
 import InteractiveDescription from "@/app/activities/components/InteractiveDescription";
+import Timer from "@/app/components/Timer";
 import KanbanBoard from "../../components/KanbanBoard";
+import ScoringTable from "@/app/components/ScoringTable";
 
 export default function ActivityInProgressPage() {
   const params = useParams();
