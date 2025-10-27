@@ -455,12 +455,22 @@ export default function DescriptionEditor({
         }} */
         />
       ) : (
-        <textarea
-          value={value}
-          onChange={handleInteractiveChange}
-          className={clsx('w-full resize-y min-h-[240px] p-3 border border-gray-300 rounded-md bg-gray-50 text-sm font-mono')}
-          placeholder="Insira seu código HTML, CSS ou JavaScript interativo aqui..."
-        />
+        <>
+          <iframe
+            frameBorder="0"
+            height="450px"
+            src="https://onecompiler.com/embed/html"
+            width="100%"
+          ></iframe>
+
+          <textarea
+            value={value}
+            onChange={handleInteractiveChange}
+            className={clsx('w-full resize-y min-h-[240px] p-3 border border-gray-300 rounded-md bg-gray-50 text-sm font-mono')}
+            placeholder="Insira seu código HTML, CSS ou JavaScript interativo aqui..."
+          />
+
+        </>
       )}
     </div>
   )
