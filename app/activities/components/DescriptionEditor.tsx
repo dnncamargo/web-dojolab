@@ -452,7 +452,7 @@ export default function DescriptionEditor({
         )}
 
         {/* Aviso e botão do OneCompiler */}
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center self-end gap-2">
           {descriptionType === 'interactive' && (
             <>
               <span className="text-xs text-gray-500 italic">
@@ -496,19 +496,6 @@ export default function DescriptionEditor({
           </button>
         </div>
 
-
-        {/* HTML/CSS/JS toggle (sempre visível) */}
-        <div className="ml-auto flex items-center gap-2">
-          <span className="text-sm text-gray-600">HTML/CSS/JS</span>
-          <button
-            type="button"
-            onClick={handleToggleType}
-            className={clsx('w-12 h-6 rounded-full transition flex items-center p-1', descriptionType === 'interactive' ? 'bg-blue-600' : 'bg-gray-300')}
-            title={isRichText ? 'Alternar para HTML/CSS/JS' : 'Alternar para Rich Text'}
-          >
-            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', descriptionType === 'interactive' ? 'translate-x-6' : 'translate-x-0')} />
-          </button>
-        </div>
       </div>
 
       {/* Área de edição */}
