@@ -14,6 +14,12 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
     const iframe = iframeRef.current;
     if (!iframe) return;
 
+    // Corrige todos os links <a> para abrirem em nova aba
+    const safeHtml = htmlContent.replace(
+      /<a\s+([^>]*href=['"][^'"]+['"][^>]*)>/gi,
+      '<a $1 target="_blank" rel="noopener noreferrer">'
+    );
+
     // Cria um documento HTML completo para o iframe
     const html = `
       <!DOCTYPE html>
@@ -31,7 +37,7 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
         </style>
       </head>
       <body>
-        ${htmlContent}
+        ${safeHtml}
         <script>
           // ResizeObserver para ajustar altura dinamicamente
           const observer = new ResizeObserver(() => {
