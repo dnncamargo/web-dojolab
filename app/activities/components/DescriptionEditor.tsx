@@ -74,6 +74,7 @@ export default function DescriptionEditor({
   const [bgColorOpen, setBgColorOpen] = useState(false);
   const [showPDFInput, setShowPDFInput] = useState(false)
 
+  const [showOneCompiler, setShowOneCompiler] = useState(false);
   const isRichText = descriptionType === 'richtext'
   const isInteractive = descriptionType === 'interactive'
   const isPDF = descriptionType === 'externalpdf'
@@ -234,6 +235,7 @@ export default function DescriptionEditor({
       <div className="flex flex-wrap gap-1 mb-3 items-center">
         {isRichText && editor && (
           <>
+            {/* Negrito */}
             <button
               type="button"
               title="Negrito"
@@ -243,6 +245,7 @@ export default function DescriptionEditor({
               <Bold size={16} />
             </button>
 
+            {/* Itálico */}
             <button
               type="button"
               title="Itálico"
@@ -252,6 +255,7 @@ export default function DescriptionEditor({
               <Italic size={16} />
             </button>
 
+            {/* Sublinhado */}
             <button
               type="button"
               title="Sublinhado"
@@ -261,6 +265,7 @@ export default function DescriptionEditor({
               <UnderlineIcon size={16} />
             </button>
 
+            {/* Riscado */}
             <button
               type="button"
               title="Riscado"
@@ -285,6 +290,7 @@ export default function DescriptionEditor({
               <Type size={16} /> {/* Usando o ícone Type */}
             </button>
 
+            {/* Lista com marcadores */}
             <button
               type="button"
               title="Lista com marcadores"
@@ -294,6 +300,7 @@ export default function DescriptionEditor({
               <ListIcon size={16} />
             </button>
 
+            {/* Lista numerada */}
             <button
               type="button"
               title="Lista numerada"
@@ -303,6 +310,7 @@ export default function DescriptionEditor({
               <ListOrdered size={16} />
             </button>
 
+            {/* Citação */}
             <button
               type="button"
               title="Citação"
@@ -312,6 +320,7 @@ export default function DescriptionEditor({
               <Quote size={16} />
             </button>
 
+            {/* Código */}
             <button
               type="button"
               title="Código"
@@ -409,23 +418,43 @@ export default function DescriptionEditor({
               ⏎
             </button>
 
-            <button type="button" title="Alinhar à esquerda" onClick={() => editor.chain().focus().setTextAlign('left').run()} className="p-2 rounded hover:bg-gray-200">
+            {/* Alinhar à esquerda */}
+            <button
+              type="button"
+              title="Alinhar à esquerda"
+              onClick={() => editor.chain().focus().setTextAlign('left').run()}
+              className="p-2 rounded hover:bg-gray-200">
               <AlignLeft size={16} />
             </button>
 
-            <button type="button" title="Centralizar" onClick={() => editor.chain().focus().setTextAlign('center').run()} className="p-2 rounded hover:bg-gray-200">
+            {/* Centralizar */}
+            <button type="button"
+              title="Centralizar"
+              onClick={() => editor.chain().focus().setTextAlign('center').run()}
+              className="p-2 rounded hover:bg-gray-200">
               <AlignCenter size={16} />
             </button>
 
-            <button type="button" title="Alinhar à direita" onClick={() => editor.chain().focus().setTextAlign('right').run()} className="p-2 rounded hover:bg-gray-200">
+            {/* Alinhar à direita */}
+            <button type="button"
+              title="Alinhar à direita"
+              onClick={() => editor.chain().focus().setTextAlign('right').run()}
+              className="p-2 rounded hover:bg-gray-200">
               <AlignRight size={16} />
             </button>
 
-            <button type="button" title="Inserir link" onClick={addLink} className="p-2 rounded hover:bg-gray-200">
+            {/* Inserir link */}
+            <button type="button"
+              title="Inserir link"
+              onClick={addLink}
+              className="p-2 rounded hover:bg-gray-200">
               <LinkIcon size={16} />
             </button>
 
-            <button type="button" title="Inserir imagem" onClick={addImage} className="p-2 rounded hover:bg-gray-200">
+            {/* Inserir imagem */}
+            <button type="button"
+              title="Inserir imagem"
+              onClick={addImage} className="p-2 rounded hover:bg-gray-200">
               <ImageIcon size={16} />
             </button>
 
@@ -466,18 +495,51 @@ export default function DescriptionEditor({
           </>
         )}
 
-        {/* HTML/CSS/JS toggle (sempre visível) */}
-        <div className="ml-auto flex items-center gap-2">
+        {/* Aviso e botão do OneCompiler */}
+        <div className="ml-auto flex items-center self-end gap-2">
+          {descriptionType === 'interactive' && (
+            <>
+              <span className="text-xs text-gray-500 italic">
+                ⚠️ Não esqueça de colar aqui o código testado no OneCompiler
+              </span>
+              <span className="text-sm text-gray-600">OneCompiler</span>
+              <button
+                type="button"
+                onClick={() => setShowOneCompiler(!showOneCompiler)}
+                className={clsx(
+                  'w-12 h-6 rounded-full transition flex items-center p-1',
+                  showOneCompiler ? 'bg-emerald-600' : 'bg-gray-300'
+                )}
+                title="Alternar exibição do OneCompiler"
+              >
+                <div
+                  className={clsx(
+                    'bg-white w-4 h-4 rounded-full shadow transform transition',
+                    showOneCompiler ? 'translate-x-6' : 'translate-x-0'
+                  )}
+                />
+              </button>
+            </>
+          )}
+
           <span className="text-sm text-gray-600">HTML/CSS/JS</span>
           <button
             type="button"
             onClick={handleToggleType}
-            className={clsx('w-12 h-6 rounded-full transition flex items-center p-1', descriptionType === 'interactive' ? 'bg-blue-600' : 'bg-gray-300')}
-            title={isRichText ? 'Alternar para HTML/CSS/JS' : 'Alternar para Rich Text'}
+            className={clsx(
+              'w-12 h-6 rounded-full transition flex items-center p-1',
+              descriptionType === 'interactive' ? 'bg-blue-600' : 'bg-gray-300'
+            )}
           >
-            <div className={clsx('bg-white w-4 h-4 rounded-full shadow transform transition', descriptionType === 'interactive' ? 'translate-x-6' : 'translate-x-0')} />
+            <div
+              className={clsx(
+                'bg-white w-4 h-4 rounded-full shadow transform transition',
+                descriptionType === 'interactive' ? 'translate-x-6' : 'translate-x-0'
+              )}
+            />
           </button>
         </div>
+
       </div>
 
       {/* Área principal */}
@@ -490,12 +552,24 @@ export default function DescriptionEditor({
           title="PDF anexado"
         />
       ) : isInteractive ? (
-        <textarea
-          value={value}
-          onChange={handleInteractiveChange}
-          className="w-full min-h-[240px] p-3 border border-gray-300 rounded-md bg-gray-50 text-sm font-mono"
-          placeholder="Insira HTML/CSS/JS aqui..."
-        />
+        <>
+          {/* Modo interativo */}
+          {showOneCompiler && (
+            <iframe
+              frameBorder="0"
+              height="450px"
+              src="https://onecompiler.com/embed/html"
+              width="100%"
+            ></iframe>
+          )}
+
+          <textarea
+            value={value}
+            onChange={handleInteractiveChange}
+            className={clsx('w-full resize-y min-h-[240px] p-3 border border-gray-300 rounded-md bg-gray-50 text-sm font-mono')}
+            placeholder="Insira seu código HTML, CSS ou JavaScript interativo aqui..."
+          />
+        </>
       ) : (
         // EditorContent com classes que garantem recuo e estilo de listas.
         // Se você usa @tailwindcss/typography, a classe "prose" já cuida bem disso.
