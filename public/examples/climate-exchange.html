@@ -1,0 +1,434 @@
+<div class="slider-component">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+    .slider-component {
+      max-width: 100%;
+      height: 700px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      background-color: #000000;
+      color: #cccccc;
+      font-family: 'Noto Sans', sans-serif;
+    }
+    .slide-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+    .slide {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100%;
+      padding: 32px;
+      box-sizing: border-box;
+      background-color: #ffffff;
+      color: #222;
+    }
+    .slide h1, .slide h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: #111;
+      margin-bottom: 12px;
+    }
+    .slide h1 { font-size: 2.8rem; }
+    .slide h3 { font-size: 1.2rem; }
+    .subtitle {
+      color: #0c0c0c;
+      font-size: 1.6rem;
+      margin-bottom: 24px;
+    }
+    .text {
+      color: #0c0c0c;
+      font-size: 1.3rem;
+    }
+    /* check list style */
+    .list-check {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .check-item {
+      position: relative;
+      padding-left: 28px;
+      font-size: 1.5rem;
+    }
+    .check-item::before {
+      content: '✔';
+      position: absolute;
+      left: 0;
+      right: 10;
+      color: #aaa;
+    }
+    .highlight {
+      color: #008000;
+      font-weight: bold;
+    }
+    /* terminal / bloco de código */
+    .terminal {
+      background-color: #111111;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 24px;
+      font-family: 'Fira Code', monospace;
+      color: #dddddd;
+      overflow-x: auto;
+      position: relative;
+    }
+    .terminal .line {
+      counter-increment: linen;
+      display: block;
+      padding-left: 32px;
+      white-space: pre;
+    }
+    .terminal .line::before {
+      content: counter(linen);
+      position: absolute;
+      left: 8px;
+      color: #666666;
+      width: 24px;
+    }
+    .terminal .keyword {
+      color: #ffffff;
+      font-weight: bold;
+    }
+    #code {
+      font-size: 1rem;
+    }
+    .img-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .img-container img {
+      max-width: 300%;
+      max-height: 500px;
+      border-radius: 8px;
+    }
+    .img-cutter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      height: 250px;
+      margin-top: 16px;
+      border-radius: 8px;
+    }
+    .img-cutter img {
+      object-fit: cover;
+      object-position: center;
+    }
+    #slide-special{
+      background-color: #000000;
+    }
+    /* Botões de navegação */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(133,186,255,0.39);
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 0.8;
+      z-index: 10;
+      transition: opacity 0.2s, background-color 0.2s;
+    }
+    .nav-btn:hover {
+      opacity: 1;
+      background-color: rgb(133,186,255);
+    }
+    #prev-btn { left: 10px; }
+    #next-btn { right: 10px; }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background-color: #555555;
+    }
+  </style>
+
+  <div class="slide-track" id="slideTrack">
+
+    <!-- SLIDE 1 -->
+    <div class="slide" id="slide-1">
+      <h1>🔄️ Barganha Tecnológica</h1>
+      <p class="subtitle">Nesta missão, cada equipe precisa montar um projeto, mas... com um desafio.</p>
+      <div class="list-check">
+        <div class="check-item">As peças que você precisa <span class="highlight">estão com outra equipe</span>!
+</div>
+        <div class="check-item">Você terá que <span class="highlight">negociar</span> para conseguir o que precisa.</div>
+        <div class="check-item">Nenhuma peça é trocada de graça — <span class="highlight">toda barganha tem uma contrapartida</span>.</div>
+      </div>
+      <div class="img-cutter">
+        <img src="https://www.shutterstock.com/image-vector/efficient-waste-garbage-management-better-260nw-2369907107.jpg"
+             alt="Trabalho em equipe com papéis distintos"
+             height="330">
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" id="slide-2">
+      <h1>Papéis da Equipe</h1>
+      <p class="subtitle">Cada integrante tem uma função essencial para o sucesso do grupo:</p>
+      <div class="list-check">
+        <div class="check-item"><span class="highlight">Engenheiro(a) de Estrutura</span>: responsável pela montagem física do projeto.</div>
+        <div class="check-item"><span class="highlight">Analista de Projetos</span>: analisa os requisitos e garante que o projeto siga o plano.</div>
+        <div class="check-item"><span class="highlight">Codificador(a)</span>: programa e testa o comportamento do robô.</div>
+        <div class="check-item"><span class="highlight">Negociador(a)</span>: o(a) único(a) autorizado(a) a trocar peças com outras equipes! Precisa pensar estrategicamente e garantir boas trocas.</div>
+        <div class="check-item"><span class="highlight">Pesquisador(a)</span>: responsável por fazer investigações científicas sobre o projeto.</div>
+      </div>
+      <div class="img-container">
+        <img src="https://static.vecteezy.com/ti/vetor-gratis/p1/2491204-ecologia-mundo-natureza-gratis-vetor.jpg"
+             alt="planeta terra"
+             height="200">
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" id="slide-3">
+      <h1>Temática: Crise Climática</h1>
+      <p class="subtitle">A atividade se passa em um cenário de <span class="highlight">crise climática</span>. As equipes devem imaginar soluções tecnológicas inspiradas na natureza.</p>
+      <p class="subtitle">O desafio é cooperar e trocar recursos com sabedoria — afinal, nenhum grupo vence sozinho uma crise global.</p>
+      <div class="img-container">
+        <img src="https://www.freightera.com/blog/wp-content/uploads/2020/04/earth-people-ai-768x402.png"
+             alt="Imagem do planeta Terra"
+             height="300">
+      </div>
+    </div>
+
+
+
+    <!-- SLIDE 21 -->
+    <div class="slide" id="slide-21">
+      <h1>Projeto 2: Pássaro</h1>
+      <span class="subtitle">O pássaro simboliza a liberdade e o equilíbrio dos ventos. <br>
+      O projeto deve representar:</span>
+      <div class="list-check">
+        <div class="check-item">A leveza e a precisão da natureza em movimento.</div>
+        <div class="check-item">A importância dos habitats e da cooperação entre espécies.</div>
+        <div class="check-item">A imaginação como ferramenta para soluções sustentáveis.</div>
+      </div>
+      <div class="img-container">
+        <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/QjZkl49Zq_Y?si=F0gKGO8CG6b_vX-n"
+                title="Vídeo Projeto Pássaro"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+                <a href="https://www.youtube.com/embed/QjZkl49Zq_Y?si=F0gKGO8CG6b_vX-n">Por que bandos de aves voam em formato de V?</a>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- SLIDE 22 -->
+    <div class="slide" id="slide-22">
+      <h1>Projeto 2: Pássaro (Visualização 3D)</h1>
+      <div class="img-container">
+        <embed type="text/html"
+               src="https://build.t2t.io/player_glb?script=e9o1sHuUVxVjBrCg"
+               width="100%" height="500">
+      </div>
+    </div>
+
+    <!-- SLIDE 4 (Competências) -->
+    <div class="slide" id="slide-4">
+      <h1>Competências Desenvolvidas</h1>
+      <div class="list-check">
+        <div class="check-item">Reconhecimento de Padrões: observar encaixes de peças entre o manual e o projeto real.</div>
+        <div class="check-item">Trabalho em Equipe: discutir e registrar decisões colaborativamente.</div>
+        <div class="check-item">Concentração: manter foco durante a atividade.</div>
+        <div class="check-item">Comunicação: interações respeitosas entre diferentes equipes.</div>
+        <div class="check-item">Leitura atenta: entendimento e análise das informações.</div>
+      </div>
+      <p style="margin-top: 24px; font-size:1.3rem; text-align:center;">
+        💡 Essa prática fortalece <span class="highlight">raciocínio lógico aplicado</span> e atenção aos detalhes.
+      </p>
+      <div class="img-container">
+        <img src="https://media.istockphoto.com/id/1247850711/pt/vetorial/brain-is-like-a-tree-growing-in-a-human-head.jpg?s=612x612&w=0&k=20&c=SDqvMCbHMkx0CxFIKmjYee9R2-XnbMgSca1k1fb3Csw=" 
+        alt="Cérebro / Lógica"
+        width="300"
+        >
+      </div>
+    </div>
+
+    <!-- SLIDE 5 (Algoritmo) -->
+    <div class="slide" id="slide-5">
+      <h1>Algoritmo do Projeto</h1>
+      <h3 class="subtitle">🎯 Objetivo</h3>
+      <span class="text">Acionar o motor ao pressionar o botão 2 ou botão 5</p>
+      <h3 class="subtitle">🧩 Primeiros Passos</h3>
+      <span class="text">Conectar o <span class="highlight">Arduino Leonardo</span> na porta USB.</span><br>
+      <span class="text">Conectar o <span class="highlight">servo-motor</span> na porta <span class="highlight">8</span> (porta amarela).</span>
+      <h3 class="subtitle">⚙️ Algoritmo</h3>
+      <div class="terminal" id="code">
+        <div class="line"><span class="keyword">When</span> Arduino Starts Up</div>
+        <div class="line"><span class="keyword">Repetir</span> para Sempre</div>
+        <div class="line"><span class="keyword">Se</span> Ler Pino Digital 2 ou Ler Pino Analógico 1, <span class="keyword">Então</span>:</div>
+        <div class="line">  Definir Ângulo do Pino Servo 8 como 0</div>
+        <div class="line"><span class="keyword">Senão</span>:</div>
+        <div class="line">  Definir Ângulo do Pino Servo 8 como 96</div>
+        <div class="line">Fim Se</div>
+        <div class="line">Fim Repetir</div>
+      </div>
+      <h3 class="subtitle">🚀 Por Último</h3>
+      <p>Clique em <span class="highlight">“Carregar código”</span> para enviar o programa ao Arduino Leonardo.</p>
+    </div>
+
+    <!-- SLIDE 6 (Algoritmo) -->
+<!--     <div class="slide" id="slide-6">
+      <h1>Algoritmo do Projeto (Visão Gráfica)</h1>
+      <div class="img-container">
+        <img src="https://raw.githubusercontent.com/dnncamargo/web-dojolab/refs/heads/main/public/images/quebra_cabe%C3%A7a-baleia.png"
+             alt="Quebra-cabeças baleia"
+             width="900"
+             height="650">
+      </div>
+    </div> -->
+
+    <!-- SLIDE 6 -->
+    <div class="slide" id="slide-6">
+      <div class="img-container">
+        <embed type="text/html"
+               src="https://ide.mblock.cc/"
+               width="100%" height="800">
+      </div>
+    </div>
+    
+    <!-- SLIDE 7 -->
+    <div class="slide" id="slide-special">
+      <h1 style="color: #aaa; font-size:2.4rem; text-align:center;">
+      🎵🎶Musiquinhas para descontrair🎧🎷</h1>
+      <div class="img-container" >
+        <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/TEW3ujNyGFw?si=gV7Dus3uhk-1pNvi"
+                title="YouTube video player" 
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="margin-top: 50px; ">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- SLIDE 11 -->
+    <div class="slide" id="slide-11">
+      <h1>Projeto 1: Baleia</h1>
+      <span class="subtitle">A baleia simboliza a vida marinha ameaçada pelas mudanças climáticas. <br>
+      O projeto deve refletir:</span>
+      <div class="list-check">
+        <div class="check-item">Força e sabedoria dos oceanos.</div>
+        <div class="check-item">Profundidade emocional e harmonia entre seres.</div>
+        <div class="check-item">Coragem e tenacidade pela preservação dos ecossistemas aquáticos.</div>
+      </div>
+      <div class="img-container">
+        <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/PFnKxAKFb70?si=N6VOfmCzPMdjAHxE"
+                title="Vídeo Projeto Baleia"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+                <a href="https://www.youtube.com/embed/PFnKxAKFb70?si=N6VOfmCzPMdjAHxE">CURIOSIDADES DAS BALEIAS JUBARTE [você sabia?]</a>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- SLIDE 12 -->
+    <div class="slide" id="slide-12">
+      <h1>Projeto 1: Baleia (Visualização 3D)</h1>
+      <div class="img-container">
+        <embed type="text/html"
+               src="https://build.t2t.io/player_glb?script=TFRxceq7RB2eMKGm"
+               width="100%" height="500">
+      </div>
+    </div>
+
+    <!-- SLIDE 31 -->
+    <div class="slide" id="slide-31">
+      <h1>Projeto 3: Vagalume</h1>
+      <span class="subtitle">O vagalume simboliza nossa luz interior, positividade, inspiração e magia. <br>
+      O projeto deve representar:</span>
+      <div class="list-check">
+        <div class="check-item">A resiliência da equipe em proteger a natureza.</div>
+        <div class="check-item">O poder do otimismo para superar dificuldade.</div>
+        <div class="check-item">A humildade e a curiosidade como virtudes para a vida.</div>
+      </div>
+      <div class="img-container">
+        <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/ikgS6q1KSMY?si=jrXatIK-2oRfxEVf"
+                title="Vídeo Projeto Vagalume"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+                <a href="https://www.youtube.com/embed/ikgS6q1KSMY?si=jrXatIK-2oRfxEVf">Por que o vagalume pisca? #Ticolipos|EP24</a>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- SLIDE 32 -->
+    <div class="slide" id="slide-32">
+      <h1>Projeto 3: Vagalume (Visualização 3D)</h1>
+      <div class="img-container">
+        <embed type="text/html"
+               src="https://build.t2t.io/player_glb?script=C0o7rvxDN5V95BFC"
+               width="100%" height="500">
+      </div>
+    </div>
+
+    <!-- Última DIV -->
+  </div>
+
+  <!-- Botões -->
+  <button id="prev-btn" class="nav-btn">❮</button>
+  <button id="next-btn" class="nav-btn">❯</button>
+</div>
+
+<script>
+  const sliderComponent = document.querySelector('.slider-component');
+  const slideTrack = document.getElementById('slideTrack');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+
+  function setupSliderDimensions() {
+    const w = sliderComponent.offsetWidth;
+    slides.forEach(slide => slide.style.width = `${w}px`);
+    slideTrack.style.width = `${w * totalSlides}px`;
+    updateSlidePosition(currentSlide);
+  }
+  function updateSlidePosition(i) {
+    const w = sliderComponent.offsetWidth;
+    slideTrack.style.transform = `translateX(${-i * w}px)`;
+  }
+  function updateNavButtons() {
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === totalSlides - 1;
+  }
+  function nextSlide() {
+    if (currentSlide < totalSlides - 1) {
+      currentSlide++;
+      updateSlidePosition(currentSlide);
+      updateNavButtons();
+    }
+  }
+  function prevSlide() {
+    if (currentSlide > 0) {
+      currentSlide--;
+      updateSlidePosition(currentSlide);
+      updateNavButtons();
+    }
+  }
+  setupSliderDimensions();
+  updateNavButtons();
+  prevBtn.addEventListener('click', prevSlide);
+  nextBtn.addEventListener('click', nextSlide);
+  window.addEventListener('resize', setupSliderDimensions);
+</script>
