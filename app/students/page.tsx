@@ -91,7 +91,17 @@ export default function StudentPage() {
   }, [students, sortKey, filterActive, filterClassroom, filterBadge, filterTeam, teams, searchName])
   //
   const frequencyList = useMemo(() => {
-    return students.filter((s) => s.classroomId === filterClassroom)
+
+
+
+    return students
+        .filter((s) => s.classroomId === filterClassroom)
+        .sort((a, b) => {
+          // Usamos loaleCompare para uma comparação alfabética
+          return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+          // O terceiro argumento '{ sensitivity: 'base' }' faz uma comparação
+          // case sensitive considerando os caracteres locais.
+        });
   }, [students, filterClassroom])
 
 
