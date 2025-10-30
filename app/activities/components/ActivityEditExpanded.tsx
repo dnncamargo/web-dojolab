@@ -26,7 +26,7 @@ export default function ActivityEditExpanded({
 }: ActivityEditExpandedProps) {
   const [title, setTitle] = useState(activity.title);
   const [description, setDescription] = useState(activity.description || "");
-  const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">(activity.descriptionType)
+  const [descriptionType, setDescriptionType] = useState<'richtext' | 'interactive' | 'externalpdf'>(activity.descriptionType)
   const [classroomId, setClassroomId] = useState(activity.classroomId || "");
   const [date, setDate] = useState(activity.date);
   const [kanban, setKanban] = useState(activity.kanban)
@@ -87,6 +87,7 @@ export default function ActivityEditExpanded({
     const tagsArray = tagString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
     let finalDescription = description;
+    console.log(finalDescription);
 
     if (descriptionType === "interactive") {
       // Se o conteúdo veio do RichTextEditor e contém tags escapadas
@@ -122,7 +123,7 @@ export default function ActivityEditExpanded({
     onClose();
   };
 
-  const handleChangeDescriptionType = (newType: 'richtext' | 'interactive') => {
+  const handleChangeDescriptionType = (newType: 'richtext' | 'interactive' | 'externalpdf') => {
     setDescriptionType(newType)
   }
 

@@ -12,6 +12,7 @@ import InteractiveDescription from "@/app/activities/components/InteractiveDescr
 import Timer from "@/app/components/Timer";
 import KanbanBoard from "../../components/KanbanBoard";
 import ScoringTable from "@/app/components/ScoringTable";
+import PDFViewer from "@/app/activities/components/PDFViewer";
 
 export default function ActivityInProgressPage() {
   const params = useParams();
@@ -99,11 +100,13 @@ export default function ActivityInProgressPage() {
 
       {/* Descrição */}
 
-      {activity.descriptionType === "interactive" ? (
-        <InteractiveDescription htmlContent={activity.description ?? ""} />
-      ) : (
-        <RichTextDescription content={activity.description ?? ""} className="mt-4 mb-6" />
-      )}
+          {activity.descriptionType === "interactive" ? (
+            <InteractiveDescription htmlContent={activity.description ?? "Sem Descrição"} />
+          ) : activity.descriptionType === "richtext" ? (
+            <RichTextDescription content={activity.description ?? "Sem Descrição"} className="mt-4 mb-6" />
+          ) : activity.description != null && activity.descriptionType === "externalpdf" ? (
+            <PDFViewer pdfSource={activity.description}/>
+          ) : ("Sem descrição")}
 
       {/* Timer */}
       {activity.timed && (

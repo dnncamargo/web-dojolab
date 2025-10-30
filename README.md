@@ -20,7 +20,7 @@ O projeto está em constante evolução: atualmente na versão **2.3**, com a **
 
 ---
 
-## ✨ Funcionalidades Atuais (v2.5)
+## ✨ Funcionalidades Atuais (v2.6)
 
 - 📋 **Cadastro (CRUD)** de:
   - Alunos
@@ -47,12 +47,13 @@ O projeto está em constante evolução: atualmente na versão **2.3**, com a **
 - 📅 **Calendário de atividades** integrado.  
 - 🏷️ **Tags** em atividades.
 - ✅ **Kanban** para organizar o fluxo de tarefas.
+- 📄 **Anexo de PDF** na descrição da atividade.
 
 ---
 
 ## 🚀 Próximas Funcionalidades (v2.6)
 
-- 📄 **Anexo de PDF** na descrição da atividade.
+
 - 📈 **KPIs** para avaliação e relatórios de desempenho de alunos.  
 - 📝 **Registros de ocorrências** e observações individuais.  
 
