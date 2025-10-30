@@ -10,6 +10,7 @@ import { useClassroom } from "../hooks/useClassroom";
 import { useTeams } from "../hooks/useTeams";
 import { useBadges } from "../hooks/useBadges";
 import { ArrowDownAZ, Filter } from "lucide-react"
+import { User } from "lucide-react"
 import { getCurrentClassroom, setCurrentClassroom } from "../utils/currentClassroom";
 
 export default function StudentPage() {
@@ -28,6 +29,9 @@ export default function StudentPage() {
   const [filterClassroom, setFilterClassroom] = useState<string>(getCurrentClassroom())
   const [filterBadge, setFilterBadge] = useState<string>("")
   const [filterTeam, setFilterTeam] = useState<"" | "included" | "not_included">("")
+  const [showFrequency, setShowFrequency] = useState(false)
+  const [searchName, setSearchName] = useState<string>("")
+
 
   useEffect(() => {
     setCurrentClassroom(getCurrentClassroom())
@@ -65,6 +69,12 @@ export default function StudentPage() {
       )
     }
 
+    // filtrar por nome
+    if (searchName) {
+      const searchLower = searchName.toLowerCase()
+      list = list.filter((s) => s.name.toLowerCase().includes(searchLower))
+    }
+
     // ordenação
     list.sort((a, b) => {
       switch (sortKey) {
@@ -78,8 +88,12 @@ export default function StudentPage() {
     })
 
     return list
-  }, [students, sortKey, filterActive, filterClassroom, filterBadge, filterTeam, teams])
+  }, [students, sortKey, filterActive, filterClassroom, filterBadge, filterTeam, teams, searchName])
   //
+  const frequencyList = useMemo(() => {
+    return students.filter((s) => s.classroomId === filterClassroom)
+  }, [students, filterClassroom])
+
 
   return (
     <div className="bg-gray-100 pl-6 pr-6">
@@ -89,13 +103,22 @@ export default function StudentPage() {
         <h1 className="title-section">Cadastro de Alunos</h1>
         <div className="flex">
           {/* Botão Ordenar */}
-{/*           <button
+          {/*           <button
             onClick={() => setShowSort((s) => !s)}
             className={`p-2 ml-2 rounded transition ${showSort ? "bg-yellow-400 text-white" : "bg-gray-200 text-gray-700"}`}
             title="Ordenar"
           >
             <ArrowDownAZ className="w-5 h-5" />
           </button> */}
+
+          {/* Botão Frequência */}
+          <button
+            onClick={() => setShowFrequency(true)}
+            className={`p-2 ml-2 rounded transition ${showFrequency ? "bg-yellow-400 text-white" : "bg-gray-200 text-gray-700"}`}
+            title="Frequência do aluno"
+          >
+            <User className="w-5 h-5" />
+          </button>
 
           {/* Botão Filtrar */}
           <button
@@ -109,7 +132,7 @@ export default function StudentPage() {
       </div>
 
       {/* Painel de ordenação */}
-{/*       {showSort && (
+      {/*       {showSort && (
         <div className="mb-4 p-3 bg-gray-100 rounded">
           <label className="block  text-sm font-medium mb-1">Ordenar por:</label>
           <select
@@ -123,9 +146,65 @@ export default function StudentPage() {
         </div>
       )} */}
 
+      {/* Modal de Frequência */}
+      {showFrequency && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-black rounded-lg w-96 max-h-[80vh] overflow-y-auto p-4 mb-4 shadow-lg">
+            <div className="flex justify-between items-center mb-4 border-b pb-2">
+              <h2 className="text-lg font-semibold text-gray-200">Frequência dos Alunos</h2>
+              <p className="text-sm text-gray-500 mb-3">
+                Turma atual:{" "}
+                <span className="font-semibold text-gray-700">
+                  {classrooms.find((c) => c.id === filterClassroom)?.name || "Não definida"}
+                </span>
+              </p>
+
+              <button
+                onClick={() => setShowFrequency(false)}
+                className="text-gray-500 hover:text-gray-800 font-semibold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <ul className="space-y-2">
+              {frequencyList.map((s) => (
+                <li
+                  key={s.id}
+                  className="flex justify-between items-center border-b pb-1"
+                >
+                  <span className="text-gray-300">{s.name}</span>
+                  <input
+                    type="checkbox"
+                    checked={s.isActive}
+                    onChange={() =>
+                      updateStudent(s.id, { isActive: !s.isActive })
+                    }
+                    className="w-5 h-5 accent-blue-600"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
       {/* Painel de filtros */}
       {showFilter && (
         <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Pesquisa por nome */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Pesquisar por Nome</label>
+            <input
+              type="text"
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              placeholder="Digite o nome do aluno..."
+              className="border rounded p-1 w-full bg-white"
+            />
+          </div>
+
+          {/* Presença */}
           <div>
             <label className="block text-sm font-medium mb-2">Presença</label>
             <div className="flex border rounded-md border-gray-200 divide-x divide-gray-200">
@@ -180,6 +259,7 @@ rounded-l-md
             </div>
           </div>
 
+          {/* Equipe */}
           <div>
             <label className="block text-sm font-medium mb-2">Equipe</label>
             <div className="flex border rounded-md border-gray-200 divide-x divide-gray-200">
@@ -233,7 +313,7 @@ rounded-l-md
             </div>
           </div>
 
-
+          {/* SELECT Turmas */}
           <div>
             <label className="block text-sm font-medium mb-1">Turma</label>
             <select
@@ -254,6 +334,7 @@ rounded-l-md
             </select>
           </div>
 
+          {/* SELECT Insígnias */}
           <div>
             <label className="block text-sm font-medium mb-1">Insígnias</label>
             <select
