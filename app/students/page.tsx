@@ -90,6 +90,10 @@ export default function StudentPage() {
     return list
   }, [students, sortKey, filterActive, filterClassroom, filterBadge, filterTeam, teams, searchName])
   //
+  const frequencyList = useMemo(() => {
+    return students.filter((s) => s.classroomId === filterClassroom)
+  }, [students, filterClassroom])
+
 
   return (
     <div className="bg-gray-100 pl-6 pr-6">
@@ -148,6 +152,13 @@ export default function StudentPage() {
           <div className="bg-black rounded-lg w-96 max-h-[80vh] overflow-y-auto p-4 mb-4 shadow-lg">
             <div className="flex justify-between items-center mb-4 border-b pb-2">
               <h2 className="text-lg font-semibold text-gray-200">Frequência dos Alunos</h2>
+              <p className="text-sm text-gray-500 mb-3">
+                Turma atual:{" "}
+                <span className="font-semibold text-gray-700">
+                  {classrooms.find((c) => c.id === filterClassroom)?.name || "Não definida"}
+                </span>
+              </p>
+
               <button
                 onClick={() => setShowFrequency(false)}
                 className="text-gray-500 hover:text-gray-800 font-semibold"
@@ -157,7 +168,7 @@ export default function StudentPage() {
             </div>
 
             <ul className="space-y-2">
-              {filteredStudents.map((s) => (
+              {frequencyList.map((s) => (
                 <li
                   key={s.id}
                   className="flex justify-between items-center border-b pb-1"
