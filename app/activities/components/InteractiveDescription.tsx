@@ -51,7 +51,8 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
     iframe.srcdoc = html;
 
     // Limpeza ao desmontar
-    return () => URL.revokeObjectURL(url);
+    //return () => URL.revokeObjectURL(url);
+    return () => {};
   }, [htmlContent]);
 
   // Ouve a altura enviada do iframe e ajusta dinamicamente
