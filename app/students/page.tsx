@@ -110,7 +110,7 @@ export default function StudentPage() {
           {/* Botão Frequência */}
           <button
             onClick={() => setShowFrequency(true)}
-            className="p-2 ml-2 rounded transition bg-gray-200 text-gray-700 hover:bg-gray-300"
+            className={`p-2 ml-2 rounded transition ${showFrequency ? "bg-yellow-400 text-white" : "bg-gray-200 text-gray-700"}`}
             title="Frequência do aluno"
           >
             <User className="w-5 h-5" />
@@ -145,9 +145,9 @@ export default function StudentPage() {
       {/* Modal de Frequência */}
       {showFrequency && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-96 max-h-[80vh] overflow-y-auto p-4 shadow-lg">
+          <div className="bg-black rounded-lg w-96 max-h-[80vh] overflow-y-auto p-4 shadow-lg">
             <div className="flex justify-between items-center mb-4 border-b pb-2">
-              <h2 className="text-lg font-semibold text-gray-800">Frequência dos Alunos</h2>
+              <h2 className="text-lg font-semibold text-gray-200">Frequência dos Alunos</h2>
               <button
                 onClick={() => setShowFrequency(false)}
                 className="text-gray-500 hover:text-gray-800 font-semibold"
@@ -157,12 +157,12 @@ export default function StudentPage() {
             </div>
 
             <ul className="space-y-2">
-              {students.map((s) => (
+              {filteredStudents.map((s) => (
                 <li
                   key={s.id}
                   className="flex justify-between items-center border-b pb-1"
                 >
-                  <span className="text-gray-800">{s.name}</span>
+                  <span className="text-gray-300">{s.name}</span>
                   <input
                     type="checkbox"
                     checked={s.isActive}
@@ -177,7 +177,6 @@ export default function StudentPage() {
           </div>
         </div>
       )}
-
 
       {/* Painel de filtros */}
       {showFilter && (
