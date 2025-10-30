@@ -45,9 +45,10 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
       </html>
     `;
 
-    const blob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    iframe.src = url;
+    //const blob = new Blob([html], { type: "text/html" });
+    //const url = URL.createObjectURL(blob);
+    //iframe.src = url;
+    iframe.srcdoc = html;
 
     // Limpeza ao desmontar
     return () => URL.revokeObjectURL(url);
@@ -68,7 +69,8 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
     <iframe
       ref={iframeRef}
       className="w-full border-0 mb-8 bg-white transition-all duration-300"
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       title="Atividade Interativa"
     />
   );
