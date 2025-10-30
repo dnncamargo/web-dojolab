@@ -145,7 +145,7 @@ export default function StudentPage() {
       {/* Modal de Frequência */}
       {showFrequency && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-black rounded-lg w-96 max-h-[80vh] overflow-y-auto p-4 shadow-lg">
+          <div className="bg-black rounded-lg w-96 max-h-[80vh] overflow-y-auto p-4 mb-4 shadow-lg">
             <div className="flex justify-between items-center mb-4 border-b pb-2">
               <h2 className="text-lg font-semibold text-gray-200">Frequência dos Alunos</h2>
               <button
@@ -181,6 +181,18 @@ export default function StudentPage() {
       {/* Painel de filtros */}
       {showFilter && (
         <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Pesquisa por nome */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Pesquisar por Nome</label>
+            <input
+              type="text"
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              placeholder="Digite o nome do aluno..."
+              className="border rounded p-1 w-full bg-white"
+            />
+          </div>
+
           {/* Presença */}
           <div>
             <label className="block text-sm font-medium mb-2">Presença</label>
