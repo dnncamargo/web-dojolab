@@ -23,7 +23,7 @@ export default function ActivityFormExpanded({
     const [description, setDescription] = useState("")
     const [timed, setTimed] = useState(false)
     const [graded, setGraded] = useState(false)
-    const [descriptionType, setDescriptionType] = useState<"richtext" | "interactive">("richtext")
+    const [descriptionType, setDescriptionType] = useState<'richtext' | 'interactive' | 'externalpdf'>("richtext")
     const [criteria, setCriteria] = useState<criteria[]>([])
     const [kanban, setKanban] = useState(false)
     const [taskBoard, setTaskBoard] = useState<task[]>([])
@@ -94,7 +94,7 @@ export default function ActivityFormExpanded({
         onCancel()
     }
 
-    const handleChangeDescriptionType = (newType: 'richtext' | 'interactive') => {
+    const handleChangeDescriptionType = (newType: 'richtext' | 'interactive' | 'externalpdf') => {
         setDescriptionType(newType)
     }
 

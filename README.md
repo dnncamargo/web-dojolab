@@ -20,7 +20,7 @@ O projeto está em constante evolução: atualmente na versão **2.3**, com a **
 
 ---
 
-## ✨ Funcionalidades Atuais (v2.5)
+## ✨ Funcionalidades Atuais (v2.6)
 
 - 📋 **Cadastro (CRUD)** de:
   - Alunos
@@ -35,27 +35,31 @@ O projeto está em constante evolução: atualmente na versão **2.3**, com a **
 - 🎯 **Critérios de avaliação** configuráveis:
   - Individual / Equipe
   - Inteiro / Booleano
-  - Com **peso avaliativo** (1 a 5).
+  - Com **peso avaliativo** (1 a 5)
+  - Avaliação com 6 estrelas 🌟 (super destaque)
 - 🔎 **Filtros e ordenação** avançados.
 - 🏆 **Pódio dinâmico** com suporte a empates.
 - 📊 Armazenamento e visualização dos **resultados das atividades**.
-- 🖼️ **Atividades com imagens.**
-- 🌟 **Descrição da atividade com HTML/CSS/JS**
+- 🖼️ **Atividades com imagens.**.
+- 🌟 **Descrição da atividade com HTML/CSS/JS**.
 - 🛠️ **Toolbar de edição formatada** (rich text) para descrição de atividades.
 - 🎶 **Alarme sonoro** para atividades cronometradas.  
 - 📅 **Calendário de atividades** integrado.  
-- 🏷️ **Tags** em atividades
-- ✅ **Kanban** para organizar o fluxo de tarefas
+- 🏷️ **Tags** em atividades.
+- ✅ **Kanban** para organizar o fluxo de tarefas.
+- 📄 **Anexo de PDF** na descrição da atividade.
 
 ---
 
 ## 🚀 Próximas Funcionalidades (v2.6)
+
 
 - 📈 **KPIs** para avaliação e relatórios de desempenho de alunos.  
 - 📝 **Registros de ocorrências** e observações individuais.  
 
 
 ## 🐞 Correções de bugs e Melhorias a fazer
+
 - 🔃 **Ordenação correta pelo nome das turmas**
 - ⛵ **Navbar sempre no topo**
 - 🎨 **Melhora visual dos formulários**

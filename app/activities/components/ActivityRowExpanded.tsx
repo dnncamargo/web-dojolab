@@ -3,12 +3,17 @@ import CriteriaList from "./CriteriaList";
 import InteractiveDescription from "./InteractiveDescription";
 import RichTextDescription from "./RichTextDescription";
 import TaskViewer from "./TaskViewer";
+import dynamic from 'next/dynamic';
 
 type ActivityRowExpandedProps = {
   activity: activity;
   onCopy: (activity: activity) => void;
   onViewResults: (id: string) => void;
 };
+
+const PDFViewer = dynamic(() => import('./PDFViewer'), {
+  ssr: false, // ❗ evita renderização no servidor
+});
 
 export default function ActivityRowExpanded({
   activity,
@@ -30,9 +35,12 @@ export default function ActivityRowExpanded({
 
           {activity.descriptionType === "interactive" ? (
             <InteractiveDescription htmlContent={activity.description ?? "Sem Descrição"} />
-          ) : (
+          ) : activity.descriptionType === "richtext" ? (
             <RichTextDescription content={activity.description ?? "Sem Descrição"} className="mt-4 mb-6" />
-          )}
+          ) : activity.description != null && activity.descriptionType === "externalpdf" ? (
+            <PDFViewer pdfSource={activity.description}/>
+          ) : ("Sem descrição")
+        }
 
         </div>
         {activity.graded ? (

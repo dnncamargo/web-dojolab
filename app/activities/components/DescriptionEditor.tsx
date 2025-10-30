@@ -17,6 +17,7 @@ import Underline from '@tiptap/extension-underline'
 import HardBreak from "@tiptap/extension-hard-break";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Heading from '@tiptap/extension-heading'
+import { PiFilePdf } from 'react-icons/pi';
 
 import clsx from 'clsx'
 
@@ -38,12 +39,13 @@ import {
   AlignRight,
   Type
 } from 'lucide-react'
+import PDFInput from './PDFInput';
 
 type DescriptionEditorProps = {
   value: string
   onChange: (html: string) => void
-  descriptionType: 'richtext' | 'interactive'
-  onSetDescriptionType: (value: 'richtext' | 'interactive') => void
+  descriptionType: 'richtext' | 'interactive' | 'externalpdf'
+  onSetDescriptionType: (value: 'richtext' | 'interactive' | 'externalpdf') => void
 }
 
 const COMMON_COLORS = [
@@ -70,8 +72,13 @@ export default function DescriptionEditor({
   //const [color, setColor] = useState('#000000');
   const [textColorOpen, setTextColorOpen] = useState(false);
   const [bgColorOpen, setBgColorOpen] = useState(false);
+  const [showPDFInput, setShowPDFInput] = useState(false)
+
   const [showOneCompiler, setShowOneCompiler] = useState(false);
   const isRichText = descriptionType === 'richtext'
+  const isInteractive = descriptionType === 'interactive'
+  const isPDF = descriptionType === 'externalpdf'
+
 
   // IMPORTANT: StarterKit already provides list-related extensions (bulletList, orderedList, listItem).
   // Do NOT include BulletList / OrderedList / ListItem again — duplication causa falha no comportamento das listas.
@@ -125,7 +132,7 @@ export default function DescriptionEditor({
   }, [value, editor, isRichText])
 
   const handleToggleType = () => {
-    if (isRichText) {
+    if (isRichText || isPDF) {
       const confirmChange = confirm(
         'Alternar para o modo HTML/CSS/JS interativo limpará o conteúdo atual do Rich Text. Deseja continuar?'
       )
@@ -202,6 +209,18 @@ export default function DescriptionEditor({
     if (!editor) return
     const src = window.prompt('URL da imagem:')
     if (src) editor.chain().focus().setImage({ src }).run()
+  }
+
+  const handleAttachPDF = () => setShowPDFInput(true)
+  const handlePdfSelect = (pdfUrl: string | null) => {
+    if (pdfUrl) {
+      onChange(pdfUrl)
+      onSetDescriptionType('externalpdf')
+    } else {
+      onChange('')
+      onSetDescriptionType('richtext')
+    }
+    setShowPDFInput(false)
   }
 
   const handleInteractiveChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -448,6 +467,31 @@ export default function DescriptionEditor({
             <button type="button" title="Refazer" onClick={() => editor.chain().focus().redo().run()} className="p-2 rounded hover:bg-gray-200" disabled={!editor.can().redo()}>
               <Redo size={16} />
             </button>
+
+            <div className="w-px h-5 bg-gray-300 mx-2" />
+
+            {/* Anexar PDF */}
+            <button
+              type="button"
+              onClick={handleAttachPDF}
+              className="px-2 py-1 border rounded flex items-center gap-2"
+              title="Anexar PDF externo"
+            >
+              <PiFilePdf className="w-5 h-5 text-red-600" />
+              <span className="text-sm">PDF</span>
+            </button>
+          </>
+        )}
+        
+        {isPDF && (
+          <>
+            <button
+              type="button"
+              onClick={() => handlePdfSelect(null)}
+              className="px-2 py-1 border rounded bg-gray-100"
+            >
+              Remover PDF
+            </button>
           </>
         )}
 
@@ -498,24 +542,16 @@ export default function DescriptionEditor({
 
       </div>
 
-      {/* Área de edição */}
-      {isRichText ? (
-        // EditorContent com classes que garantem recuo e estilo de listas.
-        // Se você usa @tailwindcss/typography, a classe "prose" já cuida bem disso.
-        <EditorContent
-          editor={editor}
-          className="prose max-w-none min-h-[240px] border border-gray-300 rounded-md p-3
-                     prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6"
-        // adicione classes utilitárias para garantir recuo e estilo mesmo sem plugin typography
-        /* style={{
-          // fallback CSS caso o projeto não tenha o plugin typography ativo
-          // garante que listas tenham recuo e marcadores
-          // (pode ser removido se preferir usar suas classes globais)
-          // eslint-disable-next-line react/no-unknown-property
-          ['--tw-prose-body' as any]: undefined,
-        }} */
+      {/* Área principal */}
+      {showPDFInput ? (
+        <PDFInput onSourceSelect={handlePdfSelect} onClose={() => setShowPDFInput(false)} />
+      ) : isPDF ? (
+        <iframe
+          src={value}
+          className="w-full min-h-[600px] border-0 rounded-md"
+          title="PDF anexado"
         />
-      ) : (
+      ) : isInteractive ? (
         <>
           {/* Modo interativo */}
           {showOneCompiler && (
@@ -533,8 +569,23 @@ export default function DescriptionEditor({
             className={clsx('w-full resize-y min-h-[240px] p-3 border border-gray-300 rounded-md bg-gray-50 text-sm font-mono')}
             placeholder="Insira seu código HTML, CSS ou JavaScript interativo aqui..."
           />
-
         </>
+      ) : (
+        // EditorContent com classes que garantem recuo e estilo de listas.
+        // Se você usa @tailwindcss/typography, a classe "prose" já cuida bem disso.
+        <EditorContent
+          editor={editor}
+          className="prose max-w-none min-h-[240px] border border-gray-300 rounded-md p-3
+                     prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6"
+        // adicione classes utilitárias para garantir recuo e estilo mesmo sem plugin typography
+        /* style={{
+          // fallback CSS caso o projeto não tenha o plugin typography ativo
+          // garante que listas tenham recuo e marcadores
+          // (pode ser removido se preferir usar suas classes globais)
+          // eslint-disable-next-line react/no-unknown-property
+          ['--tw-prose-body' as any]: undefined,
+        }} */
+        />
       )}
     </div>
   )
