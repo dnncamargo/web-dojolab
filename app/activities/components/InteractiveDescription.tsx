@@ -23,23 +23,32 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
     // Cria um documento HTML completo para o iframe
     const html = `
       <!DOCTYPE html>
-      <html lang="pt-BR">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <style>
-          html, body {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            font-family: system-ui, sans-serif;
-          }
-        </style>
-      </head>
+        <html lang="pt-BR">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              overflow-x: hidden;
+              font-family: system-ui, sans-serif;
+            }
+          </style>
+        </head>
       <body>
         ${safeHtml}
         <script>
-          // ResizeObserver para ajustar altura dinamicamente
+          // Intercepta cliques em links
+          document.addEventListener("click", function(e) {
+            const a = e.target.closest("a[href]");
+            if (a && a.href) {
+              e.preventDefault();
+              window.parent.postMessage({ type: "open-external-link", url: a.href }, "*");
+            }
+          });
+
+          // ResizeObserver existente...
           const observer = new ResizeObserver(() => {
             const height = document.body.scrollHeight;
             window.parent.postMessage({ type: "resize-iframe", height }, "*");
@@ -47,6 +56,7 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
           observer.observe(document.body);
           window.parent.postMessage({ type: "resize-iframe", height: document.body.scrollHeight }, "*");
         </script>
+
       </body>
       </html>
     `;
@@ -58,7 +68,7 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
 
     // Limpeza ao desmontar
     //return () => URL.revokeObjectURL(url);
-    return () => {};
+    return () => { };
   }, [htmlContent]);
 
   // Ouve a altura enviada do iframe e ajusta dinamicamente
@@ -66,6 +76,9 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === "resize-iframe" && iframeRef.current) {
         iframeRef.current.style.height = `${event.data.height}px`;
+      }
+      if (event.data?.type === "open-external-link" && event.data.url) {
+        window.open(event.data.url, "_blank", "noopener,noreferrer");
       }
     };
     window.addEventListener("message", handleMessage);
