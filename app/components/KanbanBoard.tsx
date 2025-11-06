@@ -228,7 +228,7 @@ export default function KanbanBoard({
                                 <button
                                   key={b.next}
                                   onClick={() => handleStatusButton(team.id, t.id, b.next as task["status"])}
-                                  className="px-2 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
+                                  className="px-2 py-1 mr-2 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
                                 >
                                   {b.label}
                                 </button>

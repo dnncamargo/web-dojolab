@@ -229,7 +229,7 @@ const Timer: React.FC<TimerProps> = ({ initialMode = "chronometer" }) => {
               </p>
               <div className="flex gap-3 mb-1">
                 <button
-                  className="px-4 py-2 rounded bg-gray-700 text-white"
+                  className="px-4 py-2 mr-2 rounded bg-gray-700 text-white"
                   onClick={stopAlarmSound}
                 >
                   Parar
