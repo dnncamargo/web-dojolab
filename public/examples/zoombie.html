@@ -1,0 +1,298 @@
+<div class="slider-component">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+    @import url('https://fonts.cdnfonts.com/css/halloween');
+
+    :root {
+      --slide-height: 600px;
+      --background-url: url('https://firebasestorage.googleapis.com/v0/b/web-dojolab.firebasestorage.app/o/img%2Fbackgrounds%2Fbackground-dirty.png?alt=media&token=3ed96ff5-297a-4439-9421-6296cbfdb0e0');
+      --textbox-font-family: 'Noto Sans', sans-serif;
+      --textbox-background: #fff;
+      --textbox-border: #ccc;
+      --textbox-text-color: #000;
+      --textbox-highlight: #008000;
+      --textbox-check-item: #aaa;
+      --body-font-size: 20px;
+      --title-font-family: 'Halloween', sans-serif;
+      --title-font-size: 20px;
+      --button-font-size: 11px;
+    }
+
+    .slider-component {
+      max-width: 100%;
+      height: var(--slide-height);
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      box-sizing: border-box;
+      background-image: var(--background-url);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    }
+
+    /* === TITULOS === */
+    .slide-title {
+      position: absolute;
+      top: 10%;
+      left: 20%;
+      font-family: var(--title-font-family);
+      font-size: 2rem;
+      color: #fff;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .slide-title::before {
+      content: url('https://firebasestorage.googleapis.com/v0/b/web-dojolab.firebasestorage.app/o/img%2Felements%2Fwooden-1.png?alt=media&token=aaddc7f6-ecdc-4365-ae35-7047eda31256');
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    
+    /* === DESAFIOS === */
+    .slide-challenge {
+      position: absolute;
+      top: 0%;
+      left: 20%;
+      font-family: var(--title-font-family);
+      font-size: 2rem;
+      color: #fff;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .slide-challenge::before {
+      content: url('https://firebasestorage.googleapis.com/v0/b/web-dojolab.firebasestorage.app/o/img%2Felements%2Fdesafio00.png?alt=media&token=1ecbfe0a-fdb7-4659-8d49-ccfaa0631814');
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      vertical-align: middle;
+    }
+
+    /* === FOOTER === */
+    .slide-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: transparent;
+    }
+
+    .slide-footer::after {
+      content: url('https://firebasestorage.googleapis.com/v0/b/web-dojolab.firebasestorage.app/o/img%2Felements%2Ffooter-1.png?alt=media&token=484adbda-0a9a-4c0f-852c-ac11887c194f');
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* === TEXTBOX === */
+    .textbox {
+      background-color: var(--textbox-background);
+      border: 1px solid var(--textbox-border);
+      box-shadow: 3px 3px red, -1em 0 0.4em olive;
+      padding: 10px;
+      position: absolute;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .textbox p {
+      font-family: var(--textbox-font-family);
+      font-size: var(--body-font-size);
+      color: var(--textbox-text-color);
+      line-height: 1.4;
+      margin: 0 0 10px;
+    }
+
+    /* === CHECKLIST === */
+    .list-check {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: absolute;
+      top: 25%;
+      left: 20%;
+      width: 70%;
+      color: #fff;
+      font-family: 'Noto Sans', sans-serif;
+    }
+
+    .check-item {
+      position: relative;
+      padding-left: 28px;
+      font-size: 1.4rem;
+    }
+
+    .check-item::before {
+      content: '✔';
+      position: absolute;
+      left: 0;
+      color: var(--textbox-check-item);
+    }
+
+    .highlight {
+      color: var(--textbox-highlight);
+      font-weight: bold;
+    }
+
+    /* === NAVEGAÇÃO === */
+    #navigation-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 200;
+      display: flex;
+    }
+
+    .nav-btn {
+      background-color: var(--textbox-background);
+      color: var(--textbox-text-color);
+      padding: 4px 10px;
+      font-family: var(--textbox-font-family);
+      font-size: var(--button-font-size);
+      cursor: pointer;
+      margin-left: 10px;
+      border: 1px solid var(--textbox-border);
+      box-shadow: 1px 1px 0 var(--textbox-border);
+      outline: none;
+    }
+
+    .nav-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: none;
+    }
+
+    .nav-btn:disabled {
+      color: var(--textbox-border);
+      cursor: default;
+      box-shadow: none;
+    }
+  </style>
+
+  <div class="slide-track" id="slideTrack">
+    <!-- SLIDE 1 -->
+    <div class="slide" id="slide-1">
+      <div class="slide-title"><p>Apocalipse Zumbi</p></div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" id="slide-2">
+      <div class="textbox" style="top:10%;left:10%;width:80%;">
+        <p>O mundo já não é mais o mesmo. Uma estranha mutação se espalhou pelas cidades, transformando grande parte da população em zumbis famintos.</p>
+        <p>Mas, em meio ao caos, surge uma esperança: cientistas descobriram que existe uma <span class="highlight">vacina</span> capaz de salvar a humanidade.</p>
+        <p>O problema? Ela está guardada em um laboratório secreto dentro da universidade, que agora está cercada por hordas de zumbis.</p>
+      </div>
+      <div class="slide-footer"></div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" id="slide-3">
+      <div class="slide-title"><p>Objetivo</p></div>
+      <div class="list-check">
+        <div class="check-item">Cumprir os 4 desafios (Alarme, Mapa, Tranca e Vacina).</div>
+        <div class="check-item">Acumular o <span class="highlight">máximo de pontos</span> dentro do tempo limite.</div>
+        <div class="check-item">Escapar do laboratório antes que os zumbis invadam.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide" id="slide-4">
+      <div class="slide-title"><p>Progresso</p></div>
+      <div class="list-check">
+        <div class="check-item">Os desafios são entregues em ordem <span class="highlight">sequencial</span>.</div>
+        <div class="check-item">Só <span class="highlight">após concluir</span> (ou esgotar o tempo) é que o próximo será liberado.</div>
+        <div class="check-item">Cada equipe pode pedir até 2 dicas no total durante o jogo.</div>
+        <div class="check-item">As dicas reduzem 2 estrelas da pontuação, mas podem salvar tempo e recursos.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide" id="slide-5">
+      <div class="slide-challenge"><p>Desafio 1</p></div>
+      <div 
+        class="textbox" 
+        style="
+          top:50%;
+          left:10%;
+          width:80%;
+          ">
+        <p>A escuridão tomou conta do laboratório.</p>
+        <p>Os zumbis estão se aproximando, mas vocês precisam de um <span class="highlight">alarme silencioso</span>, que indique sua presença sem emitir som</p>
+        <p>Qualquer ruído pode atrair ainda mais criaturas.</p> 
+        <p>O destino da equipe depende da sua engenhosidade!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTÕES -->
+  <div id="navigation-controls">
+    <button class="nav-btn" id="prev-btn" disabled>← Voltar</button>
+    <button class="nav-btn" id="next-btn">Avançar →</button>
+  </div>
+</div>
+
+<script>
+  const sliderComponent = document.querySelector('.slider-component');
+  const slideTrack = document.getElementById('slideTrack');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+
+  function setupSliderDimensions() {
+    const w = sliderComponent.offsetWidth;
+    slides.forEach(slide => slide.style.width = `${w}px`);
+    slideTrack.style.width = `${w * totalSlides}px`;
+    updateSlidePosition(currentSlide);
+  }
+
+  function updateSlidePosition(i) {
+    const w = sliderComponent.offsetWidth;
+    slideTrack.style.transform = `translateX(${-i * w}px)`;
+  }
+
+  function updateNavButtons() {
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === totalSlides - 1;
+  }
+
+  function nextSlide() {
+    if (currentSlide < totalSlides - 1) {
+      currentSlide++;
+      updateSlidePosition(currentSlide);
+      updateNavButtons();
+    }
+  }
+
+  function prevSlide() {
+    if (currentSlide > 0) {
+      currentSlide--;
+      updateSlidePosition(currentSlide);
+      updateNavButtons();
+    }
+  }
+
+  setupSliderDimensions();
+  updateNavButtons();
+  prevBtn.addEventListener('click', prevSlide);
+  nextBtn.addEventListener('click', nextSlide);
+  window.addEventListener('resize', setupSliderDimensions);
+</script>

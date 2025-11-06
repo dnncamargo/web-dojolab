@@ -1,0 +1,1233 @@
+<div class="slider-component">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+    @import url('https://fonts.cdnfonts.com/css/sf-groove-machine-3');
+    
+    :root {
+        --slide-height: 600px;
+        --win95-desktop-color: #008080;
+        --win95-gray: #C0C0C0;
+        --win95-dark-gray: #808080;
+        --win95-light-gray: #FFFFFF;
+        --win95-blue: #000080;
+        --win95-text-color: #000000;
+        --win95-font-family: 'MS Sans Serif', 'Arial', sans-serif;
+        --win95-font-terminal: 'Lucida Console', monospace;
+        --win95-font-size: 11px;
+        --body-font-size: 20px;
+        --title-font-size: 20px;
+        --creativity-gif-url: url('https://media.giphy.com/media/Wht8cSV3bN8BdslVxe/giphy.gif');
+    }
+    
+    .slider-component {
+      max-width: 100%;
+      height: var(--slide-height);
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      background-color: #000000;
+    }
+    .slide-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+    .slide {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0px;
+      box-sizing: border-box;
+      background-color: #ffffff;
+    }
+    
+    /* Estilo de fundo alternativo para o Slide 2 (branco) */
+    .slide-background-white {
+        background-color: var(--win95-light-gray) !important;
+    }
+    
+    /* === SLIDE 1 - com background windows 95 === */
+    #slide-1 {
+      padding: 20px 20px 10px;
+      background-color: var(--win95-desktop-color);
+    }
+    
+    /* === SLIDE 2 - com GIF de fundo === */
+    #slide-2 {
+      background-color: var(--win95-light-gray);
+      background-image: var(--creativity-gif-url);
+      background-repeat: no-repeat;
+      background-position: left bottom;
+      background-size: 80% auto;
+      position: relative;
+    }
+
+    /* === SLIDE 3 - Estética Vaporwave === */
+    #slide-3 {
+        position: relative;
+        overflow: hidden;
+        background-color: #1a0033;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* === SLIDE 4 - Vaporwave Claro === */
+    #slide-4 {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background-color: #f0eaff;
+    }
+
+    /* Fundo com estética vaporwave mais clara */
+    .vaporwave-bg-light {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #f5baff 0%, #b9c8ff 100%);
+        opacity: 0.9;
+        z-index: 0;
+        filter: brightness(1.05) blur(1.5px);
+    }
+
+    /* Imagem central */
+    .vaporwave-image-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+    }
+
+    .vaporwave-image-center img {
+        height: 700px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Fundo vaporwave com gradiente + textura */
+    .vaporwave-bg {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #ff00cc 0%, #3333ff 100%);
+        background-size: cover;
+        opacity: 0.85;
+        z-index: 0;
+        filter: blur(2px) brightness(1.1);
+    }
+
+    /* Janela de erro Win95 centralizada */
+    .error-window {
+        position: relative;
+        width: 500px;
+        z-index: 1;
+        background-color: var(--win95-gray);
+        border: 1px solid var(--win95-dark-gray);
+        box-shadow: 3px 3px 0 #000;
+    }
+
+    /* Botão da janela */
+    .error-window .content-display button:hover {
+        background-color: #ffffff;
+        border-color: #808080;
+    }
+
+    /* Textbox inferior reaproveitável */
+    #slide-3 .textbox b p {
+        position: absolute;
+        z-index: 5;
+        background-color: rgba(255, 255, 255, 0.85);
+        border: 1px solid var(--win95-dark-gray);
+        box-shadow: 2px 2px 0 #000;
+    }
+    
+    #slide-clippy-ajuda {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background-image: url('https://videocdn.cdnpk.net/videos/5cd8867a-cb27-5e35-aae5-f03879272c02/horizontal/thumbnails/large.jpg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    #slide-9 {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background-image: url('https://wallpaperaccess.com/full/755431.jpg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        flex-direction: column;
+    }
+
+    #slide-9 p {
+        font-family: 'SF Groove Machine';
+    }
+
+    /* Triângulo neon 3D */
+    .neon-triangle {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 200px solid transparent;
+      border-right: 200px solid transparent;
+      border-bottom: 350px solid rgba(255, 255, 255, 0.1);
+      filter: drop-shadow(0 0 15px #ff9aff)
+              drop-shadow(0 0 25px #ff9aff)
+              drop-shadow(0 0 35px #ffd6ff);
+      transform-style: preserve-3d;
+      animation: spinTriangle 10s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform-origin: center;
+      z-index: 0;
+    }
+
+    @keyframes spinTriangle {
+      0% { transform: translate(-50%, -50%) rotateY(0deg) rotateX(15deg); }
+      100% { transform: translate(-50%, -50%) rotateY(360deg) rotateX(15deg); }
+    }
+
+    /* Título Google Docs */
+    .google-docs-title {
+      position: relative;
+      font-family: 'SF Groove Machine', 'Orbitron', sans-serif;
+      font-size: 80px;
+      text-transform: uppercase;
+      background: linear-gradient(45deg, #fff2b3, #431b7a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow:
+        1px 1px 0 #fff,
+        -1px -1px 0 #fff,
+        0 0 10px #ffccff,
+        0 0 20px #d1aaff;
+      z-index: 2;
+      text-align: center;
+    }
+
+    /* Ícone do Google Docs */
+    .google-docs-icon {
+      position: relative;
+      margin-top: 20px;
+      z-index: 2;
+      width: 80px;
+      height: auto;
+      filter: drop-shadow(0 0 8px #ffffff);
+    }
+
+    
+   /* Textbox reaproveitável */
+    .textbox {
+        background-color: var(--win95-light-gray);
+        border: 1px solid var(--win95-dark-gray);
+        box-shadow: 2px 2px 0 var(--win95-text-color), 3px 3px 0 var(--win95-text-color);
+        padding: 10px;
+        position: absolute;
+        overflow-y: auto;
+        text-align: left;
+        box-sizing: border-box;
+        font-family: 'Noto Sans', sans-serif;
+    }
+    
+    /* Título do Slide (H1) */
+    .slide-title {
+        color: var(--win95-text-color);
+        font-size: var(--title-font-size);
+        margin-top: 0;
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+    /* Parágrafos de Texto (P) */
+    .slide-text p {
+        font-family: 'Noto Sans', sans-serif;
+        font-size: var(--body-font-size);
+        text-align: left;
+        line-height: 1.4;
+        color: var(--win95-text-color);
+        word-wrap: break-word;
+    }
+
+    /* === ESTILO WINDOWS 98 PARA SLIDE 3 === */
+    .windows98 {
+        position: relative;
+        z-index: 2;
+        width: 530px;
+        margin: auto;
+        background-color: #C0C0C0;
+        border: 2px solid #808080;
+        box-shadow: 3px 3px 0 #000;
+        font-family: 'MS Sans Serif', sans-serif;
+    }
+
+    .windows98 .title-bar {
+        background: linear-gradient(90deg, #000080 0%, #0000a8 100%);
+        color: #fff;
+        font-weight: bold;
+        height: 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2px 6px;
+        border-bottom: 1px solid #404040;
+    }
+
+    .windows98 .title-bar button {
+        background-color: #C0C0C0;
+        border: 0.5px solid #808080;
+        width: 18px;
+        height: 18px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .windows98 .title-bar button:active {
+        border: inset 0.5px solid #808080;
+    }
+
+    .windows98 button.shadow {
+        background-color: #E0E0E0;
+        border-top: 2px solid #FFF;
+        border-left: 2px solid #FFF;
+        border-right: 2px solid #808080;
+        border-bottom: 2px solid #808080;
+        font-family: 'MS Sans Serif';
+        font-size: 14px;
+        padding: 3px 20px;
+        cursor: pointer;
+    }
+
+    .windows98 button.shadow:active {
+        border-top: 2px solid #808080;
+        border-left: 2px solid #808080;
+        border-right: 2px solid #FFF;
+        border-bottom: 2px solid #FFF;
+    }
+
+    /* Estilo Principal da Janela */
+    .window {
+        max-width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: var(--win95-gray);
+        border: 1px solid var(--win95-dark-gray);
+        box-shadow: 2px 2px 0 var(--win95-text-color), 3px 3px 0 var(--win95-text-color);
+        box-sizing: border-box;
+        position: relative;
+    }
+    
+    /* Título do Slide (H1) */
+    .slide-title h1 {
+        color: var(--win95-text-color);
+        font-size: 20px;
+        font-family: var(--win95-font-family);
+        margin-top: 0;
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+    /* Parágrafos de Texto (P) */
+    .slide-text p {
+        font-family: var(--win95-font-family);
+        font-size: 16px;
+        text-align: left;
+        line-height: 1.4;
+        color: var(--win95-text-color);
+        word-wrap: break-word;
+    }
+    
+    /* O restante do seu CSS permanece o mesmo */
+    .title-bar {
+        height: 18px;
+        background-color: var(--win95-blue);
+        color: var(--win95-light-gray);
+        padding: 1px 2px 1px 3px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--win95-font-family);
+        font-size: var(--win95-font-size);
+        font-weight: bold;
+        cursor: default;
+        border-bottom: 1px solid var(--win95-dark-gray);
+    }
+
+    .title-bar-content {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .title-bar-icon {
+        width: 12px;
+        height: 12px;
+        margin-right: 4px;
+        background-color: var(--win95-blue);
+    }
+
+
+    .title-bar-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .title-bar-controls button {
+        background-color: var(--win95-gray);
+        height: 16px;
+        width: 16px;
+        padding: 0;
+        border: none;
+        outline: none;
+        cursor: default;
+        border-top: 1px solid var(--win95-light-gray);
+        border-left: 1px solid var(--win95-light-gray);
+        border-right: 1px solid var(--win95-dark-gray);
+        border-bottom: 1px solid var(--win95-dark-gray);
+        box-shadow: 1px 1px 0 var(--win95-text-color);
+        font-size: 13px;
+        line-height: 10px;
+    }
+
+    .title-bar-controls button:active {
+        border-top: 1px solid var(--win95-dark-gray);
+        border-left: 1px solid var(--win95-dark-gray);
+        border-right: 1px solid var(--win95-light-gray);
+        border-bottom: 1px solid var(--win95-light-gray);
+        box-shadow: none;
+    }
+
+    .title-bar-controls-m button:active {
+        border-top: 1px solid var(--win95-dark-gray);
+        border-left: 1px solid var(--win95-dark-gray);
+        border-right: 1px solid var(--win95-light-gray);
+        border-bottom: 1px solid var(--win95-light-gray);
+        box-shadow: none;
+        padding-bottom: 1px;
+    }
+
+    .menu-bar {
+        background-color: var(--win95-gray);
+        padding: 0 1px;
+        border-bottom: 1px solid var(--win95-dark-gray);
+        display: flex;
+        height: 20px;
+        align-items: center;
+    }
+
+    .menu-item {
+        padding: 0 7px 0 5px;
+        cursor: default;
+        line-height: 20px;
+        font-family: var(--win95-font-family);
+        font-size: var(--win95-font-size);
+    }
+
+    .menu-item:hover {
+        background-color: var(--win95-blue);
+        color: var(--win95-light-gray);
+    }
+
+    .text-area-container {
+        padding: 4px;
+        background-color: var(--win95-gray);
+    }
+
+    /* Área de Conteúdo */
+    .content-area-container {
+        padding: 4.2px;
+        background-color: var(--win95-gray);
+        height: var(--window-height);
+    }
+
+    /* O DISPLAY DO CONTEÚDO (Bloco de Notas) */
+    .content-display {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow-y: auto;
+
+        background-color: var(--win95-light-gray);
+        border-top: 0.5px solid var(--win95-dark-gray);
+        border-left: 0.5px solid var(--win95-dark-gray);
+        border-right: 0.5px solid var(--win95-light-gray);
+        border-bottom: 0.5px solid var(--win95-light-gray);
+        outline: 0.5px solid var(--win95-text-color);
+
+        font-family: var(--win95-font-terminal);
+        font-size: var(--body-font-size);
+        /* Tamanho da fonte ajustado */
+        color: var(--win95-text-color);
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        /* Garante quebras de linha mais agressivas */
+    }
+
+    .status-bar {
+        height: 18px;
+        background-color: var(--win95-gray);
+        border-top: 1px solid var(--win95-light-gray);
+        padding: 0 4px;
+        display: flex;
+        align-items: center;
+        font-family: var(--win95-font-family);
+        font-size: var(--win95-font-size);
+    }
+
+    .status-pane {
+        height: 14px;
+        line-height: 14px;
+        padding: 0 5px;
+        margin-right: 2px;
+        border-top: 1px solid var(--win95-dark-gray);
+        border-left: 1px solid var(--win95-dark-gray);
+        border-right: 1px solid var(--win95-light-gray);
+        border-bottom: 1px solid var(--win95-light-gray);
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .status-pane:last-child {
+        flex-grow: 0;
+        width: 100px;
+    }
+
+    .shortcut {
+        text-decoration: underline;
+    }
+
+    /* Container geral */
+    .clippy-container {
+        position: absolute;
+        z-index: 100;
+    }
+
+    /* Clippy */
+    .clippy {
+        position: relative;
+        width: 130px;
+        height: auto;
+        image-rendering: pixelated;
+        animation: floatClippy 3s ease-in-out infinite;
+        margin-top: 16px; /* distancia entre balão e clippy */
+        margin-left: 170px;
+    }
+
+    @keyframes floatClippy {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+    }
+
+    /* Balão retrô */
+    .speech-bubble {
+        position: relative;
+        background: #ffffe1;
+        border: 2px solid #000;
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: #000;
+        font-family: "MS Sans Serif", sans-serif;
+        font-size: 14px;
+        box-shadow: 2px 2px 0 #808080;
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    /* Bico do balão */
+    .speech-tail-outline,
+    .speech-tail-inner {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border: 10px solid transparent;
+        bottom: -18px;
+        left: 70%;
+    }
+
+    .speech-tail-outline {
+        border-top-color: #000;
+        transform: translateY(3px);
+    }
+
+    .speech-tail-inner {
+        border-top-color: #ffffe1;
+        z-index: 2;
+    }
+
+    /* Efeito de digitação opcional */
+    .typewriter {
+        display: inline-block;
+        overflow: hidden;
+        white-space: normal;
+        border-right: 2px solid #000;
+        animation: typing 3s steps(40) forwards, blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+
+    @keyframes blink {
+    50% { border-color: transparent; }
+    }
+    
+    /* Container de Botões de Navegação (Posicionado no Body) */
+    #navigation-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        z-index: 200;
+        display: flex;
+    }
+
+    /* Botões de navegação */
+    .nav-btn {
+        background-color: var(--win95-gray);
+        color: var(--win95-text-color);
+        padding: 4px 10px;
+        font-family: var(--win95-font-family);
+        font-size: var(--win95-font-size);
+        cursor: pointer;
+        margin-left: 10px;
+        border-top: 1px solid var(--win95-light-gray);
+        border-left: 1px solid var(--win95-light-gray);
+        border-right: 1px solid var(--win95-dark-gray);
+        border-bottom: 1px solid var(--win95-dark-gray);
+        box-shadow: 1px 1px 0 var(--win95-text-color);
+        outline: none;
+    }
+    
+    .nav-button:active {
+        border-top: 1px solid var(--win95-dark-gray);
+        border-left: 1px solid var(--win95-dark-gray);
+        border-right: 1px solid var(--win95-light-gray);
+        border-bottom: 1px solid var(--win95-light-gray);
+        box-shadow: none;
+        transform: translate(1px, 1px);
+    }
+
+    #prev-btn { left: 10px; }
+    #next-btn { right: 10px; }
+    .nav-btn:disabled {
+        color: var(--win95-dark-gray);
+        cursor: default;
+        box-shadow: none;
+        border-top: 1px solid var(--win95-gray);
+        border-left: 1px solid var(--win95-gray);
+        border-right: 1px solid var(--win95-gray);
+        border-bottom: 1px solid var(--win95-gray);
+        transform: none;
+    }
+  </style>
+
+  <div class="slide-track" id="slideTrack">
+
+    <!-- SLIDE 1 -->
+    <div class="slide" id="slide-1">
+        
+            <div class="window">
+                <div class="title-bar" id="titleBar-1">
+                    <div class="title-bar-content">
+                        <div class="title-bar-icon"><img
+                                src="https://cdn2.steamgriddb.com/icon/609a199881ca4ba9c95688235cd6ac5c/4/256x256.png"
+                                alt="notepad" width="12"></div>
+                        <div class="title-bar-text" id="titleBarText-1">Slide 1: Como fazer uma pesquisa</div>
+                    </div>
+                    <div class="title-bar-controls">
+                        <button aria-label="Minimize" onclick="alert('Minimizar não implementado!')"> ̶</button>
+                        <button aria-label="Maximize" onclick="alert('Maximizar não implementado!')">□</button>
+                        <button aria-label="Close" onclick="alert('Fechar não implementado!')">×</button>
+                    </div>
+                </div>
+
+                <div class="menu-bar">
+                    <div class="menu-item" onclick="alert('Menu Arquivo clicado!')"><span
+                            class="shortcut">A</span>rquivo</div>
+                    <div class="menu-item" onclick="alert('Menu Editar clicado!')"><span class="shortcut">E</span>ditar
+                    </div>
+                    <div class="menu-item" onclick="alert('Menu Ajuda clicado!')"><span class="shortcut">A</span>juda
+                    </div>
+                </div>
+
+                <div class="content-area-container">
+                    <div class="content-display" id="contentDisplay-1">
+Olá! Eu sou o Clippy, seu assistente virtual! 📎
+Vou te ajudar a fazer uma <b>pesquisa científica incrível</b>!
+
+As pesquisas abrem a mente para novas <b>descobertas</b>.
+
+    Características:
+    1. Assunto central.
+    2. Escopo.
+    3. Fonte.
+
+A pesquisa te ajuda a enriquecer seu conhecimento
+e não empacar nas mesmas ideias de sempre.
+
+Vamos aprender juntos!
+
+    - Seu assistente
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <div class="status-pane" id="statusMain">Pronto</div>
+                    <div class="status-pane" id="statusLineCol">Lin 1, Col 1</div>
+                </div>
+            </div>
+            <!-- Container absoluto com posição e tamanho definidos inline -->
+            <div 
+                class="clippy-container" 
+                id="clippyContainer"
+                style="position: absolute; top: 50%; left: 7%;"
+                >
+
+                <!-- Clippy -->
+                <div class="clippy">
+                    <img 
+                    id="clippyGif" 
+                    src="https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif" 
+                    alt="Clippy"
+                    />
+                </div>
+            </div>
+
+        </div>
+
+        
+        <!-- === SLIDE 2 === -->
+        <div class="slide" id="slide-2">
+            <div 
+                class="textbox" 
+                style="top: 50px; right: 10px; max-width: 540px; max-height: 420px;">
+                <h1 class="slide-title">
+                Abrir a mente para a leitura 💡
+                </h1>
+                <p class="slide-text">
+                Para escrever um texto, é preciso entender o tema <b>profundamente</b>.<br><br>
+                <b>A leitura transforma nossa vida</b>, enriquece nosso vocabulário e nos ajuda a descobrir novos interesses.<br><br>
+                É muito bom agregar novos conhecimentos e trazer mais significados ao nosso trabalho ou projeto.<br>
+                Por isso, devemos pesquisar para não empacar!<br><br>
+                A pesquisa ajuda a nossa criatividade a florescer e previne erros e bloqueios e é sempre bem-vinda até mesmo assuntos que você já conhece!<br>
+                
+                </p>
+            </div>
+        </div>
+    
+        <!-- === SLIDE 3 === -->
+        <div class="slide" id="slide-3">
+            <div class="vaporwave-bg"></div>
+
+            <!-- JANELA DE ERRO FATAL ESTILO WINDOWS 98 -->
+            <div class="windows98" >
+                <div class="title-bar">
+                    <div class="title-bar-content">
+                        <img src="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" width="16" height="16" style="margin-right:6px; image-rendering:pixelated;">
+                        <div class="title-bar-text">Erro Fatal</div>
+                    </div>
+                    <div class="title-bar-controls">
+                        <button aria-label="Fechar" onclick="alert('Sistema encerrado!')">×</button>
+                    </div>
+                </div>
+
+                <div class="content-area-container" style="height:auto; padding: 24px 20px;">
+                    <div style="display:flex; align-items:flex-start; gap:16px;">
+                        <img src="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" width="48" height="48" alt="Erro" style="image-rendering:pixelated; margin-right: 16px;">
+                        <p style="font-family:'MS Sans Serif'; font-size:16px; line-height:1.4; color:black;">
+                        <b>"Pesquisa não é acúmulo de conhecimento desenfreado."</b><br><br>
+                        <b>Escopo</b> é o que <b>delimita o assunto</b>.<br><br>
+                        Deseja continuar mesmo assim?
+                        </p>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:center; gap:12px; padding:14px;">
+                    <button class="nav-btn" style="padding: 3px 20px;"><u>S</u>im</button>
+                    <button class="nav-btn" style="padding: 3px 20px;"><u>N</u>ão</button>
+                    <button class="nav-btn" style="padding: 3px 20px;">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 4 -->
+        <div class="slide" id="slide-4">
+            <!-- Fundo vaporwave claro -->
+            <div class="vaporwave-bg-light"></div>
+
+            <!-- Imagem central -->
+            <div class="vaporwave-image-center">
+                <img src="https://t3.ftcdn.net/jpg/06/72/81/92/360_F_672819271_Hns1hvKCu4i7LqCLQK46sdlKZmJvWXeR.jpg" alt="Vaporwave central" />
+            </div>
+
+            <!-- Caixa de texto centralizada -->
+            <div class="textbox"
+                style="top: 50px; left: 50px; max-width: 350px; max-height: 420px;">
+                <h1 class="slide-title">
+                Destaque palavras-chave 📝
+                </h1>
+                <p class="slide-text" style="text-align: center;">
+                Guie-se por elas.<br><br>
+                Palavras-chave são importantes para lembrar você
+                do que está pesquisando.<br><br>
+                Faça anotações e não se esqueça<br>
+                de anotar as <i>referências</i>.<br>
+                <b>Use lápis e papel. </b>
+                </p>
+            </div>
+        </div>
+
+        <!-- === SLIDE 5 === -->
+        <div class="slide" id="slide-5" 
+            style="
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://wallpaperaccess.com/full/6106417.jpg');
+            background-size: cover;
+            background-position: top center; 
+            ">
+
+            <!-- IMAGEM DO INTERNET EXPLORER 4.0 -->
+            <img
+                src="https://www.webdesignmuseum.org/uploaded/old-software/web-browsers/internet-explorer/internet-explorer-4-0-01.png"
+                alt="Internet Explorer 4.0"
+                style="
+                position: absolute;
+                top: 8.5%;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 680px;
+                height: auto;
+                z-index: 2;
+                border-width: 1px;
+                border-right: #000;
+                border-bottom: #000;
+                border-style: solid
+                "
+            />
+            <!-- BARRA DE URL ESTILO WIN95 -->
+            <div
+                style="
+                position: absolute;
+                top: 20.8%;                                  /* Posição Y ajustada */
+                left: 45.5%;                                /* Centraliza em X */
+                transform: translateX(-50%) translateX(7px); /* Centraliza e ajusta para a direita do ícone */
+                width: 450px;                               /* Largura ajustada para caber no campo */
+                height: 20px;
+                font-family: 'MS Sans Serif', Arial, sans-serif;
+                font-size: 12px;
+                color: #000000;
+                line-height: 20px;
+                padding-left: 6px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                z-index: 5;
+            ">
+            http://www.duckduckgo.com/
+            </div>
+
+            <!-- IMAGEM DUCKDUCKGO 2008 (CORTADA NA PARTE INFERIOR) -->
+             <div
+                style="
+                position: absolute;
+                top: 28%;  /* Posição Y ajustada para o conteúdo começar corretamente */
+                left: 49.5%;
+                transform: translateX(-50%);
+                width: 648px; /* Largura ajustada para o conteúdo */
+                height: 350px;/* Altura aumentada para mostrar mais conteúdo (e ainda cortar, se necessário) */
+                overflow: hidden;
+                z-index: 3;
+            ">
+                <img 
+                    src="https://www.webdesignmuseum.org/uploaded/fullscreen/2008/duck-duck-go-2008.png" 
+                    alt="DuckDuckGo 2008" 
+                    style="
+                    width: 670px;
+                    height: auto;
+                    display: block;
+                    object-fit: cover;
+                    "
+                />
+            </div>
+        </div>
+
+        <!-- === SLIDE 6 === -->
+        <div class="slide" id="slide-6"
+            style="
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://wallpaperaccess.com/full/6106417.jpg');
+            background-size: cover;
+            background-position: top center;
+        ">
+            <!-- IMAGEM DO INTERNET EXPLORER 4.0 -->
+            <img
+                src="https://www.webdesignmuseum.org/uploaded/old-software/web-browsers/internet-explorer/internet-explorer-4-0-01.png"
+                alt="Internet Explorer 4.0"
+                style="
+                position: absolute;
+                top: 8.5%;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 680px;
+                height: auto;
+                z-index: 2;
+                border-width: 1px;
+                border-right: #000;
+                border-bottom: #000;
+                border-style: solid
+                "
+            />
+            <!-- BARRA DE URL ESTILO WIN95 -->
+            <div
+                style="
+                position: absolute;
+                top: 20.8%;  /* Posição Y ajustada */
+                left: 45.5%;/* Centraliza em X */
+                transform: translateX(-50%) translateX(7px); /* Centraliza e ajusta para a direita do ícone */
+                width: 450px;/* Largura ajustada para caber no campo */
+                height: 20px;
+                font-family: 'MS Sans Serif', Arial, sans-serif;
+                font-size: 12px;
+                color: #000000;
+                line-height: 20px;
+                padding-left: 6px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                z-index: 5;
+            ">
+                http://www.google.com/
+            </div>
+
+            <div
+                style="
+                position: absolute;
+                top: 28%;  /* Posição Y ajustada para o conteúdo começar corretamente */
+                left: 49.5%;
+                transform: translateX(-50%);
+                width: 648px; /* Largura ajustada para o conteúdo */
+                height: 350px;/* Altura aumentada para mostrar mais conteúdo (e ainda cortar, se necessário) */
+                overflow: hidden;
+                z-index: 3;
+            ">
+            <img
+                src="https://blogoscoped.com/files/google-com-history/1997.png"
+                alt="Google 1997"
+                style="
+                width: 670px;
+                height: auto;
+                display: block;
+                object-fit: cover;
+                "
+            />
+            </div>
+        </div>
+
+        <!-- === SLIDE 7 === -->
+        <div class="slide" id="slide-7" 
+            style="
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://wallpaperaccess.com/full/6106417.jpg');
+            background-size: cover;
+            background-position: top center; 
+            ">
+
+            <!-- IMAGEM DO INTERNET EXPLORER 4.0 -->
+            <img 
+                src="https://www.webdesignmuseum.org/uploaded/old-software/web-browsers/internet-explorer/internet-explorer-4-0-01.png" 
+                alt="Internet Explorer 4.0" 
+                style="
+                position: absolute;
+                top: 8.5%;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 680px;
+                height: auto;
+                z-index: 2;
+                border-width: 1px;
+                border-right: #000;
+                border-bottom: #000;
+                border-style: solid
+                "
+            />
+            <!-- BARRA DE URL ESTILO WIN95 -->
+            <div 
+            style="
+                position: absolute;
+                top: 20.8%;  /* Posição Y ajustada */
+                left: 45.5%;/* Centraliza em X */
+                transform: translateX(-50%) translateX(7px); /* Centraliza e ajusta para a direita do ícone */
+                width: 450px;/* Largura ajustada para caber no campo */
+                height: 20px;
+                font-family: 'MS Sans Serif', Arial, sans-serif;
+                font-size: 12px;
+                color: #000000;
+                line-height: 20px;
+                padding-left: 6px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                z-index: 5;
+            ">
+            http://www.pt.wikipedia.org/
+            </div>
+
+            <!-- IMAGEM WIKIPÉDIA 2003 (CORTADA NA PARTE INFERIOR) -->
+             <div 
+                style="
+                position: absolute;
+                top: 26%;  /* Posição Y ajustada para o conteúdo começar corretamente */
+                left: 50%;
+                transform: translateX(-50%);
+                width: 600px;
+                height: 360px; /* corta a parte inferior */
+                overflow: hidden;
+                z-index: 3;
+                ">
+                <img 
+                    src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Wikipedia2003.png" 
+                    alt="Wikipedia 2003" 
+                    style="
+                    width: 670px;
+                    height: auto;
+                    display: block;
+                    object-fit: cover;
+                    "
+                />
+            </div>
+        </div>
+
+        <div class="slide" id="slide-clippy-ajuda">
+
+          <!-- Container absoluto com posição e tamanho definidos inline -->
+            <div 
+            class="clippy-container" 
+            id="clippyContainer"
+            style="position: absolute; top: 40%; left: 15%;"
+            >
+                <!-- Balão de diálogo opcional -->
+                <div 
+                    class="speech-bubble" 
+                    id="clippySpeech"
+                    style="width: 340px; min-height: 90px;"
+                >
+                        <p style="margin: 0; white-space: normal;">
+                        1️⃣ Digite as palavras-chave e pressione <b>ENTER</b>.<br><br>
+                        2️⃣ Não abra <b>anúncios</b> ou <b>links patrocinados</b>.<br><br>
+                        3️⃣ Leia o conteúdo e veja se faz sentido com o tema.<br><br>
+                        4️⃣ Cuidado com <b>Fake News</b>!<br><br>
+                        5️⃣ <b>IAs também cometem erros</b> — verifique a fonte!
+                        </p>
+
+                    <!-- Bico do balão -->
+                    <div class="speech-tail-outline"></div>
+                    <div class="speech-tail-inner"></div>
+                </div>
+
+                <!-- Clippy -->
+                <div class="clippy">
+                    <img 
+                    id="clippyGif" 
+                    src="https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif" 
+                    alt="Clippy"
+                    />
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- === SLIDE 8 === -->
+        <div class="slide" id="slide-8" 
+            style="
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://wallpapercave.com/wp/wp2625463.png');
+            background-size: cover;
+            background-position: top center; 
+            ">
+                        <div 
+                class="textbox" 
+                style="top: 150px; right: 450px; max-width: 410px; max-height: 420px;">
+                <h1 class="slide-title">
+                Não se concentre em uma fonte só 🌐
+                </h1>
+                <p class="slide-text">
+                Organize as ideias no papel e colha as informações mais interessantes.<br>
+                Para isso, abra um <b>Editor de Texto</b>.<br>
+                Copie e cole apenas depois de ler o texto, compreendê-lo e perceber que ele é relevante para a pesquisa.<br>
+                <div style="margin-left: 2em;"> 
+                    <b>Selecione</b> o trecho desejado.<br>
+                    <b>CTRL+C:</b> Copia o texto<br>
+                    <b>CTRL+V:</b> Cola o texto<br><br>
+                </div>
+                Não se esqueça de anotar também de onde você está retirando esta informação.
+                <br>
+                
+                </p>
+            </div>
+        </div>
+
+        
+        <!-- === SLIDE 9 === -->
+        <div class="slide" id="slide-9" >
+            <div class="neon-triangle"></div>
+
+            <h1 class="google-docs-title">Google Docs</h1>
+
+            <img
+                src="https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_document_x256.png"
+                alt="Google Docs Icon"
+                class="google-docs-icon"
+            />
+                      <!-- Container absoluto com posição e tamanho definidos inline -->
+            <div 
+            class="clippy-container" 
+            id="clippyContainer"
+            style="position: absolute; top: 60%; left: 65%;"
+            >
+                <!-- Balão de diálogo opcional -->
+                <div 
+                    class="speech-bubble" 
+                    id="clippySpeech"
+                    style="width: 330px; min-height: 20px;"
+                >
+                    <span class="typewriter" style="word-wrap: break-word;">
+                    Vamos utilizar o Google Docs para criar nosso texto!
+                    </span>
+
+                    <!-- Bico do balão -->
+                    <div class="speech-tail-outline"></div>
+                    <div class="speech-tail-inner"></div>
+                </div>
+
+                <!-- Clippy -->
+                <div class="clippy">
+                    <img 
+                    id="clippyGif" 
+                    src="https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif" 
+                    alt="Clippy"
+                    />
+                </div>
+            </div>
+        </div>
+
+
+  <!-- Última DIV -->
+  </div>
+
+  <!-- Botões -->
+  
+      <div id="navigation-controls">
+        <button class="nav-btn" id="prev-btn" disabled>← Voltar</button>
+        <button class="nav-btn" id="next-btn">Avançar →</button>
+    </div>
+  
+</div>
+
+<script>
+
+    const sliderComponent = document.querySelector('.slider-component');
+    const slideTrack = document.getElementById('slideTrack');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+    
+    // Array global de GIFs do Clippy
+    const clippyGifs = [
+    "https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif",
+    "https://media.tenor.com/oa56X7RLjokAAAAj/clippy.gif",
+    "https://media.tenor.com/T808PcBj4tgAAAAj/clippy.gif",
+    "https://media.tenor.com/65uqptB8qOkAAAAi/clippy.gif"
+    ];
+
+    let currentGifIndex = 0;
+    let clippyInterval;
+
+    /**
+     * Inicia sequência dos GIFs.
+     * @param {boolean} playAll - se true, percorre toda a sequência; se false, mostra apenas o primeiro.
+     */
+    function playClippySequence(playAll = false) {
+        const clippyGif = document.getElementById("clippyGif");
+        if (!clippyGif) return;
+
+        clearInterval(clippyInterval);
+        currentGifIndex = 0;
+
+        // Sempre exibe o primeiro GIF
+        clippyGif.src = clippyGifs[0];
+
+        // Se playAll for falso, não há sequência
+        if (!playAll) return;
+
+        // Caso contrário, roda a sequência completa
+        clippyInterval = setInterval(() => {
+            currentGifIndex = (currentGifIndex + 1) % clippyGifs.length;
+            clippyGif.src = clippyGifs[currentGifIndex];
+        }, 2500);
+    }
+
+    function setupSliderDimensions() {
+        const w = sliderComponent.offsetWidth;
+        slides.forEach(slide => slide.style.width = `${w}px`);
+        slideTrack.style.width = `${w * totalSlides}px`;
+        updateSlidePosition(currentSlide);
+    }
+    function updateSlidePosition(i) {
+    const w = sliderComponent.offsetWidth;
+    slideTrack.style.transform = `translateX(${-i * w}px)`;
+
+    // Interrompe qualquer sequência anterior
+    clearInterval(clippyInterval);
+
+        // Executa o Clippy apenas no slide 1
+        if (i === 0) {
+            playClippySequence(true);
+        } else {
+            const clippyGif = document.getElementById("clippyGif");
+            if (clippyGif) clippyGif.src = "";
+        }
+    }
+
+    function updateNavButtons() {
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlidePosition(currentSlide);
+        updateNavButtons();
+        }
+    }
+    function prevSlide() {
+        if (currentSlide > 0) {
+        currentSlide--;
+        updateSlidePosition(currentSlide);
+        updateNavButtons();
+        }
+    }
+    setupSliderDimensions();
+    updateNavButtons();
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('resize', setupSliderDimensions);
+</script>

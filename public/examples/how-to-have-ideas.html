@@ -1,0 +1,499 @@
+<body>
+  <style>
+    :root {
+      --slide-height: 600px;
+      --desktop-color: #1c0016;
+      --window-primary-color: #b20bdb;
+      --window-analog-color: #f01fc3;
+      --window-contrast-color: #000;
+      --titlebar-font-size: 1rem;
+      --content-font-size: 1.1rem;
+      --content-font-color: #ccc;
+      --content-item-font-color: #eee;
+      --content-highlight: #bbb;
+      --content-background-color: #111;
+      --content-font-family: 'Courier New', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--desktop-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: var(--slide-height);
+      margin: 0;
+      color: -var(window-primary-color);
+      font-family: var(--content-font-family);
+    }
+
+    /* --- JANELA PRINCIPAL --- */
+    .window {
+      position: relative;
+      width: 720px;
+      height: 520px;
+      background-color: var(--content-background-color);
+      border: 3px solid var(--window-primary-color);
+      box-shadow: 0 0 12px var(--window-primary-color);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- BARRA DE TÍTULO --- */
+    .title-bar {
+      background-color: var(--window-contrast-color);
+      border-bottom: 2px solid var(--window-primary-color);
+      color: var(--window-primary-color);
+      padding: 4px 6px;
+      font-size: var(--titlebar-font-size);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .title-btn {
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--window-primary-color);
+      background: var(--window-contrast-color);
+      color: var(--window-primary-color);
+      text-align: center;
+      font-size: 10px;
+      line-height: 10px;
+      cursor: pointer;
+    }
+
+    .title-btn:hover {
+      background-color: var(--window-primary-color);
+      color: var(--window-contrast-color);
+    }
+
+    /* --- ÁREA DE CONTEÚDO COM ROLAGEM --- */
+    .content {
+      position: relative;
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      border-top: 1px solid var(--window-primary-color);
+    }
+
+    .content-inner {
+      flex: 1;
+      padding: 10px;
+      overflow: hidden;
+      color: var(--content-font-color);
+      font-size: var(--content-font-size);
+      line-height: 1.4;
+    }
+
+    /* === ESTILO DOS TÍTULOS DOS ITENS DE CONTEÚDO ANINHADO === */
+    .content-inner ol {
+      list-style: decimal-leading-zero;
+      margin-left: 2em;
+      padding-left: 1em;
+      color: var(--content-highlight);
+      counter-reset: section;
+    }
+
+    /* Cada item numerado */
+    .content-inner ol>li {
+      color: var(--content-item-font-color);
+      margin-top: 18px;
+      margin-bottom: 6px;
+      font-size: 1.1rem;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+
+    /* Efeito de brilho intermitente no título ativo (opcional, estilo terminal vivo) */
+    @keyframes glowTitle {
+
+      0%,
+      100% {
+        text-shadow: 0 0 4px #ff8080, 0 0 8px #ff2020;
+      }
+
+      50% {
+        text-shadow: 0 0 10px #ffb3b3, 0 0 20px #ff4040;
+      }
+    }
+
+    .content-inner ol>li.active {
+      font-weight: bold;
+      animation: glowTitle 1.8s infinite;
+    }
+
+    .content-inner p.active {
+      color: var(--window-analog-color);
+      font-weight: bold;
+      text-shadow: 0 0 8px var(--window-primary-color);
+      animation: glowTitle 2s infinite ease-in-out;
+    }
+
+
+    /* === BLOCO DE CITAÇÃO / QUOTE (estilo terminal retrô) === */
+    .content-inner .quote {
+      position: relative;
+      margin: 20px 2em;
+      padding: 12px 18px;
+      background-color: rgba(17, 0, 25, 0.7);
+      border-left: 3px solid var(--window-analog-color);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--content-highlight);
+      font-family: var(--content-font-family);
+      font-size: 1rem;
+      line-height: 1.5;
+      box-shadow: inset 0 0 10px rgba(240, 31, 195, 0.2);
+      text-shadow: 0 0 4px rgba(255, 0, 128, 0.4);
+      border-radius: 6px;
+      backdrop-filter: blur(2px);
+    }
+
+    /* Barra lateral animada em gradiente */
+    .content-inner .quote::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -3px;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to bottom,
+          var(--window-analog-color),
+          var(--window-primary-color));
+      animation: pulseBar 2.5s infinite ease-in-out;
+    }
+
+    .content-inner .quote .source {
+      display: block;
+      margin-top: 10px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--content-item-font-color);
+      opacity: 0.8;
+      font-style: italic;
+    }
+
+    .content-inner p.active {
+      color: var(--window-analog-color);
+      font-weight: bold;
+      text-shadow: 0 0 8px var(--window-primary-color);
+      animation: glowTitle 2s infinite ease-in-out;
+    }
+
+    /* Container geral */
+    .clippy-container {
+        position: absolute;
+        z-index: 100;
+    }
+
+    /* Clippy */
+    .clippy {
+        position: relative;
+        width: 130px;
+        height: auto;
+        image-rendering: pixelated;
+        animation: floatClippy 3s ease-in-out infinite;
+        margin-top: 16px; /* distancia entre balão e clippy */
+        margin-left: 170px;
+    }
+
+
+    /* --- SCROLLBAR --- */
+    .scrollbar {
+      width: 18px;
+      background: var(--window-contrast-color);
+      border-left: 2px solid var(--window-primary-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0;
+    }
+
+    .scroll-btn {
+      flex-shrink: 0;
+      width: 100%;
+      height: 18px;
+      border: 2px solid var(--window-primary-color);
+      background-color: var(--window-contrast-color);
+      color: var(--window-primary-color);
+      font-size: 12px;
+      text-align: center;
+      line-height: 12px;
+      cursor: pointer;
+    }
+
+    .scroll-btn:hover {
+      background-color: var(--window-primary-color);
+      color: var(--window-contrast-color);
+    }
+
+    .scroll-track {
+      position: relative;
+      flex: 1;
+      margin: 2px 0;
+      background-color: var(--window-contrast-color);
+      border-top: 1px solid var(--window-primary-color);
+      border-bottom: 1px solid var(--window-primary-color);
+    }
+
+    .scroll-thumb {
+      position: absolute;
+      top: 0;
+      left: 2px;
+      width: 10px;
+      height: 40px;
+      background-color: var(--window-primary-color);
+      cursor: grab;
+    }
+
+    .scroll-thumb:active {
+      cursor: grabbing;
+      background-color: var(--window-analog-color);
+    }
+  </style>
+
+
+  <div class="window">
+    <div class="title-bar">
+      <span>$ tail -f clippy.txt</span>
+      <div class="title-buttons">
+        <div class="title-btn">▢</div>
+        <div class="title-btn">✖</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="content-inner" id="contentInner">
+        <p>Clippy.log >> </p>
+        <p>Detectando ideias no servidor principal.</p>
+        <p>Reconfigurando serviço de imaginação...</p>
+        <p>Ativando curiosidade...</p>
+        <p>Procedendo com a criatividade.</p>
+        <p>### STATUS ###</p>
+        <p>- Sistemas de improbabilidade: Ativos</p>
+        <p>- Neurônios: Funcionando</p>
+        <p>- Backup: 78%</p>
+        <p>- Risco de insight: ALTO</p>
+        <p>### COMO TER IDEIAS ###...</p>
+        <ol>
+          <li>Ser uma pessoa criativa</li>
+          <li>Ideias podem não ser originais</li>
+          <li>Treine seu cérebro</li>
+          <li>Exercício de Imaginação (... e se?)</li>
+          <li>Não aceite a realidade como ela é</li>
+          <li>Tenha boas Refs</li>
+        </ol>
+        <br>
+        <p>Iniciando o Processo Criativo...</p>
+        <ol>
+          <li class="active">Ser uma pessoa criativa</li>
+          <p>Ser criativo é <u>resolver problemas</u>.</p>
+          <p>Pensar criticamente é um poder valioso</p>
+          <p>Te torna uma pessoa mais adaptável</p>
+          <li class="active">Ideias podem não ser originais</li>
+          <p>Originalidade é um <u>conceito frágil</u>.</p>
+          <p>Pessoas têm resistência ao novo</p>
+          <p>A inteligência humana é coletiva</p>
+          <div class="quote">.(...)Um delicado equilíbrio entre o familiar e o que é novo.
+            <span class="source">– Raymond Loewy</span>
+          </div>
+          <li class="active">Treine seu cérebro</li>
+          <p>Esta é uma habilidade para tod0s. Criatividade é treino.</p>
+        </ol>
+
+        <br>
+
+        <p>### BOAS PRÁTICAS (EXERCÍCIOS) ###</p>
+        <ol>
+          <li>E Se...? Exercício de Imaginação</li>
+          <p>Permita-se imaginar cenários improváveis. <br>A pergunta <u>"E se?"</u> é o gatilho da invenção.</p>
+
+          <li>Questione</li>
+          <p>Não aceite a realidade como ela é.</p>
+          <p>Ser questionador# é perguntar por que aquilo é assim.</p>
+          <p>Não aceite como as coisas são “normalmente”.</p>
+
+          <li>Esgote as possibilidades</li>
+          <p>Faça um exercício de juntar coisas improváveis.</p>
+          <p>Ser criativ0 não é ser original — é combinar o inesperado.</p>
+
+          <li>Tenha Boas Referências</li>
+          <p>Referências são combustível mental. Alimente seus interesses e estimule o cérebro.</p>
+
+          <li>Pratique Escrita</li>
+          <p>Externalize. Materialize. Escrever é criar conexões no cérebro e organizar ideias.</p>
+        </ol>
+
+        <br>
+
+        <p>### POSTURAS DE VIDA ###</p>
+        <ol>
+          <li>Ter boas ideias está ao alcance de todos</li>
+          <p>Criatividade não é um dom inalcançável — é uma prática humana.</p>
+
+          <li>Pratique com sua alma</li>
+          <p>Curiosidade é uma postura de vida.</p>
+
+          <li>Entre em contato com o mundo</li>
+          <p>Observe, explore e vivencie experiências novas.</p>
+
+          <li>Converse e troque ideias</li>
+          <p>Boas conversas criam sinapses criativas.</p>
+
+          <li>Seja aberto</li>
+          <p>Flexibilidade mental é um dos maiores ativos da imaginação.</p>
+
+          <li>Seja interessad0 pelo mundo</li>
+          <p>Nutrir e exercitar a mente depende de curiosidade genuína.</p>
+
+          <li>A criatividade também é experiência de vida</li>
+          <p>Cada história vivida é um novo banco de ideias possíveis.</p>
+
+          <li>Pratique abertura e humildade</li>
+          <p>Reconhecer limitações é o primeiro passo para inovar dentro delas.</p>
+
+          <li>Abrace suas limitações</li>
+          <p>Não podemos tudo — e é justamente isso que nos força a criar soluções novas.</p>
+          <p>Limites estimulam o raciocínio criativo e o improviso.</p>
+        </ol>
+
+          <li>Resumo dos Exercícios:</li>
+          <ul>
+            <li>Sair do óbvio → Criações menos óbvias.</li>
+            <li>Nutrir o cérebro com referências.</li>
+            <li>Praticar escrita regularmente.</li>
+          </ul>
+
+          <li>Resumo das Posturas:</li>
+          <ul>
+            <li>Ser curios0 é uma virtude.</li>
+            <li>Ser abert0, também ajuizad0.</li>
+            <li>Humildade é abertura.</li>
+          </ul>
+
+        <div class="quote">
+          "A criatividade não é sobre ter todas as respostas, mas sobre fazer as perguntas certas."
+          <span class="source">– Clippy.exe</span>
+        </div>
+      </div>
+
+      <div class="scrollbar">
+        <div class="scroll-btn" id="scrollUp">▲</div>
+        <div class="scroll-track" id="scrollTrack">
+          <div class="scroll-thumb" id="scrollThumb"></div>
+        </div>
+        <div class="scroll-btn" id="scrollDown">▼</div>
+      </div>
+    </div>
+
+                <!-- Container absoluto com posição e tamanho definidos inline -->
+            <div 
+                class="clippy-container" 
+                id="clippyContainer"
+                style="position: absolute; top: 70%; left: 55%;"
+                >
+
+                <!-- Clippy -->
+                <div class="clippy">
+                    <img 
+                    id="clippyGif" 
+                    src="https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif" 
+                    alt="Clippy"
+                    />
+                </div>
+            </div>
+  </div>
+
+  <script>
+
+    const contentInner = document.getElementById("contentInner");
+    const scrollThumb = document.getElementById("scrollThumb");
+    const scrollTrack = document.getElementById("scrollTrack");
+    const scrollUp = document.getElementById("scrollUp");
+    const scrollDown = document.getElementById("scrollDown");
+
+    function updateScroll() {
+      const contentHeight = contentInner.scrollHeight;
+      const visibleHeight = contentInner.clientHeight;
+      const scrollable = contentHeight - visibleHeight;
+      const trackHeight = scrollTrack.clientHeight;
+      const thumbHeight = Math.max(30, trackHeight * (visibleHeight / contentHeight));
+      scrollThumb.style.height = `${thumbHeight}px`;
+
+      const scrollPercent = contentInner.scrollTop / scrollable;
+      const maxTop = trackHeight - thumbHeight;
+      scrollThumb.style.top = `${scrollPercent * maxTop}px`;
+    }
+
+    function scrollToThumb(y) {
+      const trackHeight = scrollTrack.clientHeight;
+      const thumbHeight = scrollThumb.offsetHeight;
+      const maxTop = trackHeight - thumbHeight;
+      const scrollable = contentInner.scrollHeight - contentInner.clientHeight;
+      const percent = y / maxTop;
+      contentInner.scrollTop = percent * scrollable;
+    }
+
+    scrollThumb.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      const startY = e.clientY;
+      const startTop = parseInt(window.getComputedStyle(scrollThumb).top);
+      const onMouseMove = (ev) => {
+        const deltaY = ev.clientY - startY;
+        let newTop = Math.max(0, Math.min(startTop + deltaY, scrollTrack.clientHeight - scrollThumb.offsetHeight));
+        scrollToThumb(newTop);
+        updateScroll();
+      };
+      const onMouseUp = () => {
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+      };
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+    });
+
+    scrollUp.addEventListener("click", () => {
+      contentInner.scrollTop -= 40;
+      updateScroll();
+    });
+
+    scrollDown.addEventListener("click", () => {
+      contentInner.scrollTop += 40;
+      updateScroll();
+    });
+
+    // Array global de GIFs do Clippy
+    const clippyGifs = [
+    "https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif",
+    "https://media.tenor.com/oa56X7RLjokAAAAj/clippy.gif",
+    "https://media.tenor.com/T808PcBj4tgAAAAj/clippy.gif",
+    "https://media.tenor.com/65uqptB8qOkAAAAi/clippy.gif"
+    ];
+
+    function playClippySequence() {
+      const clippyGif = document.getElementById("clippyGif");
+      if (!clippyGif) return;
+
+      let index = 0;
+      setInterval(() => {
+        index = (index + 1) % clippyGifs.length;
+        clippyGif.src = clippyGifs[index];
+      }, 2500);
+    }
+
+    contentInner.addEventListener("scroll", updateScroll);
+    window.addEventListener("resize", updateScroll);
+    updateScroll();
+    playClippySequence();
+  </script>
+
+</body>
