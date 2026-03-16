@@ -71,7 +71,7 @@ export default function HistoryPage() {
     })
 
     return list
-  }, [activities, sortKey, filterStatus, filterClassroom, searchText])
+  }, [activities, sortKey, filterStatus, filterClassroom, filterYear, searchText])
 
 
   return (
@@ -122,10 +122,10 @@ export default function HistoryPage() {
 
       {/* Painel de filtros */}
       {showFilter && (
-        <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-3 gap-4">
-          
+        <div>
+
           {/* Pesquisar por Título ou Tag */}
-          <div className="md:col-span-2">
+          <div className="p-3 md:col-span-2">
             <label className="block text-sm font-medium mb-1">Pesquisar por Título ou Tag</label>
             <input
               type="text"
@@ -135,67 +135,69 @@ export default function HistoryPage() {
               className="border rounded p-1 w-full"
             />
           </div>
-          
-          {/* Filtrar por Status */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as ActivityStatus | "")}
-              className="border rounded p-1 w-full"
-            >
-              <option value="">Todos</option>
-              <option value="not_assigned">Sem atribuição</option>
-              <option value="assigned">Atribuída</option>
-              <option value="in_progress">Em andamento</option>
-              <option value="completed">Concluída</option>
-              <option value="cancelled">Cancelada</option>
-            </select>
-          </div>
 
-          {/* Filtrar por Turma */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Filtrar por Turma</label>
-            <select
-              value={filterClassroom}
-              onChange={(e) => {
-                  const selected = e.target.value;
-                  setFilterClassroom(selected);
-                  setCurrentClassroom(selected);
+          <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-2 md:grid-cols-3 gap-4">
+      
+            {/* Filtrar por Status */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as ActivityStatus | "")}
+                className="border rounded p-1 w-full"
+              >
+                <option value="">Todos</option>
+                <option value="not_assigned">Sem atribuição</option>
+                <option value="assigned">Atribuída</option>
+                <option value="in_progress">Em andamento</option>
+                <option value="completed">Concluída</option>
+                <option value="cancelled">Cancelada</option>
+              </select>
+            </div>
+
+            {/* Filtrar por Turma */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Filtrar por Turma</label>
+              <select
+                value={filterClassroom}
+                onChange={(e) => {
+                    const selected = e.target.value;
+                    setFilterClassroom(selected);
+                    setCurrentClassroom(selected);
+                  }
                 }
-              }
-              className="border rounded p-1 w-full"
-            >
-              <option value="">Todas</option>
-              {classrooms.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
+                className="border rounded p-1 w-full"
+              >
+                <option value="">Todas</option>
+                {classrooms.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Filtrar por Ano */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Filtrar por Ano</label>
-            <select
-              value={filterYear}
-              onChange={(e) => {
-                  const selected = e.target.value;
-                  setFilterYear(selected);
-                }
-              }
-              className="border rounded p-1 w-full"
-            >
-              <option value="">Todas</option>
-              {classrooms.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
+            {/* Filtrar por Ano */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Filtrar por Ano</label>
+              <select
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value)}
+                className="border rounded p-1 w-full"
+              >
+                <option value="">Todos</option>
+{/*                 {activities.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.date.getFullYear()}
+                  </option>
+                ))} */}
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+              </select>
+            </div>
+          </div>      
         </div>
       )}
 
