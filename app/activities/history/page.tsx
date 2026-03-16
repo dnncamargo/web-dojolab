@@ -20,6 +20,7 @@ export default function HistoryPage() {
   const [sortKey, setSortKey] = useState<"title" | "classroom" | "date" | "status">("date")
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "">("")
   const [filterClassroom, setFilterClassroom] = useState<string>("")
+  const [filterYear, setFilterYear] = useState<string>("")
   const [searchText, setSearchText] = useState<string>("") 
 
   useEffect(() => {
@@ -38,6 +39,11 @@ export default function HistoryPage() {
     // filter by classroom
     if (filterClassroom) {
       list = list.filter((a) => a.classroomId === filterClassroom)
+    }
+
+    // filter by year
+    if (filterYear) {
+      list = list.filter((a) => a.date.getFullYear().toString() === filterYear)
     }
 
         // FILTRO DE TEXTO (Título ou Tag)
@@ -116,9 +122,9 @@ export default function HistoryPage() {
 
       {/* Painel de filtros */}
       {showFilter && (
-        <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mb-4 p-3 bg-gray-100 rounded grid grid-cols-1 md:grid-cols-3 gap-4">
           
-          {/* NOVO CAMPO DE PESQUISA ADICIONADO */}
+          {/* Pesquisar por Título ou Tag */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1">Pesquisar por Título ou Tag</label>
             <input
@@ -130,6 +136,7 @@ export default function HistoryPage() {
             />
           </div>
           
+          {/* Filtrar por Status */}
           <div>
             <label className="block text-sm font-medium mb-1">Filtrar por Status</label>
             <select
@@ -146,6 +153,7 @@ export default function HistoryPage() {
             </select>
           </div>
 
+          {/* Filtrar por Turma */}
           <div>
             <label className="block text-sm font-medium mb-1">Filtrar por Turma</label>
             <select
@@ -166,6 +174,28 @@ export default function HistoryPage() {
               ))}
             </select>
           </div>
+
+          {/* Filtrar por Ano */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Filtrar por Ano</label>
+            <select
+              value={filterYear}
+              onChange={(e) => {
+                  const selected = e.target.value;
+                  setFilterYear(selected);
+                }
+              }
+              className="border rounded p-1 w-full"
+            >
+              <option value="">Todas</option>
+              {classrooms.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
         </div>
       )}
 
