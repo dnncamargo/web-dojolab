@@ -32,9 +32,12 @@ export default function HistoryPage() {
     let list: activity[] = [...activities]
 
     // filter by status
-    if (filterStatus) {
-      list = list.filter((a) => a.status === filterStatus)
-    }
+    list = filterStatus 
+    ? list.filter((a) => a.status === filterStatus) 
+    : list.filter((a) => a.status !== "cancelled");
+    //if (filterStatus) {
+      //list = list.filter((a) => a.status === filterStatus)
+    //}
 
     // filter by classroom
     if (filterClassroom) {
@@ -151,7 +154,7 @@ export default function HistoryPage() {
                 <option value="assigned">Atribuída</option>
                 <option value="in_progress">Em andamento</option>
                 <option value="completed">Concluída</option>
-                <option value="cancelled">Cancelada</option>
+                <option value="cancelled">Arquivada</option>
               </select>
             </div>
 
