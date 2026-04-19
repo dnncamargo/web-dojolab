@@ -1,0 +1,938 @@
+<div class="slider-component">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+    :root {
+      /* Color Scheme */
+      --bg: #300924;
+      --analogous: #C4A000;
+      --primary: #4E9A06;
+      --bright: #437fb8;
+      --shadow: #262a2c;
+      --glow: 0 0 8px rgba(204, 248, 5, 0.671);
+      --secondary: #E95420;
+      --hightlight: #f0e2dd;
+      --dimmer: #495553;
+      --title: #948f8f;
+      --text: #EEEEEC;
+      --white: #fff;
+      --invert: #2E3436;
+      --muted: #868686;
+
+      /* Values */
+      --max-height: 720px;
+      --title-font-size: 3.2rem;
+      --content-font-size: 1.6rem;
+      --terminal-font-size: 1.1rem;
+      --default-border-size: 4px;
+    }
+
+    .slider-component {
+      width: 100%;
+      height: 720px;
+      /* Altura padrão dos slides */
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Noto Sans', sans-serif;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--analogous) 1px, transparent 1px),
+        linear-gradient(90deg, var(--analogous) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    /* TRACK */
+    .slide-track {
+      display: flex;
+      height: 91%;
+      transition: transform .5s ease-in-out;
+    }
+
+    .slide {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 40px;
+      position: relative;
+    }
+
+
+    /* WINDOW */
+    .window {
+      background: var(--invert);
+      border: var(--default-border-size) solid var(--primary);
+      height: 100%;
+      padding: 30px;
+      position: relative;
+    }
+
+    /* Sombras esquerda e inferior */
+    .window:before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 18px;
+      width: 14px;
+      height: 100%;
+      background: var(--shadow);
+    }
+
+    .window:after {
+      content: '';
+      position: absolute;
+      left: -4px;
+      bottom: -18px;
+      width: 99%;
+      height: 14px;
+      background: var(--shadow);
+    }
+
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cover-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* texto sobreposto */
+    .cover-title {
+      position: absolute;
+      top: 200px;
+      bottom: 200px;
+      right: 200px;
+      left: 200px;
+      display: flex;
+      align-items: center;
+      /* centraliza vertical */
+      justify-content: center;
+      /* centraliza horizontal */
+      text-align: center;
+      padding: 100px;
+      box-sizing: border-box;
+    }
+
+    .cover-title .title {
+      margin: 0;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+    }
+
+    /* TITLE */
+    .title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: var(--title-font-size);
+      font-weight: 900;
+      color: var(--primary);
+      -webkit-text-stroke: var(--default-border-size) #000;
+      text-transform: uppercase;
+      margin: 0 0 20px 0;
+    }
+
+    .divider {
+      height: var(--default-border-size);
+      background: var(--primary);
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* CONTENT */
+    .content {
+      display: flex;
+      align-items: flex-start;
+      width: 100%;
+      height: calc(100% - 100px);
+      font-size: var(--content-font-size);
+      line-height: 2.3rem;
+      color: var(--text);
+      gap: 20px;
+    }
+
+    em {
+      display: inline;
+      color: var(--white);
+      font-style: normal;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .highlight {
+      color: var(--hightlight);
+    }
+
+    /* LAYOUTS */
+
+    /* ===== DIREÇÃO ===== */
+    .row {
+      flex-direction: row;
+    }
+
+    .col {
+      flex-direction: column;
+    }
+
+    /* ===== FILHOS ===== */
+    .content>div {
+      flex: 1;
+    }
+
+    /* ===== CENTRALIZAÇÃO ===== */
+    .ycenter {
+      display: flex;
+      justify-content: center;
+    }
+
+    .xcenter {
+      display: flex;
+      align-items: center;
+    }
+
+    .tcenter {
+      display: flex;
+      text-align: center;
+    }
+
+    .scenter {
+      align-self: center;
+    }
+
+    .padding {
+      padding: 20px;
+    }
+
+    .inline {
+      display: inline;
+    }
+
+    /* TEXTBOX */
+    .textbox {
+      background: var(--dark);
+      border: 1px solid var(--primary);
+    }
+
+    .tb-head {
+      background: var(--text);
+      padding: 6px;
+    }
+
+    .tb-body {
+      font-size: var(--terminal-font-size);
+      line-height: 1.2rem;
+      padding: 10px;
+      font-family: monospace;
+      color: #ccc;
+    }
+
+    /* TERMINAL */
+    .terminal {
+      background: var(--primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: var(--glow);
+      padding: 8px 8px 10px;
+      /* up lateral down */
+      color: var(--hightlight);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: 70%;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .term-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--hightlight);
+      margin-bottom: 10px;
+    }
+
+    .term-header span {
+      font-family: 'Noto Sans', sans-serif;
+      line-height: 2;
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+
+    .term-body,
+    .term-body li {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: var(--terminal-font-size);
+      line-height: 1;
+      padding: 2px 3px;
+      /* vertical horizontal */
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .control-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--hightlight);
+    }
+
+    code {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50%;
+      margin: 0 auto;
+      margin-top: 6px;
+      background-color: rgba(148, 163, 184, 0.15);
+      border-left: 3px solid var(--primary);
+      color: var(--normal-shadow);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* IMAGEM */
+    .media-frame {
+      height: 100%;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      overflow: hidden;
+      /* border-radius: 14px; */
+      border: var(--default-border-size) solid var(--primary);
+      background: transparent;
+      position: relative;
+    }
+
+    .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      object-position: center;
+      display: block;
+    }
+
+    .media-frame iframe {
+      display: block;
+      object-fit: contain;
+      /* aspect-ratio: 9 / 16; */
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .media-frame.vertical-media {
+      /* Reseta larguras fixas horizontais anteriores se houver */
+      width: auto;
+      max-width: 100%;
+
+      /* Define a altura máxima para não estourar o slide (ajuste conforme necessário) */
+      height: 100%;
+      max-height: 350px;
+      /* Altura sugerida para caber abaixo do diagrama */
+
+      /* Define a proporção vertical (ex: 3:4 ou 9:16) */
+      /* O GIF específico parece ser aproximadamente 3:4 */
+      aspect-ratio: 3 / 4;
+
+      /* Mantém o estilo visual */
+      border: none;
+      background: transparent;
+      /* Remove o fundo preto antigo */
+      margin: 0 auto;
+      /* Centraliza horizontalmente */
+      overflow: hidden;
+      transform: scale(0.7);
+    }
+
+    .media-frame.vertical-media iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+
+      /* Garante que o GIF apareça inteiro sem cortes */
+    }
+
+    .window-footer {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      width: calc(100% - 330px);
+      /* evita área dos botões à direita */
+
+      background: var(--secondary);
+      border: var(--default-border-size) solid var(--primary);
+      border-radius: 0;
+      /* cantos retos */
+
+      padding: 10px 10px;
+      box-sizing: border-box;
+
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 400;
+
+      max-height: 2.6em;
+      /* ~2 linhas */
+      overflow: hidden;
+    }
+
+    /* NAV */
+    .nav-container {
+      position: absolute;
+      bottom: 50px;
+      right: 50px;
+      display: flex;
+      gap: 20px;
+    }
+
+    /* BOTÃO CIRCULAR */
+    .nav-circle {
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+    }
+
+    .nav-circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      stroke: var(--dimmer);
+      stroke-width: 6;
+      fill: none;
+    }
+
+    .circle-progress {
+      stroke: var(--hightlight);
+      stroke-width: 7;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 188;
+      stroke-dashoffset: 188;
+      transition: .4s ease;
+    }
+
+    /* SETA */
+    .arrow {
+      position: absolute;
+      width: 70px;
+      height: 49px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      color: var(--hightlight);
+      pointer-events: none;
+    }
+  </style>
+
+  <div class="slide-track" id="track">
+
+    <!-- CAPA -->
+    <div class="slide">
+      <div class="window window-cover">
+        <div class="cover-bg">
+          <img
+            src="https://super.abril.com.br/wp-content/uploads/2016/09/super_imgdispositivo_nesd.jpg?w=1920&h=1024&crop=1">
+        </div>
+        <div class="cover-title">
+          <div class="title">
+            OLÁ MUNDO DA PROGRAMAÇÃO
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 1 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Por que Programar?</div>
+        <div class="divider"></div>
+        <div class="content row xcenter">
+          <div class="col ycenter">
+            <span style="font-size: 1.2rem;">Antes de mais nada, <br>Bem-vindo ao mundo onde você ensina o computador a
+              pensar</span>
+            <ul>
+              <li>Resolver <em>problemas</em> do mundo real.</li>
+              <li><em>Criar</em> jogos, apps e robôs</li>
+              <li><em>Automatizar</em> tarefas</li>
+              <li>Dar <em>"inteligência"</em> às máquinas</li>
+            </ul>
+          </div>
+          <div class="col ycenter ">
+            <div class="media-frame">
+              <img src="https://media1.tenor.com/m/pPKOYQpTO8AAAAAd/monkey-developer.gif" style="height: 320px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">O que é Programar?</div>
+        <div class="divider"></div>
+        <div class="content row xcenter">
+          <div class="col ycenter">
+            <ul>
+              <li>Dar <em>instruções</em> para um computador</li>
+              <li>Usar uma <em>linguagem</em> que a máquina entenda</li>
+              <li>Resolver <em>problemas</em> passo a passo</li>
+            </ul>
+          </div>
+          <div class="col ycenter ">
+            <div class="media-frame">
+              <img src="https://media.tenor.com/5ry-200hErMAAAAM/hacker-hacker-man.gif?w=1060" style="
+                        object-fit:cover;
+                        width:100%;
+                        height: 320px;
+                        display:block;
+                        transform:scale(1);
+                        margin-bottom:-23px;
+                      ">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Elementos da Programação</div>
+        <div class="divider"></div>
+        <div class="content col">
+          Comunicação entre pessoas e sistemas:
+          <ul>
+            <li><em>Linguagem</em>: forma de comunicar</li>
+            <li><em>Código-fonte</em>: instruções escritas</li>
+            <li><em>Algoritmo</em>: passo a passo lógico</li>
+          </ul>
+          <div class="media-frame" style="overflow:hidden; max-width: 100%;">
+            <img src="https://miro.medium.com/v2/resize:fit:1400/format:png/1*Tt7EhZvdD2R7tj_Wv8ajTg.png" style="
+                    object-fit:cover;
+                    object-position: 50% 30%;
+                    height:250px;
+                    width:100%;
+                    display:block;
+                    margin-bottom:-70px;
+                  ">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title" style="font-size: 38px;">A programação é baseada no uso de Algoritmos</div>
+        <div class="divider"></div>
+        <div class="content col">
+          <div class="terminal scenter" style="margin-top: 36px;">
+            <div class="term-header">
+              O que é um ALGORITMO?
+              <div class="control-buttons">
+                <span class="control-btn term-close"></span>
+                <span class="control-btn term-min"></span>
+                <span class="control-btn term-max"></span>
+              </div>
+            </div>
+            <div class="term-body">
+              <span class="term-line">
+                Os <span class="kw">algoritmos</span> são uma sequência de instruções detalhadas passo a
+                passo.
+              </span>
+            </div>
+          </div>
+          <ul>
+            <li>São escritos por <b>programadores</b> para que uma máquina execute uma tarefa, como se fosse uma
+              <b>receita</b>.
+            </li>
+            <li>A máquina deve seguir todas as tarefas <b>exatamente como escrito</b>.</li>
+            <li>Um <b>software</b> é um conjunto de diferentes algoritmos, cada um com seu propósito</li>
+            <li>Em todo sistema robótico, seguimos esse ciclo:</li>
+          </ul>
+
+          <code>Entrada → Processamento → Saída</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Estrutura Básica dos Algoritmos</div>
+        <div class="divider"></div>
+        <p>Todo algoritmo segue uma <b>lógica de pensamento</b> organizada em três partes principais:</p>
+        <div class="content row">
+          <div class="col inline">
+            <div class="media-frame">
+              <img style="object-position: 50% 30%;"
+                src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*AwDrZh-lYZLh3uYhuCZ7Ew.jpeg">
+
+            </div>
+            <br>
+            <span style="line-height: 1.8;"><b>🟦 Sequência</b></span><br>
+            <span>
+              As ações acontecem <b>uma depois da outra</b>.<br>
+              <em>Ex: acender a luz → ligar o
+                ventilador → sentar.</em>
+            </span>
+          </div>
+          <div class="col inline">
+            <div class="media-frame">
+              <img style="object-position: 50% 30%;"
+                src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*9-U3Sq5Pa6YxJZUmZ9jEog.jpeg">
+            </div>
+            <br>
+            <span style="line-height: 1.8;"><b>🟧 Repetição</b></span><br>
+            <span>
+              Um bloco de ações que se repete <b>enquanto</b> uma condição for
+              verdadeira.<br><em>Ex: repetir 10 vezes → piscar o LED.</em>
+            </span>
+          </div>
+          <div class="col inline">
+            <div class="media-frame">
+              <img style="object-position: 50% 30%;"
+                src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*VF_-RjOZOtdUjESxW-8M8A.jpeg">
+            </div>
+            <br>
+            <span style="line-height: 1.8;"><b>🟨 Condição</b> (seleção)</b></span><br>
+            <span>
+              O algoritmo <b>decide</b> o que fazer dependendo de uma situação.<br>
+              <em>Ex: se o
+                botão for pressionado → mover o robô.</em>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Características dos Algoritmos</div>
+        <div class="divider"></div>
+        <div class="content row scenter">
+          <div class="col ycenter">
+            <ul>
+              <li>Tem <em>início, meio e fim</em></li>
+              <li>Segue uma <em>ordem lógica</em></li>
+              <li>Cada passo deve ser <em>claro e sem ambiguidade</em> </li>
+              <li>Deve resolver um problema</li>
+            </ul>
+          </div>
+          <div class="col scenter">
+            <i>Exemplo: Fazer um sanduíche</i>
+            <div class="textbox">
+              <div class="tb-head"></div>
+              <div class="tb-body">
+                <ol>
+                  <li>Pegar pacote de pão fatiado, pote de manteiga de amendoim, pote de geléia de amora, faca cega,
+                    prato </li>
+                  <li>Colocar duas fatias de pão no prato</li>
+                  <li>Abrir o pote de manteiga de amendoim</li>
+                  <li>Espalhe uma camada generosa de manteiga de amendoim em um dos lados de uma das fatias de pão.</li>
+                  <li>Espalhe a geleia de amora na outra fatia de pão</li>
+                  <li>Una as duas fatias de pão com o recheio para dentro</li>
+                  <li>NHAC!! NHAMMY!! HUUMMM!! 😋</li>
+                </ol>
+                👉 Isso é um algoritmo!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="window-footer">
+          E qual é a diferença entre um <b>algoritmo</b> e um <b>software</b>?
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Entrada → Processamento → Saída</div>
+        <div class="divider"></div>
+        <div class="content row xcenter">
+          <div class="row">
+            <i>Vamos fazer uma analogia com o corpo humano</i>
+            <div class="textbox">
+              <div class="tb-head"></div>
+              <div class="tb-body">
+                Nós também somos sistemas que <span class="highlight">percebem o ambiente</span>, <span
+                  class="highlight">processam informações</span> e
+                <span class="highlight">respondem ao meio</span>.
+              </div>
+            </div>
+            <br>
+            <div class="inline">
+              Captamos informações por meio dos <em>sentidos</em> — visão, audição, tato, olfato e paladar.
+              Essas informações chegam ao <em>cérebro</em>, onde são <em>processadas</em> e guardadas na memória.
+              Em seguida, agimos com <em>músculos</em>, <em>fala</em> e outros mecanismos que influenciam o ambiente.
+            </div>
+          </div>
+          <div class="media-frame" style="border: none;">
+            <iframe src=" https://giphy.com/embed/Wht8cSV3bN8BdslVxe" style="height: 350px;" alt="think" frameBorder="0"
+              allowFullScreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">O Sistema Humano</div>
+        <div class="divider"></div>
+
+        <div class="content col tcenter">
+
+          <div class="row ycenter xcenter" style="width: 100%; gap: 20px; flex: 0 1 auto;">
+            <div class="terminal">
+              <div class="term-body">
+                👁️👂<br><b>Entradas</b><br>
+                Sentidos<br>
+                <div class="sub">(visão, tato, audição, etc.)</div>
+              </div>
+            </div>
+
+            <div class="terminal">
+              <div class="term-body">
+                🧠<br><b>Processamento</b><br>
+                Cérebro<br>
+                <div class="sub">(decisões e memória)</div>
+              </div>
+            </div>
+
+            <div class="terminal">
+              <div class="term-body">
+                💪🗣️<br><b>Saídas</b><br>
+                Músculos e fala<br>
+                <div class="sub">(ações no ambiente)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ycenter scenter" flex: 1 1 auto; overflow: hidden;">
+            <div class="media-frame vertical-media">
+              <iframe src="https://giphy.com/embed/tqqUNjq8PWOR2" style="height: 300px;" alt="human body"
+                frameBorder="0" allowFullScreen>
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">O Sistema das Máquinas</div>
+        <div class="divider"></div>
+
+        <div class="content col scenter inline">
+          A <b>robótica</b> busca imitar esse mesmo processo:
+          <div class="row ycenter xcenter" style="width: 100%; gap: 20px; flex: 0 1 auto;">
+            <div class="terminal">
+              <div class="term-body">
+                🎛️<br><b>Entradas</b><br>
+                Sensores<br>
+                <div class="sub">(luz, som, distância...)</div>
+              </div>
+            </div>
+
+            <div class="terminal">
+              <div class="term-body">
+                🔲<br><b>Processamento</b><br>
+                Microcontrolador<br>
+                <div class="sub">(como o Arduino)</div>
+              </div>
+            </div>
+
+            <div class="terminal">
+              <div class="term-body">
+                ⚙️💡🔊<br><b>Saídas</b><br>
+                Atuadores<br>
+                <div class="sub">(motores, LEDs, buzzer, etc.)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ycenter scenter" flex: 1 1 auto; overflow: hidden;">
+            <div class="media-frame vertical-media">
+              <iframe src="https://giphy.com/embed/1lB2OXzJrMN1K" alt="robot" frameBorder="0" allowFullScreen>
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Arduino, Sensores e Atuadores</div>
+        <div class="divider"></div>
+        <div class="content row xcenter">
+          <div class="col ycenter padding">
+            Componentes dos projetos robóticos:
+            <ul>
+              <li><b>Arduino:</b> cérebro do sistema</li>
+              <li><b>Sensores:</b> captam dados do ambiente</li>
+              <li><b>Atuadores:</b> executam ações físicas</li>
+            </ul>
+          </div>
+          <div class="col ycenter padding">
+            <div class="media-frame" style="height: 340px;">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg">
+            </div>
+          </div>
+        </div>
+        <div class="window-footer">
+          Em nossas aulas, usaremos o microcontrolador <b>Arduino</b>, mas existem muitos outros...
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Criando Projetos robóticos</div>
+        <div class="divider"></div>
+        <div class="content row xcenter">
+          <div class="col ycenter padding">
+            O que veremos nas aulas de robótica:
+            <ul>
+              <li><b>Mecânica:</b> Engrenagens, eixos, polias ...</li>
+              <li><b>Eletrônica:</b> Tensão elétrica, resistência ...</li>
+              <li><b>Programação:</b> Criação de algoritmos</li>
+            </ul>
+          </div>
+          <div class="col ycenter padding">
+            <div class="media-frame">
+              <img src="https://victorvision.com.br/wp-content/uploads/2021/10/dicas-projetos-com-arduino.jpg"
+                style="height: 320px;">
+            </div>
+          </div>
+        </div>
+        <div class="window-footer">
+          Será que nas aulas descobriremos a diferença entre <b>Elétrica</b> e <b>Eletrônica</b>?
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Fenômenos Físicos da Eletrônica</div>
+        <div class="divider"></div>
+        <div class="content row xcenter">
+          <div class="col scenter padding">
+            Fundamentos elétricos:
+            <ul>
+              <li>Corrente elétrica</li>
+              <li>Tensão</li>
+              <li>Resistência</li>
+              <li>Polaridade</li>
+            </ul>
+          </div>
+          <div class="col scenter">
+            <div class="media-frame" style="transform: scale(0.7);">
+              <img src="https://static.preparaenem.com/2021/08/sentido-corrente-eletrica.jpg" style="object-fit:fill;
+                        height: 490px;
+                        width:100%;
+                        display:block;
+">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-container">
+
+    <!-- PREV -->
+    <div class="nav-circle" id="prev">
+      <div class="arrow" style="margin-right: 2px;">‹</div>
+      <svg width="70" height="70">
+        <circle class="circle-bg" cx="35" cy="35" r="30" />
+        <circle class="circle-progress" id="prevProgress" cx="35" cy="35" r="30" />
+      </svg>
+    </div>
+
+    <!-- NEXT -->
+    <div class="nav-circle" id="next">
+      <span class="arrow" style="margin-left: 2px;">›</span>
+      <svg width="70" height="70">
+        <circle class="circle-bg" cx="35" cy="35" r="30" />
+        <circle class="circle-progress" id="nextProgress" cx="35" cy="35" r="30" />
+      </svg>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = document.querySelectorAll('.slide');
+
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+
+  const prevProgress = document.getElementById('prevProgress');
+  const nextProgress = document.getElementById('nextProgress');
+
+  let index = 0;
+  const total = slides.length;
+
+  // circunferência
+  const CIRC = 2 * Math.PI * 30;
+
+  function update() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+
+    let progress = index / (total - 1);
+
+    // esquerda cresce
+    prevProgress.style.strokeDashoffset = CIRC * (1 - progress);
+
+    // direita diminui
+    nextProgress.style.strokeDashoffset = CIRC * progress;
+
+    prevBtn.style.opacity = index === 0 ? 0.3 : 1;
+    nextBtn.style.opacity = index === total - 1 ? 0.3 : 1;
+  }
+
+  nextBtn.onclick = () => {
+    if (index < total - 1) {
+      index++;
+      update();
+    }
+  }
+
+  prevBtn.onclick = () => {
+    if (index > 0) {
+      index--;
+      update();
+    }
+  }
+
+  update();
+</script>

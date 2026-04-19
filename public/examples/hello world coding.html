@@ -1,0 +1,1298 @@
+<div class="slider-component">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+    :root {
+      --base-color-background: #300a24;
+      --base-color-analogous: #290930;
+      --base-color-complementary: #C4A000;
+      --base-color-primary: #4E9A06;
+      --normal-content: #EEEEEC;
+      --normal-highlight: #fff;
+      --normal-shadow: #AEA79F;
+      --normal-emphasis: #C4A000;
+      --invert-content: #2E3436;
+      --invert-highlight: #E95420;
+      --invert-shadow: #262a2c;
+      --invert-empashis: #7e713b;
+      --bright: #addd00;
+      --dimmer: #262a2c;
+      --dark: #111;
+      --glow: 0 0 8px rgba(204, 248, 5, 0.671);
+      --footer-background: var(--normal-content);
+      --footer-border: var(--base-color-primary);
+
+      /* Values */
+      --max-height: 720px;
+      --title-font-size: 3.2rem;
+      --content-font-size: 1.5rem;
+      --terminal-font-size: 1.2rem;
+      --textbox-font-size: 1.2rem;
+      --list-item-font-size: 1.3rem;
+      --footer-font-size: 1.1rem;
+      --default-border-size: 4px;
+
+      --title-font-family: 'Montserrat', sans-serif;
+      --content-font-family: 'Noto Sans', sans-serif;
+      --terminal-font-family: 'Fira Code', monospace;
+    }
+
+    .slider-component {
+      width: 100%;
+      height: var(--max-height);
+      /* Altura padrão dos slides */
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Noto Sans', sans-serif;
+      background-color: var(--base-color-background);
+      background-image:
+        linear-gradient(var(--base-color-complementary) 1px, transparent 1px),
+        linear-gradient(90deg, var(--base-color-complementary) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .slide-track {
+      display: flex;
+      height: 100%;
+      transition: transform .5s ease-in-out;
+    }
+
+    .slide {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 40px;
+      position: relative;
+    }
+
+    /* Janela principal */
+    .window {
+      background: var(--invert-content);
+      height: 100%;
+      padding: 40px 50px;
+      box-sizing: border-box;
+      position: relative;
+      border: var(--default-border-size) solid var(--base-color-primary);
+    }
+
+    /* Sombras esquerda e inferior */
+    .window:before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 18px;
+      width: 14px;
+      height: 100%;
+      background: var(--invert-shadow);
+    }
+
+    .window:after {
+      content: '';
+      position: absolute;
+      left: -4px;
+      bottom: -18px;
+      width: 99%;
+      height: 14px;
+      background: var(--invert-shadow);
+    }
+
+    .window-cover {
+      position: relative;
+      padding: 0;
+      /* remove espaçamento interno */
+      overflow: hidden;
+    }
+
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cover-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* texto sobreposto */
+    .cover-title {
+      position: absolute;
+      top: 200px;
+      bottom: 200px;
+      right: 200px;
+      left: 200px;
+      display: flex;
+      align-items: center;
+      /* centraliza vertical */
+      justify-content: center;
+      /* centraliza horizontal */
+      text-align: center;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+
+    .cover-title .title {
+      margin: 0;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Título */
+    .title {
+      font-family: var(--title-font-family);
+      font-weight: 900;
+      font-size: 3rem;
+      /* Tamanho padrão do título */
+      color: var(--base-color-primary);
+      -webkit-text-stroke: 3px var(--base-color-background);
+      text-transform: uppercase;
+      margin: 0 0 20px 0;
+    }
+
+    /* Linha divisória */
+    .divider {
+      height: var(--default-border-size);
+      background: var(--base-color-primary);
+      margin: 10px 0 30px 0;
+    }
+
+    /* Conteúdo editável */
+    .content {
+      width: 100%;
+      height: calc(100% - 140px);
+      font-family: var(--terminal-font-family);
+      font-size: var(--content-font-size);
+      /* Tamanho padrão da fonte normal */
+      color: var(--normal-content);
+    }
+
+    .content b,
+    .content strong {
+      color: var(--normal-highlight);
+      font-weight: 600;
+    }
+
+    /* container horizontal */
+    .content-row {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* container vertical */
+    .content-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .window-footer {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      width: calc(100% - 330px);
+      /* evita área dos botões à direita */
+
+      background: var(--footer-background);
+      border: 3px solid var(--footer-border);
+      border-radius: 0;
+      /* cantos retos */
+
+      padding: 10px 10px;
+      box-sizing: border-box;
+
+      font-size: var(--footer-font-size);
+      line-height: 1;
+      font-weight: 400;
+
+      max-height: 2.6em;
+      /* ~2 linhas */
+      overflow: hidden;
+    }
+
+    code {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50%;
+      margin: 0 auto;
+      margin-top: 6px;
+      background-color: rgba(148, 163, 184, 0.15);
+      border-left: 3px solid var(--base-color-primary);
+      color: var(--normal-shadow);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* Variação: Duas Colunas */
+    .layout-cols {
+      flex-direction: row;
+    }
+
+    .layout-cols .col-text {
+      display: inline;
+      width: 55%;
+      padding-right: 30px;
+    }
+
+    .layout-cols .col-media {
+      width: 45%;
+      align-items: center;
+    }
+
+    /* Variação: Duas Linhas */
+    .layout-rows {
+      flex-direction: column;
+    }
+
+    .layout-rows .col-text {
+      display: inline;
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    .layout-rows .col-media {
+      width: 100%;
+      align-items: center;
+    }
+
+    /* Coluna: Texto */
+    .col-text ul {
+      margin: 20px 0 0 0;
+      padding-left: 28px;
+    }
+
+    .col-text li {
+      margin-bottom: 14px;
+    }
+
+    .col-text em {
+      color: var(--normal-emphasis);
+      font-weight: 600;
+      display: inline;
+    }
+
+    /* Coluna: Imagem */
+    .media-frame {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      overflow: hidden;
+      /* border-radius: 14px; */
+      border: 4px solid var(--base-color-primary);
+      background: transparent;
+    }
+
+    .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* iframe container */
+    .container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 470px;
+      aspect-ratio: 0.56%;
+    }
+
+    .responsive-iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 70;
+      right: 30;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Grade tripla */
+    .column-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 20px;
+      margin-top: 5px;
+      align-self: center;
+      overflow: hidden;
+    }
+
+    .column-grid img,
+    .column-grid iframe {
+      width: 90%;
+      height: 40%;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 12px;
+    }
+
+    .column span {
+      font-size: 1.5rem;
+      line-height: 1 rem;
+      text-align: justify;
+    }
+
+    .column em {
+      color: var(--normal-emphasis);
+    }
+
+    /* Textbox */
+    .textbox {
+      background: var(--dark);
+      border: 1px solid var(--base-color-primary);
+    }
+
+    .tb-head {
+      background: var(--normal-content);
+      padding: 6px;
+    }
+
+    .tb-body {
+      font-size: var(--terminal-font-size);
+      line-height: 1.2rem;
+      padding: 10px;
+      font-family: var(--terminal-font-family);
+      color: var(--normal-shadow);
+    }
+
+    /* Terminal */
+    .terminal {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid var(--dark);
+    }
+
+    /* Barra de título */
+    .term-header {
+      color: #999691;
+      background: #3c3b37;
+      font-size: 1.6 rem;
+      /* Tamanho padrão da fonte do terminal */
+      height: 36px;
+      position: relative;
+    }
+
+    /* Botões à direita */
+    .term-ctrl {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .term-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 6px;
+    }
+
+    .term-close {
+      background: #ff5f56;
+    }
+
+    .term-min {
+      background: #ffbd2e;
+    }
+
+    .term-max {
+      background: #27c93f;
+    }
+
+    /* Corpo do terminal */
+    .term-body {
+      background: var(--base-color-background);
+      /* Ubuntu terminal */
+      color: #eeeeee;
+      padding: 5px 5px;
+      font-family: var(--terminal-font-family);
+      font-size: 1.2rem;
+      /* Tamanho padrão da fonte do terminal */
+      text-align: left;
+      overflow-x: auto;
+    }
+
+    /* Linhas preservam indentação */
+    .term-line {
+      display: block;
+    }
+
+    .term-indent {
+      white-space: pre-line;
+    }
+
+    /* palavra-chave */
+    .kw {
+      color: var(--invert-highlight);
+      font-weight: 600;
+    }
+
+    /* condição */
+    .cond {
+      color: #8be9fd;
+    }
+
+    /* comentário */
+    .comment {
+      color: #6272a4;
+      font-style: italic;
+    }
+
+    /* blocos */
+    .block {
+      color: #50fa7b;
+    }
+
+    /* símbolo */
+    .sym {
+      color: #f1fa8c;
+    }
+
+    /* Botões navegação */
+    .nav-container {
+      position: absolute;
+      bottom: 50px;
+      right: 50px;
+      display: flex;
+      gap: 20px;
+    }
+
+    /* BOTÃO CIRCULAR */
+    .nav-circle {
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+    }
+
+    .nav-circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      stroke: var(--dimmer);
+      stroke-width: 6;
+      fill: none;
+    }
+
+    .circle-progress {
+      stroke: var(--base-color-primary);
+      stroke-width: 7;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 188;
+      stroke-dashoffset: 188;
+      transition: .4s ease;
+    }
+
+    /* SETA */
+    .arrow {
+      position: absolute;
+      width: 70px;
+      height: 49px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      color: var(--base-color-complementary);
+      pointer-events: none;
+    }
+  </style>
+
+  <div class="slide-track" id="slideTrack">
+
+    <!-- CAPA -->
+    <div class="slide">
+      <div class="window window-cover">
+
+        <div class="cover-bg">
+          <img src="https://super.abril.com.br/wp-content/uploads/2016/09/super_imgdispositivo_nesd.jpg">
+        </div>
+        <div class="cover-title">
+          <div class="title" style="color: var(--normal-content);">
+            OLÁ MUNDO DA PROGRAMAÇÃO
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 1 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Por que Programar?</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="layout-cols">
+            <div class="content-col col-text">
+              <span style="font-size: 1.2rem;">Antes de mais nada, <br>Bem-vindo ao mundo onde você ensina o computador
+                a pensar.</span>
+              <ul>
+                <li>Resolver <b>problemas</b> do mundo real.</li>
+                <li><b>Criar</b> jogos, apps e robôs</li>
+                <li><b>Automatizar</b> tarefas</li>
+                <li>Dar <b>"inteligência"</b> às máquinas</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <!-- ou use src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*1dMnlOGcxiJz4jshk7kz3A.png" -->
+
+                <img src="https://media1.tenor.com/m/pPKOYQpTO8AAAAAd/monkey-developer.gif" style="height: 320px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">O que é Programar?</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+
+            <div class="content-col col-text">
+              <ul>
+                <li>Dar <b>instruções</b> para um computador</li>
+                <li>Usar uma <b>linguagem</b> que a máquina entenda</li>
+                <li>Resolver <b>problemas</b> passo a passo</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img src="https://media.tenor.com/5ry-200hErMAAAAM/hacker-hacker-man.gif?w=1060" style="
+                        object-fit:cover;
+                        width:100%;
+                        height: 320px;
+                        display:block;
+                        transform:scale(1.2);
+                        margin-bottom:-23px;
+                      ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Elementos da Programação</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-rows">
+
+            <div class="content-col col-text">
+              <ul>
+                <li><b>Linguagem</b>: forma de comunicar</li>
+                <li><b>Código-fonte</b>: instruções escritas</li>
+                <li><b>Algoritmo</b>: passo a passo lógico</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame" style="overflow:hidden; max-width: 100%; position: relative;">
+                <img src="https://miro.medium.com/v2/resize:fit:1400/format:png/1*Tt7EhZvdD2R7tj_Wv8ajTg.png" style="
+                    width:100%;
+                    height:250px;
+                    object-fit:cover;
+                    object-position: 50% 10%;
+                    display:block;
+                  ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title" style="font-size: 36px;">A programação é baseada no uso de Algoritmos</div>
+        <div class="divider"></div>
+        <div class="content">
+
+          <div class="terminal" style="margin-top: 36px;">
+            <div class="term-header">
+              &nbsp;O que é um ALGORITMO?
+              <div class="term-ctrl">
+                <span class="term-btn term-close"></span>
+                <span class="term-btn term-min"></span>
+                <span class="term-btn term-max"></span>
+              </div>
+            </div>
+            <div class="term-body">
+              <span class="term-line">
+                Os <span class="kw">algoritmos</span> são uma sequência de instruções detalhadas passo a
+                passo.
+              </span>
+            </div>
+
+          </div>
+
+          <ul>
+            <li>São escritos por <b>programadores</b> para que uma máquina execute uma tarefa, como se fosse uma
+              <b>receita</b>.
+            </li>
+            <li>A máquina deve seguir todas as tarefas <b>exatamente como escrito</b>.</li>
+            <li>Um <b>software</b> é um conjunto de diferentes algoritmos, cada um com seu propósito</li>
+            <li>Em todo sistema robótico, seguimos esse ciclo:</li>
+          </ul>
+          <br>
+          <code>Entrada → Processamento → Saída</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Estrutura Básica dos Algoritmos</div>
+        <div class="divider"></div>
+        <div class="content">
+          <p>Todo algoritmo segue uma <b>lógica de pensamento</b> organizada em três partes principais:</p>
+
+          <div class="column-grid">
+            <div class="column">
+              <img style="object-position: 50% 30%;"
+                src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*AwDrZh-lYZLh3uYhuCZ7Ew.jpeg">
+              <br>
+              <span style="line-height: 1.8;"><b>🟦 Sequência</b></span><br>
+              <span>
+                As ações acontecem <b>uma depois da outra</b>.<br>
+                <em>Ex: acender a luz → ligar o
+                  ventilador → sentar.</em>
+              </span>
+            </div>
+            <div class="column">
+              <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*9-U3Sq5Pa6YxJZUmZ9jEog.jpeg">
+              <br>
+              <span style="line-height: 1.8;"><b>🟧 Repetição</b></span><br>
+              <span>
+                Um bloco de ações que se repete <b>enquanto</b> uma condição for
+                verdadeira.<br><em>Ex: repetir 10 vezes → piscar o LED.</em>
+              </span>
+            </div>
+            <div class="column">
+              <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*VF_-RjOZOtdUjESxW-8M8A.jpeg">
+              <br>
+              <span style="line-height: 1.8;"><b>🟨 Condição</b> (seleção)</b></span><br>
+              <span>
+                O algoritmo <b>decide</b> o que fazer dependendo de uma situação.<br>
+                <em>Ex: se o
+                  botão for pressionado → mover o robô.</em>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Sequência na Programação</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              O algoritmo sempre executa de forma sequencial em uma única direção.<br>
+              Ele percorre cada passo sem retornar ao anterior — como um rio que flui em linha reta.
+              <br><br>
+              <span>Exemplo de Sequência</span>
+              <ul style="line-height: 1; list-style-type: none">
+                <li>1️⃣ Ligar o computador</li>
+                <li>2️⃣ Abrir o navegador</li>
+                <li>3️⃣ Acessar o site do Blockly</li>
+                <li>4️⃣ Resolver o desafio</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame" style="
+                width: 100%; 
+                max-width: 510px; 
+                height: 460px; 
+                border: 4px solid var(--base-color-primary); 
+                border-radius: 0; 
+                overflow: hidden; 
+                position: relative;
+                background: #fff;
+              ">
+                <iframe src="https://blockly.games/maze?lang=pt-br&level=2&skin=0" id="scaled-iframe" style="
+                    width: 1000px; 
+                    height: 850px; 
+                    border: none; 
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    transform-origin: 0 0;
+                    transform: scale(0.51); 
+                  " scrolling="no">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Repetição na Programação</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              Quando identificamos um PADRÃO, podemos repetir comandos! 😄<br>
+              Chamamos isso de um loop ou laço de repetição.
+              <br><br>
+              <span>Exemplo de Repetição</span><br>
+              <em>Repetir 5 vezes:</em>
+              <ul style="line-height: 0.5; list-style-type: none">
+                <li>1️⃣ Acender LED</li>
+                <li>2️⃣ Esperar 1 segundo</li>
+                <li>3️⃣ Apagar LED</li>
+                <li>4️⃣ Esperar 1 segundo</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame" style="
+                width: 100%; 
+                max-width: 510px; 
+                height: 460px; 
+                border: 4px solid var(--base-color-primary); 
+                border-radius: 0; 
+                overflow: hidden; 
+                position: relative;
+                background: #fff;
+              ">
+                <iframe src="https://blockly.games/maze?lang=pt-br&level=4&&skin=0" id="scaled-iframe" style="
+                    width: 1000px; 
+                    height: 850px; 
+                    border: none; 
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    transform-origin: 0 0;
+                    transform: scale(0.51); 
+                  " scrolling="no">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Condições: Tomando Decisões</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              Condições são situações em que o caminho de execução tem mais de uma opção<br>
+              Isso permite que a máquina avaliar se deve executar ou não.<br>
+              Tornando nosso código mais autônomo.
+              <br><br>
+              <span>Exemplo de Condição</span><br>
+              <em>Se botão pressionado:</em>
+              <ul style="line-height: 0.5; list-style-type: none">
+                <li>Mover servo para 120°</li>
+              </ul>
+              <em>Senão:</em>
+              <ul style="line-height: 0.5; list-style-type: none">
+                <li>Mover servo para 90°</li>
+              </ul>
+
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame" style="
+                width: 100%; 
+                max-width: 510px; 
+                height: 460px; 
+                border: 4px solid var(--base-color-primary); 
+                border-radius: 0; 
+                overflow: hidden; 
+                position: relative;
+                background: #fff;
+              ">
+                <iframe src="https://blockly.games/maze?lang=pt-br&level=6&&skin=0" id="scaled-iframe" style="
+                    width: 1000px; 
+                    height: 850px; 
+                    border: none; 
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    transform-origin: 0 0;
+                    transform: scale(0.51); 
+                  " scrolling="no">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Variáveis</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+
+            <div class="content-col col-text">
+              <ul>
+                <li>Espaço para <b>guardar</b> dados</li>
+                <li>Podem <b>mudar</b> de valor</li>
+                <li>Ex: idade = 12</li>
+                <li>Possuem vários <b>tipos</b></li>
+                <li><b>Servem para controlar valores durante a execução</b></li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img src="https://media1.tenor.com/m/tym5nEDf2sUAAAAd/barney-and-friends-bj.gif" style="
+                        object-fit:cover;
+                        width:100%;
+                        height: 320px;
+                        display:block;
+                        transform:scale(1.2);
+                        margin-bottom:-23px;
+                      ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Tipos de Dados</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              Existem muitos tipos, os mais comuns são:
+              <ul>
+                <li><b>Número</b> (10, 3.5)</li>
+                <li><b>Texto</b> ("Olá mundo")</li>
+                <li><b>Lógico</b> (true/false)</li>
+                <li>... e mais ...</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*fjhHTOzvpijdZh1cIj7hKw.gif"
+                  style="height: 320px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Verdadeiro ou Falso</div>
+        <div class="divider"></div>
+
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+
+              <ul>
+                <li>O tipo de dado lógico só pode ter valores: Verdadeiro (True) ou Falso (False). (não existe outra
+                  opção)</li>
+                <li>É usado para <b>Tomada de decisões</b> em programas</li>
+                <li>Ao combinar condições diferentes, criamos decisões complexas usando Operadores Lógicos.</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="terminal">
+                <div class="term-header">
+                  <div class="term-ctrl">
+                    <span class="term-btn term-close"></span>
+                    <span class="term-btn term-min"></span>
+                    <span class="term-btn term-max"></span>
+                  </div>
+                </div>
+                <div class="term-body">
+                  <span class="term-line">
+                    <span class="kw">Se</span> <span class="sym">(</span><span class="cond">a senha digitada é
+                      correta</span><span class="sym">)</span> <span class="block">{</span>
+                  </span>
+                  <span class="term-indent">
+                    <span class="sym">-&gt;</span> <span class="comment">ENTRAR /* condição é verdadeira */</span>
+                  </span>
+                  <span class="term-line">
+                    <span class="block">}</span> <span class="kw">senão</span> <span class="block">{</span>
+                  </span>
+                  <span class="term-indent">
+                    <span class="sym">-&gt;</span> <span class="comment">ACESSO NEGADO /* condição é falsa */</span>
+                  </span>
+                  <span class="term-line">
+                    <span class="block">}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Introdução a Lógica Booleana</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+
+            <div class="content-col col-text">
+              <ul>
+                <li>Na matemática, conhecemos muitos operadores aritméticos: <b>soma</b>, <b>subtração</b>,
+                  <b>multiplicação</b> e <b>divisão</b>.
+                </li>
+                <li>Também já vimos os operadores de relação: <b>igual</b>, <b>diferente</b>, <b>maior</b>,
+                  <b>menor</b>.
+                </li>
+                <li>Estes operadores funcionam com números.
+                  Já os <b>operadores lógicos</b> são usados para combinar condições, formando resultados
+                  <b>verdadeiros</b> (V) ou <b>falsos</b> (F).
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img
+                  src="https://b2990823.smushcdn.com/2990823/wp-content/uploads/2021/11/86-860869_math-math-symbol-math-clip-art-1-300x251.png"
+                  style="
+                        object-fit:cover;
+                        width:100%;
+                        height:100%;
+                        display:block;
+                        transform:scale(1);
+                      ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Conectivo E (AND)</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              <ul style="list-style-type: none">
+                <li>Imagine a situação: seu pai diz:<br> “no Natal, eu te darei um vídeo game <em>e</em> uma bicicleta”.
+                </li>
+                <li>Se ele te der apenas um dos dois, a promessa será <b>falsa</b>.</li>
+                <li>Uma condição com o conectivo <em>"E"</em> só será <b>verdadeira</b> quando <em>ambas</em> as
+                  condições são cumpridas.</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img
+                  src="https://i0.wp.com/300segundosdematematica.com/wp-content/uploads/2023/01/tabela_verdade_e.jpg?resize=300%2C290&ssl=1"
+                  width="360">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Conectivo OU (OR)</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              <ul style="list-style-type: none">
+                <li>Mas desta vez, seu pai disse:<br> “no Natal, eu te darei um vídeo game <em>ou</em> uma bicicleta”.
+                </li>
+                <li>Se ele te der apenas um dos dois, a promessa será <b>verdadeira</b>.</li>
+                <li>O <em>“OU”</em> é falso apenas quando <em>nenhuma</em> das partes acontece.</li>
+              </ul>
+            </div>
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img
+                  src="https://i0.wp.com/300segundosdematematica.com/wp-content/uploads/2023/01/tabela_verdade_ou.jpg?resize=300%2C289&ssl=1"
+                  width="360">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 15 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Operador NÃO (NOT)</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              <ul style="list-style-type: none">
+                <li>O operador Não inverte o valor lógico de uma condição:</li>
+                <li>Se algo é verdadeiro, NÃO torna falso — e vice-versa.</li>
+                <li><em>A: Verdadeiro;</em></li>
+                <li><em>¬A: Falso;</em></li>
+              </ul>
+            </div>
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img
+                  src="https://i0.wp.com/300segundosdematematica.com/wp-content/uploads/2023/01/tabela_verdade_nao.jpg?resize=106%2C123&ssl=1"
+                  width="360">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 16 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title" style="font-size: 36px;">Erros de sintaxe e erros de semântica</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-rows">
+
+            <div class="content-col col-text">
+              <ul style="list-style-type: none">
+                <li>A máquina entende apenas zeros e uns, para programarmos uma máquina, precisamos fazer uso de uma
+                  <em>Linguagem de Programação</em>
+                </li>
+                <li>Toda linguagem de programação tem uma <em>gramática</em> assim como nossa língua</li>
+                <li>Erro de <em>Sintaxe</em> ocorrem por uso incorreto de estruturas ou erros de digitação</li>
+                <li>Nos erros de <em>Semântica</em>, o código executa, mas produz resultados incorretos porque a lógica
+                  está errada. </li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame" style="overflow:hidden;">
+                <img
+                  src="https://img.freepik.com/premium-vector/system-message-screen-pixel-art-style-virus-popup-vector-illustration_159446-2018.jpg?w=1060"
+                  style="
+                    object-fit:cover;
+                    object-position:50% 0%;
+                    width:100%;
+                    display:block;
+                    margin-bottom:-70px;
+                  ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE Links -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Links Úteis</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+
+              <ul>
+                <li><a href="https://blockly.games/">Blockly Games</a></li>
+                <li><a
+                    href="https://create.kahoot.it/share/informatica-basica-1/9f32c3f2-71c1-45e0-92d0-159cb39e4e84">Kahoot:
+                    Hardware e Software</a></li>
+                <li><a
+                    href="https://create.kahoot.it/share/informatica-basica-2/4656c7f4-da92-4504-a855-0fdce05b4e15">Kahoot:
+                    Fluxo da informação</a></li>
+                <li><a href="https://www.tinkercad.com/">Tinkercad</a></li>
+                <li><a href="https://ide.mblock.cc/">mBlock</a></li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPA -->
+    <div class="slide">
+      <div class="window window-cover">
+
+        <div class="cover-bg">
+          <img src="https://images2.alphacoders.com/980/thumb-1920-980230.jpg">
+        </div>
+        <div class="cover-title">
+          <div class="title">
+            AGORA É COM VOCÊS
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fim do Slider -->
+  </div>
+
+  <div class="nav-container">
+
+    <!-- PREV -->
+    <div class="nav-circle" id="prev">
+      <div class="arrow" style="margin-right: 2px;">‹</div>
+      <svg width="70" height="70">
+        <circle class="circle-bg" cx="35" cy="35" r="30" />
+        <circle class="circle-progress" id="prevProgress" cx="35" cy="35" r="30" />
+      </svg>
+    </div>
+
+    <!-- NEXT -->
+    <div class="nav-circle" id="next">
+      <span class="arrow" style="margin-left: 2px;">›</span>
+      <svg width="70" height="70">
+        <circle class="circle-bg" cx="35" cy="35" r="30" />
+        <circle class="circle-progress" id="nextProgress" cx="35" cy="35" r="30" />
+      </svg>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var sliderComponent = document.querySelector('.slider-component');
+  var slideTrack = document.getElementById('slideTrack');
+  var slides = document.querySelectorAll('.slide');
+  var totalSlides = slides.length;
+  var currentSlide = 0;
+
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+
+  const prevProgress = document.getElementById('prevProgress');
+  const nextProgress = document.getElementById('nextProgress');
+
+  const CIRC = 2 * Math.PI * 30;
+
+  function updateProgress() {
+    let progress = currentSlide / (totalSlides - 1);
+
+    prevProgress.style.strokeDashoffset = CIRC * (1 - progress);
+    nextProgress.style.strokeDashoffset = CIRC * progress;
+
+    prevBtn.style.opacity = currentSlide === 0 ? 0.3 : 1;
+    nextBtn.style.opacity = currentSlide === totalSlides - 1 ? 0.3 : 1;
+  }
+
+  function setupSlider() {
+    var w = sliderComponent.offsetWidth;
+    for (var i = 0; i < slides.length; i++) {
+      slides[i].style.width = w + 'px';
+    }
+    slideTrack.style.width = (w * totalSlides) + 'px';
+    updatePos();
+  }
+
+  function updatePos() {
+    var w = sliderComponent.offsetWidth;
+    slideTrack.style.transform = 'translateX(' + (-currentSlide * w) + 'px)';
+
+    updateProgress();
+  }
+
+  function nextSlide() {
+    if (currentSlide < totalSlides - 1) {
+      currentSlide++;
+      updatePos();
+    }
+  }
+
+  function prevSlide() {
+    if (currentSlide > 0) {
+      currentSlide--;
+      updatePos();
+    }
+  }
+
+  nextBtn.addEventListener('click', function () {
+    if (currentSlide < totalSlides - 1) {
+      currentSlide++;
+      updatePos();
+    }
+  });
+
+  prevBtn.addEventListener('click', function () {
+    if (currentSlide > 0) {
+      currentSlide--;
+      updatePos();
+    }
+  });
+  window.addEventListener('resize', setupSlider);
+
+  setupSlider();
+</script>
+
+<script>
+  /**
+ * Script para garantir que o 'scale' seja sempre relativo à largura do container.
+ * Se o slide encolher, o conteúdo do iframe reduz junto para manter os 100% horizontais.
+ */
+  function fitIframe() {
+    const frame = document.getElementById('scaled-iframe');
+    const container = frame.parentElement;
+    const virtualWidth = 1000; // A largura "desktop" que queremos ver
+
+    const currentWidth = container.offsetWidth;
+    const scaleFactor = currentWidth / virtualWidth;
+
+    frame.style.transform = `scale(${scaleFactor})`;
+  }
+
+  // Ajusta no carregamento e sempre que a janela mudar
+  window.addEventListener('resize', fitIframe);
+  setTimeout(fitIframe, 200); // Delay para garantir renderização do slide
+</script>

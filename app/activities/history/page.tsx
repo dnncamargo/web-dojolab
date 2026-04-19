@@ -20,7 +20,7 @@ export default function HistoryPage() {
   const [sortKey, setSortKey] = useState<"title" | "classroom" | "date" | "status">("date")
   const [filterStatus, setFilterStatus] = useState<ActivityStatus | "">("")
   const [filterClassroom, setFilterClassroom] = useState<string>("")
-  const [filterYear, setFilterYear] = useState<string>("")
+  const [filterYear, setFilterYear] = useState<string>(new Date().getFullYear().toString())
   const [searchText, setSearchText] = useState<string>("") 
 
   useEffect(() => {

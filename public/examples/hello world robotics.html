@@ -1,0 +1,1066 @@
+<div class="slider-component">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+        :root {
+            --base-color-background: #2d8fcb;
+            --base-color-analogous: #ffd400;
+            --base-color-complementary: #2fbf71;
+            --base-color-primary: #0d3b66;
+            --normal-content: #111;
+            --normal-highlight: #ffd400;
+            --normal-shadow: #AEA79F;
+            --normal-emphasis: #C4A000;
+            --invert-content: #f2f2f2;
+            --invert-highlight: #E95420;
+            --invert-shadow: #04213b;
+            --invert-empashis: #7e713b;
+            --bright: rgba(238, 255, 7, 0.699);
+            --dimmer: rgba(148, 163, 184, 0.15);
+            --dark: rgba(0, 0, 0, 0.911);
+            --glow: 0 0 8px rgba(56, 189, 248, 0.6);
+            --footer-background: var(--normal-content);
+            --footer-border: var(--base-color-primary);
+
+            /* Values */
+            --max-height: 720px;
+            --title-font-size: 3.2rem;
+            --content-font-size: 1.5rem;
+            --terminal-font-size: 1.2rem;
+            --textbox-font-size: 1.2rem;
+            --list-item-font-size: 1.3rem;
+            --footer-font-size: 1.1rem;
+            --default-border-size: 4px;
+            --default-line-height: 0.8;
+
+            --title-font-family: 'Montserrat', sans-serif;
+            --content-font-family: 'Noto Sans', sans-serif;
+            --terminal-font-family: 'Fira Code', monospace;
+        }
+
+        .slider-component {
+            width: 100%;
+            height: var(--max-height);
+            /* Altura padrão dos slides */
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Noto Sans', sans-serif;
+            background-color: var(--base-color-background);
+            background-image:
+                linear-gradient(var(--base-color-complementary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--base-color-complementary) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .slide-track {
+            display: flex;
+            height: 100%;
+            transition: transform .5s ease-in-out;
+        }
+
+        .slide {
+            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 40px;
+            position: relative;
+        }
+
+        /* Janela principal */
+        .window {
+            background: var(--invert-content);
+            height: 100%;
+            padding: 40px 50px;
+            box-sizing: border-box;
+            position: relative;
+            border: var(--default-border-size) solid var(--base-color-primary);
+        }
+
+        /* Sombras esquerda e inferior */
+        .window:before {
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: 18px;
+            width: 14px;
+            height: 100%;
+            background: var(--invert-shadow);
+        }
+
+        .window:after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            bottom: -18px;
+            width: 99%;
+            height: 14px;
+            background: var(--invert-shadow);
+        }
+
+        .window-cover {
+            position: relative;
+            padding: 0;
+            /* remove espaçamento interno */
+            overflow: hidden;
+        }
+
+        .cover-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cover-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        /* texto sobreposto */
+        .cover-title {
+            position: absolute;
+            top: 200px;
+            bottom: 200px;
+            right: 200px;
+            left: 200px;
+            display: flex;
+            align-items: center;
+            /* centraliza vertical */
+            justify-content: center;
+            /* centraliza horizontal */
+            text-align: center;
+            padding: 120px;
+            box-sizing: border-box;
+        }
+
+        .cover-title .title {
+            margin: 0;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Título */
+        .title {
+            font-family: var(--title-font-family);
+            font-weight: 900;
+            font-size: 3rem;
+            /* Tamanho padrão do título */
+            color: var(--base-color-analogous);
+            -webkit-text-stroke: var(--default-border-size) var(--dark);
+            text-transform: uppercase;
+            margin: 0 0 20px 0;
+        }
+
+        /* Linha divisória */
+        .divider {
+            height: var(--default-border-size);
+            background: var(--base-color-primary);
+            margin: 10px 0 30px 0;
+        }
+
+        /* Conteúdo editável */
+        .content {
+            width: 100%;
+            height: calc(100% - 140px);
+            font-family: var(--content-font-family);
+            font-size: var(--content-font-size);
+
+            /* Tamanho padrão da fonte normal */
+            color: var(--normal-content);
+        }
+
+        .content b,
+        .content strong {
+            color: var(--normal-content);
+            font-weight: 600;
+        }
+
+        .content em {
+            display: inline;
+            color: var(--normal-emphasis);
+            font-weight: 600;
+        }
+
+        .content p,
+        .content span {
+            line-height: var(default-line-height);
+            text-align: justify;
+        }
+
+        /* container horizontal */
+        .content-row {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* container vertical */
+        .content-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .window-footer {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            width: calc(100% - 330px);
+            /* evita área dos botões à direita */
+
+            background: var(--footer-background);
+            border: 3px solid var(--footer-border);
+            border-radius: 0;
+            /* cantos retos */
+
+            padding: 10px 10px;
+            box-sizing: border-box;
+
+            font-size: var(--footer-font-size);
+            line-height: 1;
+            font-weight: 400;
+
+            max-height: 2.6em;
+            /* ~2 linhas */
+            overflow: hidden;
+        }
+
+        code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+            margin: 0 auto;
+            margin-top: 6px;
+            background-color: var(--dimmer);
+            border-left: 3px solid var(--base-color-primary);
+            color: var(--normal-shadow);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Variação: Duas Colunas */
+        .layout-cols {
+            flex-direction: row;
+        }
+
+        .layout-cols .col-text {
+            display: inline;
+            width: 55%;
+            padding-right: 30px;
+        }
+
+        .layout-cols .col-media {
+            width: 45%;
+            align-items: center;
+        }
+
+        /* Variação: Duas Linhas */
+        .layout-rows {
+            flex-direction: column;
+        }
+
+        .layout-rows .col-text {
+            display: inline;
+            text-align: justify;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .layout-rows .col-media {
+            width: 100%;
+            align-items: center;
+        }
+
+        /* Coluna: Texto */
+        .col-text li {
+            margin-bottom: 14px;
+        }
+
+        .col-text ul {
+            margin: 20px 0 0 0;
+            padding-left: 50px;
+        }
+
+        .centralized {
+            align-self: center;
+        }
+
+        /* Coluna: Imagem */
+        .media-frame {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            overflow: hidden;
+            /* border-radius: 14px; */
+            border: 4px solid var(--base-color-primary);
+            background: transparent;
+            position: relative;
+        }
+
+        .media-frame img {
+            display: block;
+            object-fit: cover;
+            object-position: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .media-frame iframe {
+            display: block;
+            object-fit: cover;
+            object-position: top center;
+            /* aspect-ratio: 9 / 16; */
+            border: none;
+            width: 100%;
+            height: 360px;
+            transform: scale(1.3);
+            overflow: visible;
+        }
+
+        /* iframe container */
+        .container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 470px;
+            aspect-ratio: 0.56%;
+        }
+
+        .responsive-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 70;
+            right: 30;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Grade tripla */
+        .column-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 20px;
+            margin-top: 5px;
+            align-self: center;
+            overflow: visible;
+        }
+
+        .column-grid img,
+        .column-grid iframe {
+            width: 90%;
+            height: 40%;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 12px;
+        }
+
+        .column span {
+            font-size: 1.5rem;
+            line-height: 1 rem;
+            text-align: justify;
+        }
+
+        .column em {
+            color: var(--normal-emphasis);
+        }
+
+        /* Textbox */
+        .textbox {
+            background: var(--dark);
+            border: 1px solid var(--base-color-primary);
+            margin: 0 auto;
+        }
+
+        .tb-head {
+            background: var(--normal-shadow);
+            padding: 6px;
+        }
+
+        .tb-body {
+            font-size: var(--terminal-font-size);
+            line-height: var(--default-line-height);
+            font-family: var(--terminal-font-family);
+            padding: 8px 10px;
+            color: var(--normal-shadow);
+        }
+
+        /* Terminal */
+        .terminal {
+            background: var(--base-color-primary);
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--glow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Barra de título */
+        .term-header {
+            color: #999691;
+            background: #3c3b37;
+            font-size: 1.6 rem;
+            /* Tamanho padrão da fonte do terminal */
+            height: 36px;
+            position: relative;
+        }
+
+        /* Botões à direita */
+        .term-ctrl {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .term-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 6px;
+        }
+
+        .term-close {
+            background: #ff5f56;
+        }
+
+        .term-min {
+            background: #ffbd2e;
+        }
+
+        .term-max {
+            background: #27c93f;
+        }
+
+        /* Corpo do terminal */
+        .term-body {
+            background: var(--base-color-primary);
+            /* Ubuntu terminal */
+            color: var(--normal-shadow);
+            padding: 5px 7px;
+            font-family: var(--terminal-font-family);
+            border-radius: 7px;
+            font-size: 1.2rem;
+            /* Tamanho padrão da fonte do terminal */
+            text-align: center;
+            font-weight: 300;
+            overflow-x: auto;
+        }
+
+        .term-body b {
+
+            color: #fff;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* Linhas preservam indentação */
+        .term-line {
+            display: block;
+        }
+
+        .term-indent {
+            white-space: pre-line;
+        }
+
+        /* palavra-chave */
+        .kw {
+            color: var(--invert-highlight);
+            font-weight: 600;
+        }
+
+        /* condição */
+        .cond {
+            color: #8be9fd;
+        }
+
+        /* comentário */
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        /* blocos */
+        .block {
+            color: #50fa7b;
+        }
+
+        /* símbolo */
+        .sym {
+            color: #f1fa8c;
+        }
+
+        /* Botões navegação */
+        .nav-container {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            display: flex;
+            gap: 20px;
+        }
+
+        /* BOTÃO CIRCULAR */
+        .nav-circle {
+            width: 70px;
+            height: 70px;
+            cursor: pointer;
+        }
+
+        .nav-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            stroke: var(--dimmer);
+            stroke-width: 6;
+            fill: none;
+        }
+
+        .circle-progress {
+            stroke: var(--base-color-analogous);
+            stroke-width: 7;
+            fill: none;
+            stroke-linecap: round;
+            stroke-dasharray: 188;
+            stroke-dashoffset: 188;
+            transition: .4s ease;
+        }
+
+        /* SETA */
+        .arrow {
+            position: absolute;
+            width: 70px;
+            height: 49px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            color: var(--base-color-analogous);
+            pointer-events: none;
+        }
+    </style>
+
+    <div class="slide-track" id="slideTrack">
+
+        <!-- CAPA -->
+        <div class="slide">
+            <div class="window window-cover">
+                <div class="cover-bg">
+                    <img
+                        src="https://knowhow.distrelec.com/wp-content/uploads/2024/02/GettyImages-1508780671-min.jpg?w=1920&h=1024&crop=1">
+                </div>
+                <div class="cover-title">
+                    <div class="title">
+                        OLÁ MUNDO DA ROBÓTICA
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 1 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">O que é um Computador?</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-cols">
+                        <div class="content-col col-text centralized">
+                            Máquina capaz de:
+                            <ul>
+                                <li>Receber informações</li>
+                                <li>Processar dados</li>
+                                <li>Cumprir tarefas, mostrar resultados ou armazená-los</li>
+                            </ul>
+                        </div>
+                        <div class="content-col col-media">
+                            <div class="media-frame">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Apple_II_Plus%2C_Museum_of_the_Moving_Image.jpg"
+                                    style="height: 320px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">Interfaces Homem–Máquina</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-rows">
+
+                        <div class="content-col col-text">
+                            Comunicação entre pessoas e sistemas:
+                            <ul>
+                                <li><em>Hardware (Estrutural):</em> componentes internos, dispositivos, periféricos e
+                                    estruturas</li>
+                                <li><em>Software (Virtual):</em> Apps, sistemas operacionais, jogos e os algoritmos.
+                                </li>
+                                <li>Interação por <em>interfaces</em></li>
+                            </ul>
+                        </div>
+
+                        <div class="content-col col-media">
+                            <div class="media-frame" style="overflow:hidden;">
+                                <img src="https://aivatec.com/wp-content/uploads/2026/03/difference-between-hardware-and-software1-1024x494.jpg"
+                                    style="
+                    object-fit:cover;
+                    object-position:50% 0%;
+                    width:100%;
+                    display:block;
+                    margin-bottom:-70px;
+                  ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">O que é um Algoritmo?</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-cols">
+                        <div class="content-col col-text">
+                            <span>Conjunto <em>finito</em> e <em>bem definido</em> de passos <em>ordenados</em> para
+                                realizar
+                                uma tarefa ou resolver um problema.</span>
+                            <br><br><br>
+                            <i>Exemplos do dia a dia</i>
+                            <div class="textbox">
+                                <div class="tb-head"></div>
+                                <div class="tb-body">
+                                    <ul>
+                                        <li>Receita de bolo</li>
+                                        <li>Manual de montar brinquedo</li>
+                                        <li>Regras de um jogo</li>
+                                        <li>Passo a passo para escovar os dentes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-col col-media">
+                            <div class="media-frame">
+                                <img src="https://files.tecnoblog.net/wp-content/uploads/2024/09/ilustracao-de-algoritmos.png"
+                                    style="
+                        object-fit:cover;
+                        width:100%;
+                        height: 320px;
+                        display:block;
+                        transform:scale(1.2);
+                        margin-bottom:-23px;
+                      ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">Características dos Algoritmos</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-cols">
+                        <div class="content-col col-text centralized">
+                            <ul>
+                                <li>Tem <em>início, meio e fim</em></li>
+                                <li>Segue uma <em>ordem lógica</em></li>
+                                <li>Cada passo deve ser <em>claro e sem ambiguidade</em> </li>
+                                <li>Deve resolver um problema</li>
+                            </ul>
+                        </div>
+                        <div class="content-col col-text">
+                            <i>Exemplo: Fazer um sanduíche</i>
+                            <div class="textbox">
+                                <div class="tb-head"></div>
+                                <div class="tb-body">
+                                    <ol>
+                                        <li>Pegar pacote de pão fatiado, pote de manteiga de amendoim, pote de geléia de
+                                            amora, faca cega,
+                                            prato </li>
+                                        <li>Colocar duas fatias de pão no prato</li>
+                                        <li>Abrir os potes</li>
+                                        <li>Espalhar uma camada generosa de manteiga de amendoim em um dos lados de uma
+                                            das fatias de pão.</li>
+                                        <li>Espalhar a geleia de amora na outra fatia de pão</li>
+                                        <li>Unir as duas fatias de pão com o recheio para dentro</li>
+                                        <li>NHAC!! NHAMMY!! HUUMMM!! 😋</li>
+                                    </ol>
+                                    👉 Isso é um algoritmo!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">Entrada → Processamento → Saída</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-cols">
+                        <div class="content-col col-text">
+                            <i>Vamos fazer uma analogia com o corpo humano</i>
+                            <div class="textbox">
+                                <div class="tb-head"></div>
+                                <div class="tb-body">
+                                    Nós também somos sistemas que <span class="highlight">percebem o ambiente</span>,
+                                    <span class="highlight">processam informações</span> e
+                                    <span class="highlight">respondem ao meio</span>.
+                                </div>
+                            </div>
+                            <br><br>
+                            <span>
+                                Captamos informações por meio dos <em>sentidos</em> — visão, audição, tato, olfato e
+                                paladar.
+                                Essas informações chegam ao <em>cérebro</em>, onde são <em>processadas</em> e guardadas
+                                na memória.
+                                Em seguida, agimos com <em>músculos</em>, <em>fala</em> e outros mecanismos que
+                                influenciam o ambiente.
+                            </span>
+                        </div>
+
+                        <div class="content-col col-media">
+                            <div class="media-frame">
+                                <iframe src=" https://giphy.com/embed/Wht8cSV3bN8BdslVxe" alt="think" allowFullScreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">O Sistema Humano</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-col">
+                        <div class="column-grid">
+                            <div class="column">
+                                <div class="terminal">
+                                    <div class="term-body">
+                                        👁️👂<br><b>Entradas</b><br>
+                                        Sentidos<br>
+                                        <div class="sub">(visão, tato, audição, etc.)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="terminal">
+                                    <div class="term-body">
+                                        🧠<br><b>Processamento</b><br>
+                                        Cérebro<br>
+                                        <div class="sub">(decisões e memória)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="terminal">
+                                    <div class="term-body">
+                                        💪🗣️<br><b>Saídas</b><br>
+                                        Músculos e fala<br>
+                                        <div class="sub">(ações no ambiente)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="content-col">
+                        <br>
+                        <div class="media-frame" style="transform: scale(0.6); overflow: visible; border: none;">
+                            <iframe src="https://giphy.com/embed/tqqUNjq8PWOR2" alt="human body" allowFullScreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">O Sistema das Máquinas</div>
+                <div class="divider"></div>
+                <div class="content">
+                    A <b>robótica</b> busca imitar esse mesmo processo:
+                    <div class="content-col">
+                        <div class="column-grid">
+                            <div class="column">
+                                <div class="terminal">
+                                    <div class="term-body">
+                                        🎛️<br><b>Entradas</b><br>
+                                        Sensores<br>
+                                        <div class="sub">(luz, som, distância...)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="terminal">
+                                    <div class="term-body">
+                                        🔲<br><b>Processamento</b><br>
+                                        Microcontrolador<br>
+                                        <div class="sub">(como o Arduino)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="terminal">
+                                    <div class="term-body">
+                                        ⚙️💡🔊<br><b>Saídas</b><br>
+                                        Atuadores<br>
+                                        <div class="sub">(motores, LEDs, buzzer, etc.)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="content-col col-media">
+                        <div class="media-frame" style="transform: scale(0.45); overflow: visible; border: none;">
+                            <iframe src="https://giphy.com/embed/1lB2OXzJrMN1K" alt="robot" allowFullScreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">Arduino, Sensores e Atuadores</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-cols">
+                        <div class="content-col col-text centralized">
+                            Componentes dos projetos robóticos:
+                            <ul>
+                                <li><b>Arduino:</b> cérebro do sistema</li>
+                                <li><b>Sensores:</b> captam dados do ambiente</li>
+                                <li><b>Atuadores:</b> executam ações físicas</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-col col-media">
+                            <div class="media-frame" style="height: 340px;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9 -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">Criando Projetos robóticos</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-cols">
+                        <div class="content-col col-text centralized">
+                            O que veremos nas aulas de robótica:
+                            <ul>
+                                <li><b>Mecânica:</b> Engrenagens, eixos, polias ...</li>
+                                <li><b>Eletrônica:</b> Tensão elétrica, resistência ...</li>
+                                <li><b>Programação:</b> Criação de algoritmos</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-col col-media">
+                            <div class="media-frame">
+                                <img src="https://victorvision.com.br/wp-content/uploads/2021/10/dicas-projetos-com-arduino.jpg"
+                                    style="height: 320px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE Links -->
+        <div class="slide">
+            <div class="window">
+                <div class="title">Links Úteis</div>
+                <div class="divider"></div>
+                <div class="content">
+                    <div class="content-row layout-cols">
+                        <div class="content-col col-text">
+
+                            <ul>
+                                <li><a href="https://blockly.games/">Blockly Games</a></li>
+                                <li><a
+                                        href="https://create.kahoot.it/share/informatica-basica-1/9f32c3f2-71c1-45e0-92d0-159cb39e4e84">Kahoot:
+                                        Hardware e Software</a></li>
+                                <li><a
+                                        href="https://create.kahoot.it/share/informatica-basica-2/4656c7f4-da92-4504-a855-0fdce05b4e15">Kahoot:
+                                        Fluxo da informação</a></li>
+                                <li><a href="https://www.tinkercad.com/">Tinkercad</a></li>
+                                <li><a href="https://ide.mblock.cc/">mBlock</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CAPA -->
+        <div class="slide">
+            <div class="window window-cover">
+
+                <div class="cover-bg">
+                    <img src="https://images2.alphacoders.com/980/thumb-1920-980230.jpg">
+                </div>
+                <div class="cover-title">
+                    <div class="title">
+                        AGORA É COM VOCÊS
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fim do Slider -->
+    </div>
+
+    <div class="nav-container">
+
+        <!-- PREV -->
+        <div class="nav-circle" id="prev">
+            <div class="arrow" style="margin-right: 2px;">‹</div>
+            <svg width="70" height="70">
+                <circle class="circle-bg" cx="35" cy="35" r="30" />
+                <circle class="circle-progress" id="prevProgress" cx="35" cy="35" r="30" />
+            </svg>
+        </div>
+
+        <!-- NEXT -->
+        <div class="nav-circle" id="next">
+            <span class="arrow" style="margin-left: 2px;">›</span>
+            <svg width="70" height="70">
+                <circle class="circle-bg" cx="35" cy="35" r="30" />
+                <circle class="circle-progress" id="nextProgress" cx="35" cy="35" r="30" />
+            </svg>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var sliderComponent = document.querySelector('.slider-component');
+    var slideTrack = document.getElementById('slideTrack');
+    var slides = document.querySelectorAll('.slide');
+    var totalSlides = slides.length;
+    var currentSlide = 0;
+
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+
+    const prevProgress = document.getElementById('prevProgress');
+    const nextProgress = document.getElementById('nextProgress');
+
+    const CIRC = 2 * Math.PI * 30;
+
+    function updateProgress() {
+        let progress = currentSlide / (totalSlides - 1);
+
+        prevProgress.style.strokeDashoffset = CIRC * (1 - progress);
+        nextProgress.style.strokeDashoffset = CIRC * progress;
+
+        prevBtn.style.opacity = currentSlide === 0 ? 0.3 : 1;
+        nextBtn.style.opacity = currentSlide === totalSlides - 1 ? 0.3 : 1;
+    }
+
+    function setupSlider() {
+        var w = sliderComponent.offsetWidth;
+        for (var i = 0; i < slides.length; i++) {
+            slides[i].style.width = w + 'px';
+        }
+        slideTrack.style.width = (w * totalSlides) + 'px';
+        updatePos();
+    }
+
+    function updatePos() {
+        var w = sliderComponent.offsetWidth;
+        slideTrack.style.transform = 'translateX(' + (-currentSlide * w) + 'px)';
+
+        updateProgress();
+    }
+
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updatePos();
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updatePos();
+        }
+    }
+
+    nextBtn.addEventListener('click', function () {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updatePos();
+        }
+    });
+
+    prevBtn.addEventListener('click', function () {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updatePos();
+        }
+    });
+    window.addEventListener('resize', setupSlider);
+
+    setupSlider();
+</script>
+
+<script>
+    /**
+   * Script para garantir que o 'scale' seja sempre relativo à largura do container.
+   * Se o slide encolher, o conteúdo do iframe reduz junto para manter os 100% horizontais.
+   */
+    function fitIframe() {
+        const frame = document.getElementById('scaled-iframe');
+        const container = frame.parentElement;
+        const virtualWidth = 1000; // A largura "desktop" que queremos ver
+
+        const currentWidth = container.offsetWidth;
+        const scaleFactor = currentWidth / virtualWidth;
+
+        frame.style.transform = `scale(${scaleFactor})`;
+    }
+
+    // Ajusta no carregamento e sempre que a janela mudar
+    window.addEventListener('resize', fitIframe);
+    setTimeout(fitIframe, 200); // Delay para garantir renderização do slide
+</script>

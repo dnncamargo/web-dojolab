@@ -1,0 +1,671 @@
+<body>
+    <style>
+        :root {
+            --body-max-height: 600px;
+            --window-height: 85%;
+            --window-width: 75%;
+            --window-desktop-color: #008080;
+            --window-frame-color: #C0C0C0;
+            --window-frame-border: #808080;
+            --window-frame-embossing: #FFFFFF;
+            --window-frame-shadow: #000;
+            --window-active: #000080;
+            --window-text-color: #000;
+            --window-font-family: 'MS Sans Serif', 'Arial', sans-serif;
+            --window-font-terminal: 'Lucida Console', monospace;
+            --window-font-size: 11px;
+            --window-bar-size: 18px;
+            --content-font-color: #000;
+            --content-line-height: 1.2;
+            --content-highlight: #655669;
+            --content-quote-em: #FF7518;
+            --content-glow-1: #7c5081;
+            --content-glow-2: #3e003f;
+            --content-quote-bg: #111;
+            --content-quote-txt: #ccc;
+            --body-font-size: 20px;
+            --title-font-size: 20px;
+            --clippy-pos-x: 15%;
+            --clippy-pos-y: 60%;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--window-desktop-color);
+            height: var(--body-max-height);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: var(--window-font-family);
+        }
+
+        /* Estilo Principal da Janela */
+        .window {
+            width: var(--window-width);
+            height: var(--window-height);
+            margin-left: auto;
+            margin-right: auto;
+            background-color: var(--window-frame-color);
+            border: 1px solid var(--window-frame-border);
+            box-shadow: 2px 2px 0 var(--window-frame-shadow), 3px 3px 0 var(--window-frame-shadow);
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* O restante do seu CSS permanece o mesmo */
+        .title-bar {
+            height: var(--window-bar-size);
+            background-color: var(--window-active);
+            color: var(--window-frame-embossing);
+            padding: 1px 2px 1px 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--window-font-family);
+            font-size: var(--window-font-size);
+            font-weight: bold;
+            cursor: default;
+            border-bottom: 1px solid var(--window-frame-border);
+        }
+
+        .title-bar-content {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .title-bar-icon {
+            width: 12px;
+            height: 12px;
+            margin-right: 4px;
+            background-color: var(--window-active);
+        }
+
+        .title-bar-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .title-bar-controls button {
+            background-color: var(--window-frame-color);
+            height: 15px;
+            width: 15px;
+            padding: 0;
+            border: none;
+            outline: none;
+            cursor: default;
+            border-top: 1px solid var(--window-frame-embossing);
+            border-left: 1px solid var(--window-frame-embossing);
+            border-right: 1px solid var(--window-frame-border);
+            border-bottom: 1px solid var(--window-frame-border);
+            box-shadow: 1px 1px 0 var(--window-frame-shadow);
+            font-size: 13px;
+            line-height: 10px;
+        }
+
+        .title-bar-controls button:active {
+            border-top: 1px solid var(--window-frame-border);
+            border-left: 1px solid var(--window-frame-border);
+            border-right: 1px solid var(--window-frame-embossing);
+            border-bottom: 1px solid var(--window-frame-embossing);
+            box-shadow: none;
+        }
+
+        .title-bar-controls-m button:active {
+            border-top: 1px solid var(--window-frame-border);
+            border-left: 1px solid var(--window-frame-border);
+            border-right: 1px solid var(--window-frame-embossing);
+            border-bottom: 1px solid var(--window-frame-embossing);
+            box-shadow: none;
+            padding-bottom: 1px;
+        }
+
+        .menu-bar {
+            background-color: var(--window-frame-color);
+            padding: 0 1px;
+            border-bottom: 1px solid var(--window-frame-border);
+            display: flex;
+            height: 20px;
+            align-items: center;
+        }
+
+        .menu-item {
+            padding: 0 7px 0 5px;
+            cursor: default;
+            line-height: 20px;
+            font-family: var(--window-font-family);
+            font-size: var(--window-font-size);
+        }
+
+        .menu-item:hover {
+            background-color: var(--window-active);
+            color: var(--window-frame-embossing);
+        }
+
+        /* --- ÁREA DE CONTEÚDO COM ROLAGEM --- */
+        .text-area-container {
+            padding: 2px;
+            position: relative;
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            border-top: 1px solid var(--window-frame-embossing);
+        }
+
+        .content-inner {
+            flex: 1;
+            padding: 10px;
+            overflow: hidden;
+            background-color: var(--window-frame-embossing);
+            font-size: var(--content-font-size);
+            line-height: var(--content-line-height);
+        }
+
+        /* === ESTILO DOS TÍTULOS DOS ITENS DE CONTEÚDO ANINHADO === */
+        .content-inner ol {
+            list-style: decimal-leading-zero;
+            margin-left: 2em;
+            padding-left: 1em;
+            counter-reset: section;
+        }
+
+        /* Cada item numerado */
+        .content-inner ol>li {
+            margin-top: 18px;
+            margin-bottom: 6px;
+            font-size: 1.1rem;
+        }
+
+        .content-inner em {
+            background-color: var(--content-highlight);
+            color: var(--content-quote-txt);
+            font-style: normal;
+        }
+
+        .content-inner .quote em {
+            color: var(--content-quote-em);
+            background-color: transparent;
+        }
+
+
+        /* Efeito de brilho intermitente no título ativo (opcional, estilo terminal vivo) */
+        @keyframes glowTitle {
+
+            0%,
+            100% {
+                text-shadow: 0 0 4px #ff8080, 0 0 8px var(--content-glow-1);
+            }
+
+            50% {
+                text-shadow: 0 0 10px #ffb3b3, 0 0 20px var(--content-glow-2);
+            }
+        }
+
+        .content-inner ol>li.active {
+            font-weight: bold;
+            animation: glowTitle 1.8s infinite;
+        }
+
+        .content-inner p.active {
+            color: var(--content-font-color);
+            font-weight: bold;
+            text-shadow: 0 0 8px var(--content-font-color);
+            animation: glowTitle 2s infinite ease-in-out;
+        }
+
+
+        /* === BLOCO DE CITAÇÃO / QUOTE (estilo terminal retrô) === */
+        .content-inner .quote {
+            position: relative;
+            margin: 20px 2em;
+            padding: 12px 18px;
+            background-color: var(--content-quote-bg);
+            color: var(--content-quote-txt);
+            font-family: var(--window-font-family);
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 6px;
+            backdrop-filter: blur(2px);
+        }
+
+        .content-inner .quote .source {
+            display: block;
+            margin-top: 10px;
+            text-align: right;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .content-inner p.active {
+            color: var(--content-glow-2);
+            font-weight: bold;
+            text-shadow: 0 0 8px var(--content-glow-1);
+            animation: glowTitle 2s infinite ease-in-out;
+        }
+
+        .status-bar {
+            height: var(--window-bar-size);
+            background-color: var(--window-frame-color);
+            border-top: 1px solid var(--window-frame-embossing);
+            padding: 0 4px;
+            display: flex;
+            align-items: center;
+            font-family: var(--window-font-family);
+            font-size: var(--window-font-size);
+        }
+
+        .status-pane {
+            height: 14px;
+            line-height: 14px;
+            padding: 0 5px;
+            margin-right: 2px;
+            border-top: 1px solid var(--window-frame-border);
+            border-left: 1px solid var(--window-frame-border);
+            border-right: 1px solid var(--window-frame-embossing);
+            border-bottom: 1px solid var(--window-frame-embossing);
+            flex-grow: 1;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .status-pane:last-child {
+            flex-grow: 0;
+            width: 100px;
+        }
+
+        /* Container geral */
+        .clippy-container {
+            position: absolute;
+            z-index: 100;
+            top: var(--clippy-pos-y); 
+            right: var(--clippy-pos-x);
+        }
+
+        /* Clippy */
+        .clippy {
+            position: relative;
+            width: 130px;
+            height: auto;
+            image-rendering: pixelated;
+            animation: floatClippy 3s ease-in-out infinite;
+            margin-top: 16px;
+            /* distancia entre balão e clippy */
+            margin-left: 170px;
+        }
+
+        @keyframes floatClippy {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        /* Balão retrô */
+        .speech-bubble {
+            position: relative;
+            background: #ffffe1;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #000;
+            font-family: "MS Sans Serif", sans-serif;
+            font-size: 14px;
+            box-shadow: 2px 2px 0 #808080;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        /* Bico do balão */
+        .speech-tail-outline,
+        .speech-tail-inner {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            bottom: -18px;
+            left: 70%;
+        }
+
+        .speech-tail-outline {
+            border-top-color: #000;
+            transform: translateY(3px);
+        }
+
+        .speech-tail-inner {
+            border-top-color: #ffffe1;
+            z-index: 2;
+        }
+
+        /* Efeito de digitação opcional */
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            white-space: normal;
+            border-right: 2px solid #000;
+            animation: typing 3s steps(40) forwards, blink 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        /* --- SCROLLBAR --- */
+        .scrollbar {
+            width: var(--window-bar-size);
+            background: var(--window-contrast-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0;
+        }
+
+        .scrollbar button {
+            background-color: var(--window-frame-color);
+            height: 16px;
+            width: 16px;
+            padding: 0;
+            border: none;
+            outline: none;
+            cursor: default;
+            border-top: 1px solid var(--window-frame-embossing);
+            border-left: 1px solid var(--window-frame-embossing);
+            border-right: 1px solid var(--window-frame-border);
+            border-bottom: 1px solid var(--window-frame-border);
+            box-shadow: 1px 1px 0 var(--window-frame-shadow);
+            font-size: 9px;
+            line-height: 10px;
+        }
+
+        .scrollbar button:active {
+            border-top: 1px solid var(--window-frame-border);
+            border-left: 1px solid var(--window-frame-border);
+            border-right: 1px solid var(--window-frame-embossing);
+            border-bottom: 1px solid var(--window-frame-embossing);
+            box-shadow: none;
+        }
+
+        .scroll-track {
+            position: relative;
+            flex: 1;
+            margin: 1px 1px;
+            background-color: var(--window-frame-border);
+        }
+
+        .scroll-thumb {
+            position: absolute;
+            top: 0;
+            left: 0px;
+            width: 15px;
+            height: 40px;
+            background-color: var(--window-frame-color);
+            border-top: 1px solid var(--window-frame-embossing);
+            border-left: 1px solid var(--window-frame-embossing);
+            border-right: 1px solid var(--window-frame-border);
+            border-bottom: 1px solid var(--window-frame-border);
+            box-shadow: 1px 1px 0 var(--window-frame-shadow);
+            cursor: grab;
+        }
+
+        .scroll-thumb:active {
+            cursor: grabbing;
+            background-color: var(--window-frame-border);
+        }
+    </style>
+
+    <div class="window">
+        <div class="title-bar" id="titleBar-1">
+            <div class="title-bar-content">
+                <div class="title-bar-icon"><img
+                        src="https://cdn2.steamgriddb.com/icon/609a199881ca4ba9c95688235cd6ac5c/4/256x256.png"
+                        alt="notepad" width="12"></div>
+                <div class="title-bar-text" id="titleBarText-1">Doc 1: Como fazer um projeto</div>
+            </div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize" onclick="alert('Minimizar não implementado!')"> ̶</button>
+                <button aria-label="Maximize" onclick="alert('Maximizar não implementado!')">□</button>
+                <button aria-label="Close" onclick="alert('Fechar não implementado!')">×</button>
+            </div>
+        </div>
+
+        <div class="menu-bar">
+            <div class="menu-item" onclick="alert('Menu Arquivo clicado!')"><span class="shortcut">A</span>rquivo</div>
+            <div class="menu-item" onclick="alert('Menu Editar clicado!')"><span class="shortcut">E</span>ditar
+            </div>
+            <div class="menu-item" onclick="alert('Menu Ajuda clicado!')"><span class="shortcut">A</span>juda
+            </div>
+        </div>
+
+        <div class="text-area-container">
+  <div class="content-inner" id="contentInner">
+
+        <p>Clippy.log >> </p>
+        <p>Inicializando módulo: Cultura Maker...</p>
+        <p>Carregando mentalidade de criação...</p>
+        <p>Ativando modo: Aprendizagem Baseada em Projetos (ABP)...</p>
+        <p>Preparando ambiente investigativo...</p>
+
+        <p >### STATUS ###</p>
+        <p>- Criatividade: Ativa</p>
+        <p>- Curiosidade: Elevada</p>
+        <p>- Autonomia: Em desenvolvimento</p>
+        <p>- Modo Maker: ON</p>
+
+        <br>
+
+        <p class="active">### CULTURA MAKER ###</p>
+        <p><em>Aprender fazendo</em>. Construir para compreender.</p>
+        <p>Errar, testar e melhorar fazem parte do processo.</p>
+
+        <br>
+
+        <p class="active">### OBJETIVOS DA APRENDIZAGEM BASEADA EM PROJETOS ###</p>
+        <ol>
+            <li>Estimular a experimentação com base em uma pergunta exploratória</li>
+            <li>Os alunos assumem o papel de investigadores</li>
+            <li>Aprender com autonomia</li>
+            <li>Criar soluções para problemas reais</li>
+            <li>Construir o próprio conhecimento ao final do processo</li>
+        </ol>
+
+        <br>
+
+        <p class="active">### ETAPAS DO PROJETO ###</p>
+        <ol>
+            <li>Definição do Problema e da Solução</li>
+            <p>Qual problema queremos resolver?</p>
+            <p>Que tipo de solução podemos imaginar?</p>
+
+            <li>Investigação</li>
+            <p>Pesquisar, observar, testar ideias.</p>
+            <p>Levantar hipóteses e referências.</p>
+
+            <li>Desenvolvimento e Criação</li>
+            <p>Construir protótipos.</p>
+            <p>Aplicar conhecimentos técnicos e criativos.</p>
+
+            <li>Apresentações e Entrega dos Produtos</li>
+            <p>Compartilhar resultados.</p>
+            <p>Explicar o processo e as decisões tomadas.</p>
+        </ol>
+
+        <br>
+
+        <p class="active">### PLANEJAMENTO DO PROJETO ###</p>
+        <ol>
+            <li>Definir Objetivos de Aprendizagem</li>
+            <p>O que queremos aprender com este projeto?</p>
+
+            <li>Definir a Temática Central e a Questão Norteadora</li>
+            <p>Qual é a pergunta que guia nossa investigação?</p>
+
+            <li>Recuperar Conhecimentos Prévios</li>
+            <p>O que já sabemos que pode ajudar?</p>
+
+            <li>Definir a Sequência Didática</li>
+            <p>Quais serão os passos da aprendizagem?</p>
+
+            <li>Definir os Produtos Esperados</li>
+            <p>O que será criado ao final?</p>
+
+            <li>Definir os Materiais Necessários</li>
+            <p>Quais recursos serão utilizados?</p>
+        </ol>
+
+        <br>
+
+        <p class="active">### ABORDAGEM ###</p>
+        <p>STEAM + Método Científico + Pesquisa</p>
+
+        <ul>
+            <li><b>Ciência:</b> observar e compreender fenômenos</li>
+            <li><b>Tecnologia:</b> usar ferramentas e sistemas</li>
+            <li><b>Engenharia:</b> construir soluções</li>
+            <li><b>Artes:</b> criatividade e expressão</li>
+            <li><b>Matemática:</b> lógica e análise</li>
+        </ul>
+
+        <br>
+
+        <div class="quote">
+            "Onde há <em>investigação</em>, há espaço para <em>novidade</em>."
+            <span class="source">– clippy.exe</span>
+        </div>
+
+        <br>
+
+        <p>Finalizando inicialização do modo Maker...</p>
+        <p>Sistema pronto para criação 🚀</p>
+
+    </div>
+            <div class="scrollbar">
+                <button aria-label="Rolar para cima" id="scrollUp">▲</button>
+                <div class="scroll-track" id="scrollTrack">
+                    <div class="scroll-thumb" id="scrollThumb"></div>
+                </div>
+                <button aria-label="Rolar para baixo" id="scrollDown">▼</button>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-pane" id="statusMain">Pronto</div>
+            <div class="status-pane" id="statusLineCol">Lin 1, Col 1</div>
+        </div>
+
+    </div>
+
+    <!-- Container absoluto com posição e tamanho definidos inline -->
+    <div class="clippy-container" id="clippyContainer">
+
+        <!-- Clippy -->
+        <div class="clippy">
+            <img id="clippyGif" src="https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif" alt="Clippy" />
+        </div>
+    </div>
+
+    <script>
+        const contentInner = document.getElementById("contentInner");
+        const scrollThumb = document.getElementById("scrollThumb");
+        const scrollTrack = document.getElementById("scrollTrack");
+        const scrollUp = document.getElementById("scrollUp");
+        const scrollDown = document.getElementById("scrollDown");
+
+        function updateScroll() {
+            const contentHeight = contentInner.scrollHeight;
+            const visibleHeight = contentInner.clientHeight;
+            const scrollable = contentHeight - visibleHeight;
+            const trackHeight = scrollTrack.clientHeight;
+            const thumbHeight = Math.max(30, trackHeight * (visibleHeight / contentHeight));
+            scrollThumb.style.height = `${thumbHeight}px`;
+
+            const scrollPercent = contentInner.scrollTop / scrollable;
+            const maxTop = trackHeight - thumbHeight;
+            scrollThumb.style.top = `${scrollPercent * maxTop}px`;
+        }
+
+        function scrollToThumb(y) {
+            const trackHeight = scrollTrack.clientHeight;
+            const thumbHeight = scrollThumb.offsetHeight;
+            const maxTop = trackHeight - thumbHeight;
+            const scrollable = contentInner.scrollHeight - contentInner.clientHeight;
+            const percent = y / maxTop;
+            contentInner.scrollTop = percent * scrollable;
+        }
+
+        scrollThumb.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            const startY = e.clientY;
+            const startTop = parseInt(window.getComputedStyle(scrollThumb).top);
+            const onMouseMove = (ev) => {
+                const deltaY = ev.clientY - startY;
+                let newTop = Math.max(0, Math.min(startTop + deltaY, scrollTrack.clientHeight - scrollThumb.offsetHeight));
+                scrollToThumb(newTop);
+                updateScroll();
+            };
+            const onMouseUp = () => {
+                document.removeEventListener("mousemove", onMouseMove);
+                document.removeEventListener("mouseup", onMouseUp);
+            };
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mouseup", onMouseUp);
+        });
+
+        scrollUp.addEventListener("click", () => {
+            contentInner.scrollTop -= 40;
+            updateScroll();
+        });
+
+        scrollDown.addEventListener("click", () => {
+            contentInner.scrollTop += 40;
+            updateScroll();
+        });
+
+        // Array global de GIFs do Clippy
+        const clippyGifs = [
+            "https://media.tenor.com/Tmu1IbKTtosAAAAj/clippy.gif",
+            "https://media.tenor.com/oa56X7RLjokAAAAj/clippy.gif",
+            "https://media.tenor.com/T808PcBj4tgAAAAj/clippy.gif",
+            "https://media.tenor.com/65uqptB8qOkAAAAi/clippy.gif"
+        ];
+
+        function playClippySequence() {
+            const clippyGif = document.getElementById("clippyGif");
+            if (!clippyGif) return;
+
+            let index = 0;
+            setInterval(() => {
+                index = (index + 1) % clippyGifs.length;
+                clippyGif.src = clippyGifs[index];
+            }, 2500);
+        }
+
+        contentInner.addEventListener("scroll", updateScroll);
+        window.addEventListener("resize", updateScroll);
+        updateScroll();
+        playClippySequence();
+    </script>
+</body>

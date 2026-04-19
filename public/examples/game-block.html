@@ -1,0 +1,710 @@
+<div class="game-slider">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+    @import url('https://fonts.cdnfonts.com/css/retro-mario');
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+    :root {
+      --base-color-background: #87CEEB;
+      --normal-content: #000;
+      --normal-title: #ed1078;
+      --normal-background: white;
+      --normal-shadow: #000;
+      --normal-highlight: #990574;
+      --element-highlight: #FFCC00;
+
+      /* Values */
+      --max-height: 720px;
+      --title-font-size: 4rem;
+      --content-font-size: 1.3rem;
+      --title-font-family: 'Retro Mario', sans-serif;
+      --header-font-family: 'Montserrat', sans-serif;
+      --content-font-family: 'Ubuntu', sans-serif;
+      --block-font-family: 'Noto Sans', sans-serif;
+      --bg-world: url('https://images.alphacoders.com/185/thumb-1920-18591.jpg');
+    }
+
+    .game-slider {
+      width: 100%;
+      height: var(--max-height);
+      position: relative;
+      overflow: hidden;
+      background: var(--base-color-background);
+    }
+
+    /* FUNDO */
+    .world {
+      position: absolute;
+      height: 100%;
+      display: flex;
+      left: 0;
+      top: 0;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .bg {
+      height: 100%;
+      width: 100vw;
+      object-fit: cover;
+      flex-shrink: 0;
+      backface-visibility: hidden;
+      image-rendering: pixelated;
+      /* estilo Mario */
+    }
+
+    /* TRACK DOS SLIDES */
+    .window-track {
+      position: relative;
+      height: 100%;
+      display: flex;
+      transition: transform .6s ease;
+      z-index: 2;
+    }
+
+    .slide {
+      min-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* JANELA */
+    .window {
+      width: 80%;
+      height: 70%;
+
+      background: var(--normal-background);
+      border: 6px solid var(--normal-shadow);
+      box-shadow: 8px 8px 0 var(--normal-shadow);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    /* ===== TITLE ===== */
+    .title {
+      font-family: var(--title-font-family);
+      font-size: var(--title-font-size);
+      margin-bottom: 10px;
+      color: var(--normal-title);
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      height: var(--default-border-size);
+      background: var(--base-color-primary);
+      margin: 10px 0 30px 0;
+    }
+
+    /* ===== CONTENT ===== */
+    .content {
+      display: flex;
+      width: 100%;
+      height: calc(100% - 140px);
+      font-size: var(--content-font-size);
+      color: var(--normal-content);
+      gap: 20px;
+    }
+
+    /* ===== DIREÇÕES ===== */
+    .row {
+      flex-direction: row;
+    }
+
+    .col {
+      flex-direction: column;
+    }
+
+    /* ===== FILHOS ===== */
+    .content>.panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--content-font-family);
+      display: inline;
+    }
+
+    /* ===== CENTRALIZAÇÃO ===== */
+    .center {
+      justify-content: center;
+      align-self: center;
+    }
+
+    .col-center {
+      align-items: center;
+
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    /* ===== TEXTO ===== */
+    .panel ul {
+      padding-left: 24px;
+    }
+
+    .panel li {
+      margin-bottom: 12px;
+    }
+
+    .panel b {
+      color: var(--normal-highlight);
+      font-weight: 900;
+    }
+
+    .panel h2 {
+      font-family: var(--header-font-family);
+    }
+
+    /* ===== IMAGEM ===== */
+    .media {
+      width: 100%;
+      max-width: 320px;
+      border: 6px solid var(--normal-shadow);
+      box-shadow: 8px 8px 0 var(--normal-shadow);
+    }
+
+    .media img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ===== GRID 3 COL ===== */
+    .grid-3 {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-3 .panel {
+      flex: 1;
+      text-align: center;
+    }
+
+    /* ===== CONTAINER DE CÓDIGO ===== */
+    .code-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      align-items: flex-start;
+    }
+
+    /* ===== BLOCO BASE ===== */
+    .code-block {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 5px;
+      border-radius: 12px;
+      font-weight: bold;
+      color: #fff;
+      font-family: var(--block-font-family);
+      box-shadow: 3px 3px 0 #000;
+      position: relative;
+    }
+
+    /* ===== ENCAIXE VERTICAL (efeito Lego) ===== */
+    .code-block::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 10px;
+      width: 20px;
+      height: 6px;
+      background: inherit;
+      border-radius: 0 0 6px 6px;
+    }
+
+    /* ===== CORES POR CATEGORIA ===== */
+    .move {
+      background: #4C97FF;
+    }
+
+    /* azul */
+    .event {
+      background: #FFD500;
+      color: #000;
+    }
+
+    .control {
+      background: #FFAB19;
+    }
+
+    .operator {
+      background: #59C059;
+    }
+
+    .sensing {
+      background: #5cb1d6;
+    }
+
+    .function {
+      background: #FF6680;
+    }
+
+    /* ===== ARGUMENTOS ===== */
+    .arg {
+      background: #fff;
+      color: #000;
+      padding: 4px 8px;
+      border-radius: 8px;
+      margin: 0 6px;
+      font-weight: normal;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* SLOT PARA BLOCO */
+    .arg.slot {
+      background: #eaeaea;
+      border: 2px dashed #999;
+      padding: 4px 8px;
+    }
+
+    .flag {
+      width: 18px;
+      height: 18px;
+      margin-right: 6px;
+      display: inline-block;
+    }
+
+    /* ===== ESCOPO ===== */
+    /* ===== BLOCO COM ESCOPO ===== */
+    .code-block.control {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 7px 5px;
+    }
+
+    /* LINHA SUPERIOR (texto do bloco) */
+    .code-head {
+      display: flex;
+      align-items: center;
+    }
+
+    /* ÁREA INTERNA (ESCOPO) */
+    .code-scope {
+      width: 100%;
+      margin-top: 8px;
+      padding: 7px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* REMOVE BORDA ANTIGA */
+    .scope {
+      display: none;
+    }
+
+    /* BOTÕES MARIO */
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 3;
+    }
+
+    .controls button {
+      width: 70px;
+      height: 70px;
+      font-size: 24px;
+      margin-left: 10px;
+      background: var(--element-highlight);
+      border: 4px solid var(--normal-shadow);
+      box-shadow: 4px 4px 0 var(--normal-shadow);
+      cursor: pointer;
+    }
+
+    .controls button:active {
+      transform: translateY(4px);
+      box-shadow: 2px 2px 0 var(--normal-shadow);
+    }
+  </style>
+
+  <!-- FUNDO MARIO -->
+  <div class="world" id="world">
+    <img src="https://images.alphacoders.com/185/thumb-1920-18591.jpg" class="bg">
+    <img src="https://images.alphacoders.com/185/thumb-1920-18591.jpg" class="bg">
+    <img src="https://images.alphacoders.com/185/thumb-1920-18591.jpg" class="bg">
+  </div>
+
+  <!-- SLIDES -->
+  <div class="window-track" id="track">
+
+    <div class="slide">
+      <div class="window">
+        <div class="title">Criar um mundo com Blocos</div>
+        <div class="content row">
+
+          <div class="panel col center">
+            <h2>Vamos criar jogos!</h2>
+            <p>Hoje você vai aprender a programar usando <b>blocos</b>, como peças de LEGO 🧩</p>
+            <p>Com eles, podemos criar <b>movimentos, regras e jogos incríveis!</b></p>
+          </div>
+
+          <div class="panel col-center center">
+            <div class="media" style="transform: scale(0.7);">
+              <img src="https://media2.giphy.com/avatars/scratchfoundation/TRGiyW3EqeCF.GIF" alt="rainbow scratch cat">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="window">
+        <div class="title" style="font-size: 3.4rem;">O que é a Programação em Blocos?</div>
+        <div class="content row">
+
+          <div class="panel col center">
+            <ul>
+              <li>Programar é dar <b>ordens</b> ao computador</li>
+              <li>Você encaixa blocos para criar <b>ações</b></li>
+              <li>Os blocos são como <b>instruções</b></li>
+              <li>Não precisa digitar código!</li>
+            </ul>
+          </div>
+
+          <div class="panel col-center center">
+            <div class="media" style="transform: scale(1.2);">
+              <img
+                src="https://images.squarespace-cdn.com/content/v1/5b9580a050a54f9cd774077b/1641497184907-XF1IX3HKLAXDFKL95SCY/Game.gif"">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class=" slide">
+      <div class="window">
+        <div class="title">Elementos do Jogo 🎮</div>
+        <div class="content row">
+          <div class="panel center">
+            <ul>
+              <li><b>Cenário</b> <i>stage</i> 🏞️: o fundo do jogo</li>
+              <li>Pode mudar durante o jogo</li>
+              <li>Tem <b>sons</b> 🎵 e aparência</li>
+
+              <li style="margin-top:10px;"><b>Botão RUN</b> 🚩</li>
+            </ul>
+          </div>
+
+          <div class="panel col-center center">
+            <div class="media">
+              <img
+                src="https://images.squarespace-cdn.com/content/v1/64636baa18729b07fa56aa7e/1688113845996-JCFQ9GZLOHG3KDUBDR9Z/Picture-6-e1546846920473.png"
+                style="height: 200px; ">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="window">
+        <div class="title">Elementos do Jogo 🎮</div>
+        <div class="content row">
+          <div class="panel center">
+            <ul>
+              <li><b>Atores</b> <i>sprites</i> 🏃‍➡️: personagens do jogo</li>
+              <li>Podem <b>andar, pular, falar</b></li>
+              <li>Têm posição:
+                <ul>
+                  <li><b>X</b> → lado a lado</li>
+                  <li><b>Y</b> → cima e baixo</li>
+                </ul>
+              </li>
+              <li>Também têm:
+                <ul>
+                  <li><b>Tamanho</b></li>
+                  <li><b>Direção</b></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="panel col-center center">
+            <div class="media">
+              <img src="https://2018media.idtech.com/2022-05/sprite-character-jumping-onto-platforms.gif"
+                style="height: 200px; ">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="window">
+        <div class="title">Eventos: O jogo começa</div>
+        <div class="content row">
+          <div class="panel center">
+            <div class="code-stack">
+              <div class="code-block event">
+                Quando&nbsp;&nbsp;
+                <svg class="flag" viewBox="0 0 24 24">
+                  <path fill="#00C853"
+                    d="M4 22 2 22V4a1 1 0 01.4-.8A6 6 0 018 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0120 4v10a1 1 0 01-.4.8A6 6 0 0116 16c-3 0-5-2-8-2a6 6 0 00-4 1.528" />
+                </svg>
+                for clicado
+              </div>
+              <div class="code-block control">
+
+                <div class="code-head">
+                  repita <span class="arg slot"></span> vezes
+                </div>
+
+                <div class="code-scope">
+
+                  <div class="code-block move">
+                    mover <span class="arg">10</span> passos
+                  </div>
+
+                  <div class="code-block move">
+                    girar <span class="arg">15</span> graus
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel col-center center">
+            <div class="media">
+              <img
+                src="https://user-images.githubusercontent.com/567844/43477845-4439c7ee-94ca-11e8-8c4b-6f9b0ae6aa5c.gif"
+                style="height: 200px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="window">
+        <div class="title">Movimento: Saltar e Andar</div>
+        <div class="content row">
+          <div class="panel center">
+            <div class="code-stack">
+              <div class="code-block event">
+                Quando a tecla&nbsp;
+                <span style="border: 2px solid black; padding: 5px;">espaço</span>
+                &nbsp;for pressionada
+              </div>
+              <div class="code-block control">
+
+                <div class="code-head">
+                  repita <span class="arg">10</span> vezes
+                </div>
+
+                <div class="code-scope">
+
+                  <div class="code-block move">
+                    adicione <span class="arg">10</span> a y
+                  </div>
+
+                </div>
+              </div>
+              <div class="code-block control">
+
+                <div class="code-head">
+                  repita <span class="arg">10</span> vezes
+                </div>
+
+                <div class="code-scope">
+
+                  <div class="code-block move">
+                    adicione <span class="arg">-10</span> a y
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel col-center center">
+            <div class="media">
+              <img
+                src="https://codingireland.blob.core.windows.net/images/steps%5Cscju%20dino%20jump.gif"
+                style="height: 200px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="window">
+        <div class="title">Movimento: Deslizar</div>
+        <div class="content row">
+          <div class="panel center">
+            <div class="code-stack">
+              <div class="code-block event">
+                Quando&nbsp;&nbsp;
+                <svg class="flag" viewBox="0 0 24 24">
+                  <path fill="#00C853"
+                    d="M4 22 2 22V4a1 1 0 01.4-.8A6 6 0 018 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0120 4v10a1 1 0 01-.4.8A6 6 0 0116 16c-3 0-5-2-8-2a6 6 0 00-4 1.528" />
+                </svg>
+                for clicado
+              </div>
+              <div class="code-block control">
+
+                <div class="code-head">
+                  sempre
+                </div>
+
+                <div class="code-scope">
+
+                  <div class="code-block move">
+                    vá para x:<span class="arg">235</span> y:<span class="arg">-145</span>
+                  </div>
+                  <div class="code-block move">
+                    deslize por <span class="arg">1</span> s. até x:<span class="arg">-235</span> y:<span class="arg">-145</span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel col-center center">
+            <div class="media">
+              <img
+                src="https://user-images.githubusercontent.com/1297724/34467845-7f6b0e62-ef3f-11e7-8b1d-99923c82f788.gif"
+                style="height: 200px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <div class="slide">
+      <div class="window">
+        <div class="title">Colisão: Quando o jogo acaba</div>
+        <div class="content row">
+          <div class="panel center">
+            <div class="code-stack">
+              <div class="code-block event">
+                Quando&nbsp;&nbsp;
+                <svg class="flag" viewBox="0 0 24 24">
+                  <path fill="#00C853"
+                    d="M4 22 2 22V4a1 1 0 01.4-.8A6 6 0 018 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0120 4v10a1 1 0 01-.4.8A6 6 0 0116 16c-3 0-5-2-8-2a6 6 0 00-4 1.528" />
+                </svg>
+                for clicado
+              </div>
+              <div class="code-block control">
+
+                <div class="code-head">
+                  repita até que
+                    <span class="arg">
+                      <span class="code-block sensing">
+                        <span class="arg">tocando em </span><span style="border: 2px solid black; padding: 5px;">Sprite2</span> 
+                      </span>
+                  </span>
+                </div>
+
+                <div class="code-scope">
+
+                  <div class="code-block control">
+                    parar <span style="border: 2px solid black; padding: 5px;">todos</span> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel col-center center">
+            <div class="media">
+              <img
+                src="https://user-images.githubusercontent.com/1297724/34467845-7f6b0e62-ef3f-11e7-8b1d-99923c82f788.gif"
+                style="height: 200px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+ 
+
+  <!-- BOTÕES -->
+  <div class="controls">
+    <button id="prev">◀</button>
+    <button id="next">▶</button>
+  </div>
+
+</div>
+
+<script>
+
+  const track = document.getElementById('track');
+  const world = document.getElementById('world');
+
+  const slides = document.querySelectorAll('.slide');
+  let index = 0;
+  const total = slides.length;
+
+  let worldOffset = 0;
+
+  /* MOVE SLIDES */
+  function update() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  /* AVANÇAR */
+  document.getElementById('next').onclick = () => {
+    if (index < total - 1) {
+      index++;
+      update();
+
+      moveWorld();
+    }
+  }
+
+  /* VOLTAR */
+  document.getElementById('prev').onclick = () => {
+    if (index > 0) {
+      index--;
+      update();
+
+      moveWorld(true);
+    }
+  }
+
+  /* ANIMAÇÃO DO FUNDO */
+  function moveWorld(reverse = false) {
+    const distance = window.innerWidth;
+
+    // move normalmente
+    worldOffset += reverse ? distance : -distance;
+
+    world.style.transition = "transform 0.6s linear";
+    world.style.transform = `translateX(${worldOffset}px)`;
+
+    // largura total (3 imagens)
+    const totalWidth = distance * 3;
+
+    // LOOP INVISÍVEL (sem quebrar animação)
+    setTimeout(() => {
+      if (worldOffset <= -totalWidth + distance) {
+        worldOffset = 0;
+        world.style.transition = "none";
+        world.style.transform = `translateX(0px)`;
+      }
+
+      if (worldOffset > 0) {
+        worldOffset = -distance * 2;
+        world.style.transition = "none";
+        world.style.transform = `translateX(${worldOffset}px)`;
+      }
+    }, 600); // mesmo tempo da animação
+  }
+</script>

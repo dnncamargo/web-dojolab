@@ -1,0 +1,967 @@
+<div class="slider-component">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+    .slider-component {
+      width: 100%;
+      height: 720px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Noto Sans', sans-serif;
+      background-color: #2d8fcb;
+      background-image:
+        linear-gradient(#1f6fa3 1px, transparent 1px),
+        linear-gradient(90deg, #1f6fa3 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .slide-track {
+      display: flex;
+      height: 100%;
+      transition: transform .5s ease-in-out;
+    }
+
+    .slide {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 40px;
+      position: relative;
+    }
+
+    /* Janela branca */
+    .window {
+      background: #f2f2f2;
+      height: 100%;
+      padding: 40px 50px;
+      box-sizing: border-box;
+      position: relative;
+      border: 4px solid #0d3b66;
+    }
+
+    /* Sombras esquerda e inferior */
+    .window:before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 18px;
+      width: 18px;
+      height: 100%;
+      background: #0d3b66;
+    }
+
+    .window:after {
+      content: '';
+      position: absolute;
+      left: 0px;
+      bottom: -18px;
+      width: 99%;
+      height: 18px;
+      background: #0d3b66;
+    }
+
+    .window-cover{
+      position:relative;
+      padding:0;               /* remove espaçamento interno */
+      overflow:hidden;
+    }
+
+    .cover-bg{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+    }
+
+    .cover-bg img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+    }
+
+  /* texto sobreposto */
+    .cover-title{
+      position: absolute;
+      top: 200px;
+      bottom: 200px;
+      right: 200px;
+      left: 200px;
+      display:flex;
+      align-items:center;      /* centraliza vertical */
+      justify-content:center;  /* centraliza horizontal */
+      text-align:center;
+      padding:40px;
+      box-sizing:border-box;
+    }
+
+    .cover-title .title{
+      margin:0;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.45);
+    }
+
+    /* Título */
+    .title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 48px;
+      color: #ffd400;
+      -webkit-text-stroke: 3px #000;
+      text-transform: uppercase;
+      margin: 0 0 20px 0;
+    }
+
+    /* Linha divisória */
+    .divider {
+      height: 4px;
+      background: #0d3b66;
+      margin: 10px 0 30px 0;
+    }
+
+    /* Conteúdo editável */
+    .content {
+      width: 100%;
+      height: calc(100% - 140px);
+      font-size: 26px;
+      color: #111;
+    }
+
+    /* container horizontal */
+    .content-row {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Layout Base Flex */
+    .content-row {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .content-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .window-footer{
+      position:absolute;
+      left:24px;
+      bottom:24px;
+      width:calc(100% - 330px); /* evita área dos botões à direita */
+      
+      background:#2fbf71;      /* verde bandeira claro */
+      border:3px solid #0d3b66; /* azul */
+      border-radius:0;          /* cantos retos */
+
+      padding:10px 10px;
+      box-sizing:border-box;
+
+      color:#ffffff;
+      font-size:18px;
+      line-height:1;
+      font-weight:400;
+
+      max-height:2.6em;         /* ~2 linhas */
+      overflow:hidden;
+    }
+
+    /* Variação: Duas Colunas */
+    .layout-cols {
+      flex-direction: row;
+    }
+
+    .layout-cols .col-text {
+      width: 55%;
+      padding-right: 30px;
+    }
+
+    .layout-cols .col-media {
+      width: 45%;
+      align-items: center;
+    }
+
+    /* Variação: Duas Linhas */
+    .layout-rows {
+      flex-direction: column;
+    }
+
+    .layout-rows .col-text {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    .layout-rows .col-media {
+      width: 100%;
+      align-items: center;
+    }
+
+    /* ===== TEXTO ===== */
+    .col-text ul {
+      margin: 20px 0 0 0;
+      padding-left: 28px;
+    }
+
+    .col-text li {
+      margin-bottom: 14px;
+    }
+
+    /* ===== IMAGEM ===== */
+    .media-frame {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      overflow: hidden;
+      /* border-radius: 14px; */
+      border: 4px solid #0d3b66;
+      background: #000;
+    }
+
+    .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* Terminal */
+    .terminal-window {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #111;
+    }
+
+    /* Barra de título */
+    .terminal-titlebar {
+      background: #3c3b37;
+      height: 36px;
+      position: relative;
+    }
+
+    /* Botões à direita */
+    .terminal-controls {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .term-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 6px;
+    }
+
+    .term-close {
+      background: #ff5f56;
+    }
+
+    .term-min {
+      background: #ffbd2e;
+    }
+
+    .term-max {
+      background: #27c93f;
+    }
+
+    /* Corpo do terminal */
+    .terminal-body {
+      background: #300a24;
+      /* Ubuntu terminal */
+      color: #eeeeee;
+      padding: 5px 5px;
+      font-family: 'Fira Code', monospace;
+      font-size: 18px;
+      text-align: left;
+      overflow-x: auto;
+    }
+
+    /* Linhas preservam indentação */
+    .term-line {
+      white-space: pre;
+      display: block;
+    }
+    /* Highlight */
+    .kw{ color:#ff79c6; font-weight:600; }   /* palavra-chave */
+    .cond{ color:#8be9fd; }                  /* condição */
+    .comment{ color:#6272a4; font-style:italic; }
+    .block{ color:#50fa7b; }                 /* blocos */
+    .sym{ color:#f1fa8c; }                   /* símbolos */
+
+    /* Botões navegação */
+    .nav-btn {
+      position: absolute;
+      bottom: 60px;
+      right: 30px;
+      width: 90px;
+      height: 43px;
+      background: #ffd400;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 33px;
+      padding: 1px 8px 3px 8px;
+      line-height: 1.2;
+      font-weight: bold;
+      color: #1f6fa3;
+      transition: all .15s ease;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .nav-btn:active {
+      transform: translateY(2px);
+    }
+
+    #prev-btn {
+      right: 140px;
+    }
+
+    .nav-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+
+  <div class="slide-track" id="slideTrack">
+
+    <!-- CAPA -->
+    <div class="slide">
+      <div class="window window-cover">
+
+        <div class="cover-bg">
+          <img src="https://knowhow.distrelec.com/wp-content/uploads/2024/02/GettyImages-1508780671-min.jpg?w=1920&h=1024&crop=1">
+        </div>
+        <div class="cover-title">
+          <div class="title">
+            OLÁ MUNDO DA ELETRÔNICA
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 1 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">O que é um Computador</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              Máquina capaz de:
+              <ul>
+                <li>Receber informações</li>
+                <li>Processar dados</li>
+                <li>Cumprir tarefas, mostrar resultados ou armazená-los</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Apple_II_Plus%2C_Museum_of_the_Moving_Image.jpg"
+                  style="height: 320px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE ANALOGIA -->
+    <div class="slide">
+      <div class="window">
+        <div class="title" style="font-size: 36px;">Analogia entre um Ser Humano e um Robô👍🦾</div>
+        <div class="divider"></div>
+        <div class="content">
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Interfaces Homem–Máquina</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-rows">
+
+            <div class="content-col col-text">
+              Comunicação entre pessoas e sistemas:
+              <ul>
+                <li><b>Hardware (Físico):</b> componentes internos, dispositivos e periféricos</li>
+                <li><b>Software (Virtual):</b> programas digitais e instruções</li>
+                <li>Interação por <b>interfaces</b></li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame" style="overflow:hidden;">
+                <img
+                  src="https://aivatec.com/wp-content/uploads/2026/03/difference-between-hardware-and-software1-1024x494.jpg"
+                  style="
+                    object-fit:cover;
+                    object-position:50% 0%;
+                    width:100%;
+                    display:block;
+                    margin-bottom:-70px;
+                  ">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">O que é um Algoritmo </div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+
+            <div class="content-col col-text">
+              <div
+                style="margin-bottom: 10px;">
+                Conjunto
+                <span
+                  style="text-decoration: underline wavy red; text-decoration-thickness: 2px; text-underline-offset: 6px;">
+                  finito
+                </span>
+                e 
+                <span
+                  style="text-decoration: underline wavy red; text-decoration-thickness: 2px; text-underline-offset: 6px;">
+                  bem definido
+                </span>
+                de passos 
+                <span
+                  style="text-decoration: underline wavy red; text-decoration-thickness: 2px; text-underline-offset: 6px;">
+                  ordenados
+                </span>
+                  para realizar uma tarefa ou resolver um problema.
+              </div> 
+              
+              <i>Exemplo: Beber água</i>
+              <ol>
+                <li>Pegar o copo</li>
+                <li>Encher com água</li>
+                <li>Levar à boca</li>
+                <li>Beber</li>
+                👉 Isso é um algoritmo!
+              </ol>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img 
+                  src="https://files.tecnoblog.net/wp-content/uploads/2024/09/ilustracao-de-algoritmos.png" 
+                  style="
+                        object-fit:cover;
+                        width:100%;
+                        height: 320px;
+                        display:block;
+                        transform:scale(1.2);
+                        margin-bottom:-23px;
+                      ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Características dos Algoritmos </div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+
+            <div class="content-col col-text">
+              <ul>
+                <li>Tem <b>início, meio e fim</b></li>
+                <li>Segue uma <b>ordem lógica</b></li>
+                <li>Cada passo deve ser <b>claro e sem ambiguidade</b> </li>
+                <li>Deve resolver um problema</li>
+                <li>Pode ter zero ou mais <b>entradas</b>, mas pelo menos um resultado final <b>(ou saída)</b> é
+                  esperado</li>
+              </ul>
+
+            </div>
+
+            <div class="content-col col-text">
+              <i>Exemplos do dia a dia</i>
+              <ul>
+                <li>Receita de bolo</li>
+                <li>Manual de montar brinquedo</li>
+                <li>Regras de um jogo</li>
+                <li>Passo a passo para escovar os dentes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="window-footer">
+          E qual é a diferença entre um <b>algoritmo</b> e um <b>software</b>?
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Entrada → Processamento → Saída</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+
+            <div class="content-col col-text">
+              Modelo de funcionamento dos sistemas:
+              <ul>
+                <li><b>Entrada</b> → sensores e comandos</li>
+                <li><b>Processamento</b> → microcontrolador</li>
+                <li><b>Saída</b> → respostas e ações</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img src="https://victorvision.com.br/wp-content/uploads/2021/10/dicas-projetos-com-arduino.jpg"
+                  style="height: 320px;">
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="window-footer">
+          Em nossas aulas, usaremos o microcontrolador <b>Arduino</b>, mas existem muitos outros...
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Arduino, Sensores e Atuadores</div>
+        <div class="divider"></div>
+
+        <div class="content">
+
+          <div class="content-row layout-cols">
+
+            <div class="content-col col-text">
+              Componentes da robótica educacional:
+              <ul>
+                <li><b>Arduino:</b> cérebro do sistema</li>
+                <li><b>Sensores:</b> captam dados do ambiente</li>
+                <li><b>Atuadores:</b> executam ações físicas</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"
+                  style="height: 320px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Lógica Booleana • If / Else</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              Tomada de decisões em programas:
+              <ul>
+                <li>Condições <b>Verdadeiro ou Falso</b> <br>(não existe outra opção)</li>
+                <li>Se <span
+                    style="text-decoration: underline wavy red; text-decoration-thickness: 2px; text-underline-offset: 6px;">acontecer
+                    algo</span> → execute</li>
+                <li>Senão → alternativa</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+                            <div class="terminal-window">
+                <div class="terminal-titlebar">
+                  <div class="terminal-controls">
+                    <span class="term-btn term-close"></span>
+                    <span class="term-btn term-min"></span>
+                    <span class="term-btn term-max"></span>
+                  </div>
+                </div>
+
+                <div class="terminal-body">
+                  <span class="term-line">
+<span class="kw">se</span> <span class="sym">(</span><span class="cond">condição verdadeira</span><span class="sym">)</span> <span class="block">{</span>
+                  </span>
+                  <span class="term-line">
+    <span class="sym">-&gt;</span> <span class="comment"># este bloco é executado</span>
+                  </span>
+                  <span class="term-line">
+<span class="block">}</span> <span class="kw">senão</span> <span class="sym">(</span>$ falso<span class="sym">)</span> <span class="block">{</span>
+                  </span>
+                  <span class="term-line">
+    <span class="sym">-&gt;</span> <span class="comment"># este bloco é executado</span>
+                  </span>
+                  <span class="term-line">
+<span class="block">}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Repetições</div>
+        <div class="divider"></div>
+        <div class="content">
+
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              Automatização de tarefas:
+              <ul>
+                <li>Loops de repetição</li>
+                <li>Execução contínua</li>
+                <li>Eficiência e automação</li>
+                <li><span
+                    style="text-decoration: underline wavy red; text-decoration-thickness: 2px; text-underline-offset: 6px;">Reconhecimento de Padrões</span></li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="terminal-window">
+                <div class="terminal-titlebar">
+                  <div class="terminal-controls">
+                    <span class="term-btn term-close"></span>
+                    <span class="term-btn term-min"></span>
+                    <span class="term-btn term-max"></span>
+                  </div>
+                </div>
+
+                <div class="terminal-body">
+    <span class="term-line">
+<span class="kw">enquanto</span> <span class="sym">(</span><span class="cond">condição verdadeira</span><span class="sym">)</span> <span class="block">{</span>
+    </span>
+    <span class="term-line">
+  comandos
+    </span>
+    <span class="term-line">
+<span class="block">}</span>
+    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Fenômenos Físicos da Eletrônica</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              Fundamentos elétricos:
+              <ul>
+                <li>Corrente elétrica</li>
+                <li>Tensão</li>
+                <li>Resistência</li>
+                <li>Polaridade</li>
+              </ul>
+            </div>
+
+            <div class="content-col col-media">
+              <div class="media-frame">
+                <img
+                  src="https://static.preparaenem.com/2021/08/sentido-corrente-eletrica.jpg"
+                  style="
+                        object-fit:cover;
+                         ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE INTERATIVO -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Circuito Elétrico Interativo⚡🎮</div>
+        <div class="divider"></div>
+
+        <div class="content">
+          <div style="
+            width:100%;
+            height:100%;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:flex-start;
+            gap:10px;
+          ">
+            <div style="
+              display:flex;
+              gap:24px;
+              flex-wrap:wrap;
+              justify-content:center;
+              
+              padding:16px 24px;
+              border-radius:12px;
+            ">
+              <div style="display:flex; flex-direction:column; gap:6px; font-size:14px;">
+                <label>Tensão da Fonte (V)</label>
+                <input id="voltage" type="number" min="1" max="240" step="1" value="12" style="width:100px; padding:6px;">
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:6px; font-size:14px;">
+                <label>Resistência (Ω)</label>
+                <input id="resistance" type="number" min="1" max="1000" step="1" value="100" style="width:100px; padding:6px;">
+              </div>
+
+              <div style="font-weight:bold; font-size:16px; align-self:center;">
+                Corrente: <span id="current">0.12</span> A
+              </div>
+            </div>
+
+            <div style="
+              padding:16px;
+              border-radius:16px;
+            ">
+              <svg width="520" height="360" style="overflow:visible">
+
+                <!-- FIOS -->
+                <path id="wirePath" d="M60 60 H140 H200 H420 V300 H300 H200 H60 Z"
+                  fill="none" stroke="#95a5a6" stroke-width="6" stroke-linecap="round"/>
+
+                <!-- CHAVE -->
+                <line x1="140" y1="60" x2="160" y2="60" stroke="#2c3e50" stroke-width="4"/>
+                <line x1="200" y1="60" x2="220" y2="60" stroke="#2c3e50" stroke-width="4"/>
+                <line x1="160" y1="60" x2="200" y2="60" stroke="#f2f2f2" stroke-width="10"/>
+
+                <line id="switchArm" x1="160" y1="60" x2="200" y2="60"
+                  stroke="#2c3e50" stroke-width="4"
+                  style="transform-origin:150px 60px; transition:.3s; cursor:pointer"/>
+
+                <!-- BATERIA -->
+                <line y1="180" x1="380" y2="180" x2="460" stroke="#2c3e50" stroke-width="4"/>
+                <line y1="200" x1="400" y2="200" x2="440" stroke="#2c3e50" stroke-width="4"/>
+                <line y1="182" x1="420" y2="198" x2="420" stroke="#f2f2f2" stroke-width="10"/>
+
+                <!-- RESISTOR -->
+                <rect x="200" y="280" width="100" height="40"
+                  fill="#ecf0f1" stroke="#2c3e50" stroke-width="3"/>
+                <text x="250" y="305" text-anchor="middle" font-size="14" fill="#2c3e50">R</text>
+
+                <!-- LÂMPADA -->
+                <circle id="lamp" cx="60" cy="180" r="28"
+                  fill="#f1c40f" stroke="#2c3e50" stroke-width="4"/>
+                <rect x="45" y="207" width="30" height="18"
+                  fill="#bdc3c7" stroke="#2c3e50" stroke-width="3"/>
+
+                <!-- ELÉTRONS -->
+                <g id="electrons"></g>
+
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function(){
+      const voltageInput = document.getElementById('voltage');
+      const resistanceInput = document.getElementById('resistance');
+      const currentSpan = document.getElementById('current');
+      const switchArm = document.getElementById('switchArm');
+      const lamp = document.getElementById('lamp');
+      const wire = document.getElementById('wirePath');
+      const electronsGroup = document.getElementById('electrons');
+
+      let closed = true;
+      let current = 0;
+      let speed = 0;
+
+      const electronCount = 18;
+      const electrons = [];
+
+      for(let i=0;i<electronCount;i++){
+        const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        c.setAttribute('r',4);
+        c.setAttribute('fill','#f1c40f');
+        electronsGroup.appendChild(c);
+        electrons.push({el:c, offset:i/electronCount});
+      }
+
+      const pathLength = wire.getTotalLength();
+
+      function updatePhysics(){
+        const V = parseFloat(voltageInput.value);
+        const R = parseFloat(resistanceInput.value);
+        current = V / R;
+        currentSpan.textContent = current.toFixed(2);
+
+        const glow = Math.min(current / 2, 1);
+        lamp.style.filter = `drop-shadow(0 0 ${glow*25}px rgba(255,223,0,.9))`;
+
+        speed = current * 120;
+      }
+
+      function updateSwitch(){
+        if(closed){
+          switchArm.style.transform = 'rotate(0deg)';
+          wire.setAttribute('stroke','#2ecc71');
+          lamp.setAttribute('fill','#f1c40f');
+        }else{
+          switchArm.style.transform = 'rotate(-35deg)';
+          wire.setAttribute('stroke','#95a5a6');
+          lamp.setAttribute('fill', '#bdc3c7');
+          lamp.style.filter = `drop-shadow(0 0 0)`;
+        }
+      }
+
+      function animate(t){
+        if(!animate.last) animate.last = t;
+        const dt = (t - animate.last)/1000;
+        animate.last = t;
+
+        if(closed){
+          electrons.forEach(e=>{
+            e.offset += (speed * dt) / pathLength;
+            if(e.offset > 1) e.offset -= 1;
+            const p = wire.getPointAtLength(e.offset * pathLength);
+            e.el.setAttribute('cx', p.x);
+            e.el.setAttribute('cy', p.y);
+            e.el.style.display = 'block';
+          });
+        }else{
+          electrons.forEach(e=> e.el.style.display = 'none');
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      voltageInput.addEventListener('input', updatePhysics);
+      resistanceInput.addEventListener('input', updatePhysics);
+
+      switchArm.addEventListener('click', ()=>{
+        closed = !closed;
+        updateSwitch();
+      });
+
+      updatePhysics();
+      updateSwitch();
+      requestAnimationFrame(animate);
+    })();
+    </script>
+
+    <!-- SLIDE Links -->
+    <div class="slide">
+      <div class="window">
+        <div class="title">Links Úteis</div>
+        <div class="divider"></div>
+        <div class="content">
+          <div class="content-row layout-cols">
+            <div class="content-col col-text">
+              
+              <ul>
+                <li><a href="https://blockly.games/">Blockly Games</a></li>
+                <li><a href="https://create.kahoot.it/share/informatica-basica-1/9f32c3f2-71c1-45e0-92d0-159cb39e4e84">Kahoot: Hardware e Software</a></li>
+                <li><a href="https://create.kahoot.it/share/informatica-basica-2/4656c7f4-da92-4504-a855-0fdce05b4e15">Kahoot: Fluxo da informação</a></li>
+                <li><a href="https://www.tinkercad.com/">Tinkercad</a></li>
+                <li><a href="https://ide.mblock.cc/">mBlock</a></li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Fim do Slider -->
+  </div>
+
+  <button id="prev-btn" class="nav-btn">←</button>
+  <button id="next-btn" class="nav-btn">→</button>
+</div>
+
+<script>
+  var sliderComponent = document.querySelector('.slider-component');
+  var slideTrack = document.getElementById('slideTrack');
+  var prevBtn = document.getElementById('prev-btn');
+  var nextBtn = document.getElementById('next-btn');
+  var slides = document.querySelectorAll('.slide');
+  var totalSlides = slides.length;
+  var currentSlide = 0;
+
+  function setupSlider() {
+    var w = sliderComponent.offsetWidth;
+    for (var i = 0; i < slides.length; i++) {
+      slides[i].style.width = w + 'px';
+    }
+    slideTrack.style.width = (w * totalSlides) + 'px';
+    updatePos();
+  }
+
+  function updatePos() {
+    var w = sliderComponent.offsetWidth;
+    slideTrack.style.transform = 'translateX(' + (-currentSlide * w) + 'px)';
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === totalSlides - 1;
+  }
+
+  function nextSlide() {
+    if (currentSlide < totalSlides - 1) {
+      currentSlide++;
+      updatePos();
+    }
+  }
+
+  function prevSlide() {
+    if (currentSlide > 0) {
+      currentSlide--;
+      updatePos();
+    }
+  }
+
+  prevBtn.addEventListener('click', prevSlide);
+  nextBtn.addEventListener('click', nextSlide);
+  window.addEventListener('resize', setupSlider);
+
+  setupSlider();
+</script>
