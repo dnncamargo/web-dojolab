@@ -32,6 +32,7 @@ export default function ActivityInProgressPage() {
 
   // estado local dos resultados (useState)
   const [results, setResults] = useState<scoringResult[]>([]);
+  const [activeSummary, setActiveSummary] = useState<string | null>(null);
 
   // sincroniza quando a activity mudar (useEffect)
   useEffect(() => {
@@ -100,13 +101,16 @@ export default function ActivityInProgressPage() {
 
       {/* Descrição */}
 
-          {activity.descriptionType === "interactive" ? (
-            <InteractiveDescription htmlContent={activity.description ?? "Sem Descrição"} />
-          ) : activity.descriptionType === "richtext" ? (
-            <RichTextDescription content={activity.description ?? "Sem Descrição"} className="mt-4 mb-6" />
-          ) : activity.description != null && activity.descriptionType === "externalpdf" ? (
-            <PDFViewer pdfSource={activity.description}/>
-          ) : ("Sem descrição")}
+      {activity.descriptionType === "interactive" ? (
+        <InteractiveDescription
+          htmlContent={activity.description ?? "Sem Descrição"}
+          onOpenSummary={(titleText) => setActiveSummary(titleText)} // <--- CAPTURA O TEXTO AQUI
+        />
+      ) : activity.descriptionType === "richtext" ? (
+        <RichTextDescription content={activity.description ?? "Sem Descrição"} className="mt-4 mb-6" />
+      ) : activity.description != null && activity.descriptionType === "externalpdf" ? (
+        <PDFViewer pdfSource={activity.description} />
+      ) : ("Sem descrição")}
 
       {/* Timer */}
       {activity.timed && (
@@ -166,6 +170,33 @@ export default function ActivityInProgressPage() {
           </button>
         </div>
       </form>
+
+      {/* MODAL DE SUMÁRIO EXPANDIDO */}
+      {activeSummary && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white p-6 rounded-lg max-w-lg w-full shadow-2xl border-2 border-gray-300">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b">
+              <h3 className="font-bold text-lg text-blue-900">
+                Sumário: {activeSummary} {/* Apresenta o texto capturado do slide */}
+              </h3>
+              <button 
+                onClick={() => setActiveSummary(null)}
+                className="px-2 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-colors"
+              >
+                Fechar
+              </button>
+            </div>
+            
+            <div className="text-gray-700 space-y-3">
+              <p>Você clicou no tópico <strong>{activeSummary}</strong>.</p>
+              <p className="text-sm bg-gray-100 p-3 rounded italic">
+                Dica Pedagógica: Use este espaço para exibir instruções extras aos alunos ou revisar o conceito com o grupo que solicitou ajuda.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 }

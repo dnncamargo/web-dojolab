@@ -3,5 +3,6 @@
     "terminal.integrated.fontSize": 14,
     "editor.fontFamily": "Fira Code",
     "editor.fontSize": 15,
-    "editor.fontLigatures": true
+    "editor.fontLigatures": true,
+    "livePreview.defaultPreviewPath": "/public/examples/hello world coding.html"
 }
