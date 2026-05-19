@@ -21,54 +21,95 @@ export default function InteractiveDescription({ htmlContent }: InteractiveDescr
     );
 
     // Cria um documento HTML completo para o iframe
-    const html = `
-      <!DOCTYPE html>
-        <html lang="pt-BR">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <style>
-            html, body {
-              margin: 0;
-              padding: 0;
-              overflow-x: hidden;
-              font-family: system-ui, sans-serif;
-            }
-          </style>
-        </head>
-      <body>
-        ${safeHtml}
-        <script>
-          // Intercepta cliques em links
-          document.addEventListener("click", function(e) {
-            const a = e.target.closest("a[href]");
-            if (a && a.href) {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          font-family: system-ui, sans-serif;
+
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
+        }
+      </style>
+    </head>
+
+    <body>
+      ${safeHtml}
+
+      <script>
+
+        // Compatível com Chrome antigo
+        document.addEventListener("click", function(e) {
+
+          let node = e.target;
+
+          while (node && node !== document) {
+
+            if (
+              node.tagName &&
+              node.tagName.toLowerCase() === "a" &&
+              node.href
+            ) {
+
               e.preventDefault();
-              window.parent.postMessage({ type: "open-external-link", url: a.href }, "*");
+              e.stopPropagation();
+
+              window.parent.postMessage({
+                type: "open-external-link",
+                url: node.href
+              }, "*");
+
+              return;
             }
-          });
 
-          // ResizeObserver existente...
-          const observer = new ResizeObserver(() => {
-            const height = document.body.scrollHeight;
-            window.parent.postMessage({ type: "resize-iframe", height }, "*");
-          });
+            node = node.parentNode;
+          }
+
+        }, false);
+
+
+        // Fallback compatível com Chrome 81
+        function sendHeight() {
+          window.parent.postMessage({
+            type: "resize-iframe",
+            height: document.body.scrollHeight
+          }, "*");
+        }
+
+        if (window.ResizeObserver) {
+
+          const observer = new ResizeObserver(sendHeight);
           observer.observe(document.body);
-          window.parent.postMessage({ type: "resize-iframe", height: document.body.scrollHeight }, "*");
-        </script>
 
-      </body>
-      </html>
-    `;
+        } else {
 
-    //const blob = new Blob([html], { type: "text/html" });
-    //const url = URL.createObjectURL(blob);
-    //iframe.src = url;
-    iframe.srcdoc = html;
+          setInterval(sendHeight, 500);
+        }
+
+        sendHeight();
+
+      <\/script>
+
+    </body>
+    </html>
+  `;
+
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    iframe.src = url;
+    //iframe.srcdoc = html;
 
     // Limpeza ao desmontar
-    //return () => URL.revokeObjectURL(url);
-    return () => { };
+    return () => URL.revokeObjectURL(url);
+    //return () => { };
   }, [htmlContent]);
 
   // Ouve a altura enviada do iframe e ajusta dinamicamente
